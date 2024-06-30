@@ -1,0 +1,6 @@
+@MaterialAdvisor.API_HostAddress = http://localhost:5245
+
+GET {{MaterialAdvisor.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
