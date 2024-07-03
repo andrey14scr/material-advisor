@@ -1,0 +1,42 @@
+@import '../variables.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  border: 1px solid black;
+}
+
+.navbar {
+  .navbar-brand {
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $brand-color;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-link {
+    font-size: 1rem;
+    color: $inactive-color;
+    
+    &:hover {
+      color: $secondary-color;
+    }
+
+    &.active {
+      color: $primary-color;
+      font-weight: bold;
+    }
+  }
+
+  .navbar-toggler {
+    border: none;
+    outline: none;
+  }
+}

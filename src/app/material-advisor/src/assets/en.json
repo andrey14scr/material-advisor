@@ -1,0 +1,9 @@
+{
+    "navigation": {
+        "mainPage": "Main page",
+        "testConstructor": "Test constructor",
+        "information": "Information",
+        "account": "Account",
+        "title": "Navigation"
+    }
+}
