@@ -14,15 +14,15 @@ public class LanguageTextEntity
     [MaxLength(500)]
     public string Text { get; set; } = null!;
 
-    public LanguageType LanguageId { get; set; }
+    public Language LanguageId { get; set; }
 
     public virtual LanguageEntity Language { get; set; }
 
-    public virtual ICollection<QuestionEntity> Questions { get; set; }
+    public virtual ICollection<QuestionEntity> Questions { get; set; } = [];
 
-    public virtual ICollection<AnswerEntity> Answers { get; set; }
+    public virtual ICollection<AnswerEntity> Answers { get; set; } = [];
 
-    public virtual ICollection<AnswerGroupEntity> AnswerGroups { get; set; }
+    public virtual ICollection<AnswerGroupEntity> AnswerGroups { get; set; } = [];
 
-    public virtual ICollection<TopicEntity> Topics { get; set; }
+    public virtual ICollection<TopicEntity> Topics { get; set; } = [];
 }

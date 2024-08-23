@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.API", "MaterialAdvisor.API\MaterialAdvisor.API.csproj", "{BF7D1C4C-A820-4B8D-A4BE-955654A1816E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialAdvisor.Data", "MaterialAdvisor.Data\MaterialAdvisor.Data.csproj", "{7202F2A6-DD01-4145-91B6-957C1DBDB713}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Data", "MaterialAdvisor.Data\MaterialAdvisor.Data.csproj", "{7202F2A6-DD01-4145-91B6-957C1DBDB713}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application", "MaterialAdvisor.Application\MaterialAdvisor.Application.csproj", "{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7202F2A6-DD01-4145-91B6-957C1DBDB713}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7202F2A6-DD01-4145-91B6-957C1DBDB713}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7202F2A6-DD01-4145-91B6-957C1DBDB713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

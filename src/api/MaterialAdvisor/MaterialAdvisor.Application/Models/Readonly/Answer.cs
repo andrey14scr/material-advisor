@@ -1,4 +1,6 @@
-﻿namespace MaterialAdvisor.API.Models;
+﻿using MaterialAdvisor.Application.Models.Shared;
+
+namespace MaterialAdvisor.Application.Models.Readonly;
 
 public class Answer
 {

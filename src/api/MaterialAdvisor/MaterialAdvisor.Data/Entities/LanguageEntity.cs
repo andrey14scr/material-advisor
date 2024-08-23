@@ -8,7 +8,7 @@ namespace MaterialAdvisor.Data.Entities;
 [Table("Languages")]
 public class LanguageEntity
 {
-    public LanguageType Id { get; set; }
+    public Language Id { get; set; }
 
     [Required]
     [MaxLength(50)]

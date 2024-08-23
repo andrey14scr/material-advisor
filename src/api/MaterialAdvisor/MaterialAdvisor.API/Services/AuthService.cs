@@ -1,4 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using MaterialAdvisor.API.Options;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,17 +10,17 @@ using System.Text;
 
 namespace MaterialAdvisor.API.Services;
 
-public class AuthService(IConfiguration configuration)
+public class AuthService(IConfiguration configuration, IOptions<JwtOptions> jwtOptions)
 {
-    public string GenerateJwtToken(string name, string email)
+    public string GenerateJwtToken(string username, string email)
     {
-        var issuer = configuration.GetSection("Jwt")["Issuer"]!;
-        var secret = configuration.GetSection("Jwt")["Key"]!;
+        var issuer = jwtOptions.Value.Issuer;
+        var secret = jwtOptions.Value.Key;
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, name),
-            new Claim(JwtRegisteredClaimNames.Name, name),
+            new Claim(JwtRegisteredClaimNames.Sub, username),
+            new Claim(JwtRegisteredClaimNames.Name, username),
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(JwtRegisteredClaimNames.Iss, issuer),
             new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.Now).ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64)

@@ -4,5 +4,6 @@ public enum QuestionType : byte
 {
     Select,
     MultiSelect,
-    Group
+    Group,
+    OpenText
 }

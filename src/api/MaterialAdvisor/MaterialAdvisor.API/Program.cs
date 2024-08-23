@@ -1,19 +1,26 @@
+using MaterialAdvisor.API;
+using MaterialAdvisor.API.Middleware;
+using MaterialAdvisor.API.Options;
 using MaterialAdvisor.API.Services;
-using MaterialAdvisor.Data;
+using MaterialAdvisor.Application.Configuration;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
+using Serilog;
 
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -46,11 +53,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<AuthService>();
 
-builder.Services.AddDbContext<MaterialAdvisorContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var configuration = builder.Configuration;
+ApplicationConfiguration.ConfigureServices(builder.Services, configuration);
 
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+var jwtOptionPath = Constants.Configuration.JwtSection;
+builder.Services.Configure<JwtOptions>(configuration.GetSection(jwtOptionPath));
+var jwtOptions = configuration.GetSection(jwtOptionPath).Get<JwtOptions>()!;
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -62,8 +70,8 @@ builder.Services
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtIssuer,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+            ValidIssuer = jwtOptions.Issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
         };
     });
 
@@ -71,7 +79,10 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<EndpointLogMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

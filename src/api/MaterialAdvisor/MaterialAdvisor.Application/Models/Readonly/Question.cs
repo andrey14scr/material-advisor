@@ -1,6 +1,7 @@
-﻿using MaterialAdvisor.Data.Enums;
+﻿using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Data.Enums;
 
-namespace MaterialAdvisor.API.Models;
+namespace MaterialAdvisor.Application.Models.Readonly;
 
 public class Question
 {

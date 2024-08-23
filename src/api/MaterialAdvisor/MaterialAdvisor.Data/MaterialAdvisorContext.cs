@@ -12,6 +12,7 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<LanguageTextEntity> LanguageTexts { get; set; }
     public DbSet<QuestionEntity> Questions { get; set; }
     public DbSet<TopicEntity> Topics { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {

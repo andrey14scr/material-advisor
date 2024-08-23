@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace MaterialAdvisor.API.Controllers;
-[Route("api/[controller]")]
-[ApiController]
-public class AuthController(AuthService authService) : ControllerBase
+
+public class AuthController(AuthService authService, ILogger<MaterialController> logger) : BaseApiController
 {
     [HttpGet]
-    public IActionResult Get(string name, string email)
+    public IActionResult Get(string username, string email)
     {
-        return Ok(authService.GenerateJwtToken(name, email));
+        return Ok(authService.GenerateJwtToken(username, email));
     }
 }

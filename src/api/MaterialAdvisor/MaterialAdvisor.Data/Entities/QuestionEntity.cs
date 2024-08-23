@@ -21,7 +21,7 @@ public class QuestionEntity
 
     public QuestionType Type { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; }
+    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
 
-    public virtual ICollection<AnswerGroupEntity> AnswerGroups { get; set; }
+    public virtual ICollection<AnswerGroupEntity> AnswerGroups { get; set; } = [];
 }

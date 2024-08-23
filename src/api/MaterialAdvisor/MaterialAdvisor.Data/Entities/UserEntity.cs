@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Users")]
+[Index(nameof(Name), IsUnique = true)]
+[Index(nameof(Email), IsUnique = true)]
 public class UserEntity
 {
     public Guid Id { get; set; }

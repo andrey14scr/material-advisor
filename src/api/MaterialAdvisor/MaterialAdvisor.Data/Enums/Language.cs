@@ -1,6 +1,6 @@
 ﻿namespace MaterialAdvisor.Data.Enums;
 
-public enum LanguageType : byte
+public enum Language : byte
 {
     English,
     Polish,
