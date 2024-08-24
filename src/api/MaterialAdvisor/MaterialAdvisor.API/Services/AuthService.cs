@@ -29,7 +29,7 @@ public class AuthService(IConfiguration configuration, IOptions<JwtOptions> jwtO
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var token = new JwtSecurityToken(issuer: issuer, claims: claims, expires: DateTime.Now.AddMinutes(2), signingCredentials: creds);
+        var token = new JwtSecurityToken(issuer: issuer, claims: claims, expires: DateTime.Now.AddMinutes(jwtOptions.Value.ExpireIn), signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

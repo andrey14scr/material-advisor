@@ -18,11 +18,19 @@ public class LanguageTextEntity
 
     public virtual LanguageEntity Language { get; set; }
 
-    public virtual ICollection<QuestionEntity> Questions { get; set; } = [];
+    public virtual Guid? QuestionId { get; set; }
 
-    public virtual ICollection<AnswerEntity> Answers { get; set; } = [];
+    public virtual QuestionEntity? Question { get; set; }
 
-    public virtual ICollection<AnswerGroupEntity> AnswerGroups { get; set; } = [];
+    public virtual Guid? AnswerId { get; set; }
 
-    public virtual ICollection<TopicEntity> Topics { get; set; } = [];
+    public virtual AnswerEntity? Answer { get; set; }
+
+    public virtual Guid? AnswerGroupId { get; set; }
+
+    public virtual AnswerGroupEntity? AnswerGroup { get; set; }
+
+    public virtual Guid? TopicId { get; set; }
+
+    public virtual TopicEntity? Topic { get; set; }
 }

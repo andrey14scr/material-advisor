@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Data", "Mat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application", "MaterialAdvisor.Application\MaterialAdvisor.Application.csproj", "{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialAdvisor.Data.Migrator", "MaterialAdvisor.Data.Migrator\MaterialAdvisor.Data.Migrator.csproj", "{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F249F28C-1A68-4719-B6F0-161B7FBEF6CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

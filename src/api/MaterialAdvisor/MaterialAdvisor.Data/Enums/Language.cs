@@ -4,7 +4,4 @@ public enum Language : byte
 {
     English,
     Polish,
-    Ukranian,
-    Belarussian,
-    Russian,
 }

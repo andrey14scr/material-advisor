@@ -22,7 +22,7 @@ public static class ApplicationConfiguration
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-        services.Configure<CachingOptions>(cnf => configuration.GetSection("Caching"));
+        services.Configure<CachingOptions>(configuration.GetSection("Caching"));
 
         services.AddDbContext<MaterialAdvisorContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }

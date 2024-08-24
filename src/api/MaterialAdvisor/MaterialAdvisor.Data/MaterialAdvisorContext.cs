@@ -1,4 +1,5 @@
 ﻿using MaterialAdvisor.Data.Entities;
+using MaterialAdvisor.Data.Enums;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -16,5 +17,27 @@ public class MaterialAdvisorContext : DbContext
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {
+    }
+
+    public MaterialAdvisorContext()
+    {
+
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer("Server=.;Database=MaterialAdvisorDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        var languages = Enum.GetValues(typeof(Language))
+            .Cast<Language>()
+            .Select(l => new LanguageEntity { Id = l, Name = l.ToString() })
+            .ToList();
+
+        modelBuilder.Entity<LanguageEntity>().HasData(languages);
     }
 }

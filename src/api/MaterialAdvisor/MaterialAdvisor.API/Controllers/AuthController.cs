@@ -8,6 +8,6 @@ public class AuthController(AuthService authService, ILogger<MaterialController>
     [HttpGet]
     public IActionResult Get(string username, string email)
     {
-        return Ok(authService.GenerateJwtToken(username, email));
+        return Ok("Bearer " + authService.GenerateJwtToken(username, email));
     }
 }

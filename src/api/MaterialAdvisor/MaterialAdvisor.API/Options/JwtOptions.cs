@@ -7,4 +7,6 @@ public class JwtOptions
     public string Audience { get; set; } = null!;
 
     public string Key { get; set; } = null!;
+
+    public int ExpireIn { get; set; }
 }

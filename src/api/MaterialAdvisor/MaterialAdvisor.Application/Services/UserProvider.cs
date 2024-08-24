@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace MaterialAdvisor.Application.Services;
@@ -19,12 +20,12 @@ public class UserProvider(MaterialAdvisorContext dbContext,
     public async Task<UserInfo> GetUser()
     {
         var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
-        var username = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name)!.Value;
+        var username = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Name)!.Value;
         var cacheKey = $"user_{username}_{email}";
 
         if (!cache.TryGetValue(cacheKey, out UserInfo? user) || user is null)
         {
-            var userEntity = await dbContext.Users.SingleAsync(u => u.Name == username && u.Email == email);
+            var userEntity = await dbContext.Users.AsNoTracking().SingleAsync(u => u.Name == username && u.Email == email);
             user = new UserInfo() { UserId = userEntity.Id, UserEmail = userEntity.Email, UserName = userEntity.Name };
             
             var cacheOptions = new MemoryCacheEntryOptions()
