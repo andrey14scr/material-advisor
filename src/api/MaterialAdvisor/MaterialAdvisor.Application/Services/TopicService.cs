@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 
-using MaterialAdvisor.Application.Models.Editable;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
@@ -11,24 +10,82 @@ namespace MaterialAdvisor.Application.Services;
 
 public class TopicService(MaterialAdvisorContext dbContext, IUserProvider tenantService, IMapper mapper) : ITopicService
 {
-    public async Task<EditableTopic> Create(EditableTopic topicModel)
+    public async Task<TModel> Create<TModel>(TModel topicModel)
     {
-        var topicEntity = mapper.Map<TopicEntity>(topicModel);
-        await EnrichWithUserId(topicEntity);
-
-        var createdTopic = await dbContext.Topics.AddAsync(topicEntity);
-        await dbContext.SaveChangesAsync();
-
-        var createdTopicModel = mapper.Map<EditableTopic>(createdTopic.Entity);
-        return createdTopicModel;
+        var topicEntity = await MapToEntity(topicModel);
+        var createdTopic = await CreateTopic(topicEntity);
+        return MapToEditableModel<TModel>(createdTopic);
     }
 
     public async Task<bool> Delete(Guid topicId)
     {
-        var topicToDelete = await GetFullTopic(dbContext).SingleOrDefaultAsync(t => t.Id == topicId);
+        var topicToDelete = await GetFullTopic().SingleAsync(t => t.Id == topicId);
+        var deleted = await DeleteTopic(topicToDelete);
+        return deleted != 0;
+    }
 
-        dbContext.Topics.Remove(topicToDelete!);
+    public async Task<TModel> Get<TModel>(Guid topicId)
+    {
+        var topic = await GetFullTopic().AsNoTracking().SingleAsync(t => t.Id == topicId);
+        return MapToEditableModel<TModel>(topic);
+    }
 
+    public async Task<IList<TModel>> Get<TModel>()
+    {
+        var topic = await GetFullTopic().AsNoTracking().ToListAsync();
+        var topicsModel = mapper.Map<IList<TModel>>(topic);
+        return topicsModel;
+    }
+
+    public async Task<TModel> Update<TModel>(TModel topicModel)
+    {
+        var topicEntity = await MapToEntity(topicModel);
+        var existingTopic = await GetFullTopic().SingleAsync(t => t.Id == topicEntity.Id);
+
+        using var transaction = await dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            await DeleteTopic(existingTopic);
+            var createdTopic = await CreateTopic(topicEntity);
+            return MapToEditableModel<TModel>(createdTopic);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    private async Task<TopicEntity> MapToEntity<TModel>(TModel topic)
+    {
+        var topicEntity = mapper.Map<TopicEntity>(topic);
+        await EnrichWithUserId(topicEntity);
+        return topicEntity;
+    }
+
+    private TModel MapToEditableModel<TModel>(TopicEntity topic)
+    {
+        var topicsModel = mapper.Map<TModel>(topic);
+        return topicsModel;
+    }
+
+    private async Task<int> DeleteTopic(TopicEntity topic)
+    {
+        dbContext.Topics.Remove(topic);
+        RemoveUnusedLanguageTexts();
+        var deleted = await dbContext.SaveChangesAsync();
+        return deleted;
+    }
+
+    private async Task<TopicEntity> CreateTopic(TopicEntity topic)
+    {
+        var createdTopic = await dbContext.Topics.AddAsync(topic);
+        await dbContext.SaveChangesAsync();
+        return createdTopic.Entity;
+    }
+
+    private void RemoveUnusedLanguageTexts()
+    {
         var textsToDelete = dbContext.ChangeTracker.Entries<LanguageTextEntity>()
             .Where(lt => !lt.Entity.AnswerGroupId.HasValue
                 && !lt.Entity.AnswerId.HasValue
@@ -38,32 +95,9 @@ public class TopicService(MaterialAdvisorContext dbContext, IUserProvider tenant
             .ToList();
 
         dbContext.LanguageTexts.RemoveRange(textsToDelete);
-
-        var deleted = await dbContext.SaveChangesAsync();
-
-        return deleted != 0;
     }
 
-    public async Task<EditableTopic> Get(Guid topicId)
-    {
-        var topic = await GetFullTopic(dbContext).AsNoTracking().SingleOrDefaultAsync(t => t.Id == topicId);
-        var topicModel = mapper.Map<EditableTopic>(topic);
-        return topicModel;
-    }
-
-    public async Task<EditableTopic> Update(EditableTopic topicModel)
-    {
-        var topicEntity = mapper.Map<TopicEntity>(topicModel);
-        await EnrichWithUserId(topicEntity);
-
-        var updatedTopic = dbContext.Topics.Update(topicEntity);
-        await dbContext.SaveChangesAsync();
-
-        var updatedTopicModel = mapper.Map<EditableTopic>(updatedTopic);
-        return updatedTopicModel;
-    }
-
-    private static IIncludableQueryable<TopicEntity, ICollection<LanguageTextEntity>> GetFullTopic(MaterialAdvisorContext dbContext)
+    private IIncludableQueryable<TopicEntity, ICollection<LanguageTextEntity>> GetFullTopic()
     {
         return dbContext.Topics
                     .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(ag => ag.Answers).ThenInclude(a => a.Texts)

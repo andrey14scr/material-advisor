@@ -24,6 +24,13 @@ public class MaterialAdvisorContext : DbContext
 
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var result = base.SaveChangesAsync(cancellationToken);
+        ChangeTracker.Clear();
+        return result;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer("Server=.;Database=MaterialAdvisorDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True");

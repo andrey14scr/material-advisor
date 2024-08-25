@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaterialAdvisor.API.Controllers;
 
-public class AuthController(AuthService authService, ILogger<MaterialController> logger) : BaseApiController
+public class AuthController(AuthService authService, ILogger<TopicController> logger) : BaseApiController
 {
     [HttpGet]
     public IActionResult Get(string username, string email)

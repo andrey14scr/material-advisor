@@ -1,14 +1,14 @@
-﻿using MaterialAdvisor.Application.Models.Editable;
-
-namespace MaterialAdvisor.Application.Services;
+﻿namespace MaterialAdvisor.Application.Services;
 
 public interface ITopicService
 {
-    Task<EditableTopic> Create(EditableTopic topicModel);
+    Task<TModel> Create<TModel>(TModel topicModel);
 
     Task<bool> Delete(Guid topicId);
 
-    Task<EditableTopic> Get(Guid topicId);
+    Task<IList<TModel>> Get<TModel>();
 
-    Task<EditableTopic> Update(EditableTopic topicModel);
+    Task<TModel> Get<TModel>(Guid topicId);
+
+    Task<TModel> Update<TModel>(TModel topicModel);
 }

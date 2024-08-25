@@ -6,17 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaterialAdvisor.API.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 [Authorize]
-public class MaterialController(ITopicService topicService) : BaseApiController
+public class TopicController(ITopicService topicService) : BaseApiController
 {
-    [HttpGet(Constants.Entities.Topic)]
-    public async Task<ActionResult<EditableTopic>> GetByTopicIdAsync(Guid id)
+    [HttpGet()]
+    public async Task<ActionResult<IList<EditableTopic>>> GetTopics()
     {
-        var result = await topicService.Get(id);
+        var result = await topicService.Get<EditableTopic>();
         return Ok(result);
     }
 
-    [HttpPost(Constants.Entities.Topic)]
+    [HttpGet("{id}")]
+    public async Task<ActionResult<EditableTopic>> GetByTopicIdAsync(Guid id)
+    {
+        var result = await topicService.Get<EditableTopic>(id);
+        return Ok(result);
+    }
+
+    [HttpPost()]
     public async Task<ActionResult<EditableTopic>> CreateTopic(EditableTopic topic)
     {
         if (topic.Id == Guid.Empty)
@@ -31,8 +40,8 @@ public class MaterialController(ITopicService topicService) : BaseApiController
         }
     }
 
-    [HttpDelete(Constants.Entities.Topic)]
-    public async Task<ActionResult<bool>> CreateTopic(Guid topicId)
+    [HttpDelete()]
+    public async Task<ActionResult<bool>> DeleteTopic(Guid topicId)
     {
         var result = await topicService.Delete(topicId);
         return Ok(result);
