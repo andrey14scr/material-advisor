@@ -66,10 +66,5 @@ public class MaterialAdvisorContext : DbContext
             .WithMany(u => u.CreatedGroups)
             .HasForeignKey(g => g.OwnerId)
             .OnDelete(DeleteBehavior.ClientCascade);
-
-        modelBuilder.Entity<GroupEntity>()
-            .HasMany(g => g.Users)
-            .WithMany(u => u.Groups)
-            .UsingEntity(j => j.ToTable("GroupEntityUserEntity"));
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240825225250_Initial")]
+    [Migration("20240825225505_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("GroupEntityUserEntity", (string)null);
+                    b.ToTable("GroupEntityUserEntity");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>

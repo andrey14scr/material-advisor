@@ -34,7 +34,7 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("GroupEntityUserEntity", (string)null);
+                    b.ToTable("GroupEntityUserEntity");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
