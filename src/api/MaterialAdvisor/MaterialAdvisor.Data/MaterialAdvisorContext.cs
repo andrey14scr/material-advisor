@@ -3,6 +3,8 @@ using MaterialAdvisor.Data.Enums;
 
 using Microsoft.EntityFrameworkCore;
 
+using System.Text.RegularExpressions;
+
 namespace MaterialAdvisor.Data;
 
 public class MaterialAdvisorContext : DbContext
@@ -45,6 +47,29 @@ public class MaterialAdvisorContext : DbContext
             .Select(l => new LanguageEntity { Id = l, Name = l.ToString() })
             .ToList();
 
+        var roles = Enum.GetValues(typeof(RoleType))
+            .Cast<RoleType>()
+            .Select(r => new RoleEntity { Id = r, Name = r.ToString() })
+            .ToList();
+
+        var permissions = Enum.GetValues(typeof(PermissionType))
+            .Cast<PermissionType>()
+            .Select(p => new PermissionEntity { Id = p, Name = p.ToString() })
+            .ToList();
+
         modelBuilder.Entity<LanguageEntity>().HasData(languages);
+        modelBuilder.Entity<RoleEntity>().HasData(roles);
+        modelBuilder.Entity<PermissionEntity>().HasData(permissions);
+
+        modelBuilder.Entity<GroupEntity>()
+            .HasOne(g => g.Owner)
+            .WithMany(u => u.CreatedGroups)
+            .HasForeignKey(g => g.OwnerId)
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        modelBuilder.Entity<GroupEntity>()
+            .HasMany(g => g.Users)
+            .WithMany(u => u.Groups)
+            .UsingEntity(j => j.ToTable("GroupEntityUserEntity"));
     }
 }

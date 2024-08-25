@@ -11,7 +11,7 @@ public class TopicEntity
 
     public virtual UserEntity User { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; }
+    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
 
-    public virtual ICollection<QuestionEntity> Questions { get; set; }
+    public virtual ICollection<QuestionEntity> Questions { get; set; } = [];
 }

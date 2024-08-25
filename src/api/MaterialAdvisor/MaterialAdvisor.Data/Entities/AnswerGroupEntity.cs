@@ -13,7 +13,7 @@ public class AnswerGroupEntity
 
     public byte Number { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; }
+    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
 
-    public virtual ICollection<AnswerEntity> Answers { get; set; }
+    public virtual ICollection<AnswerEntity> Answers { get; set; } = [];
 }

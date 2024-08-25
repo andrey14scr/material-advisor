@@ -15,5 +15,7 @@ public class AnswerEntity
 
     public double Points { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; }
+    public bool IsRight { get; set; }
+
+    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
 }

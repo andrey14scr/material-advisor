@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240824120254_Initial")]
+    [Migration("20240825225250_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,6 +25,21 @@ namespace MaterialAdvisor.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GroupEntityUserEntity", b =>
+                {
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("GroupsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("GroupEntityUserEntity", (string)null);
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -33,6 +48,9 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.Property<Guid>("AnswerGroupId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsRight")
+                        .HasColumnType("bit");
 
                     b.Property<byte>("Number")
                         .HasColumnType("tinyint");
@@ -64,6 +82,35 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("AnswerGroups");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("GroupEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupEntityId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.LanguageEntity", b =>
@@ -99,16 +146,16 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AnswerGroupsId")
+                    b.Property<Guid?>("AnswerGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AnswersId")
+                    b.Property<Guid?>("AnswerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte>("LanguageId")
                         .HasColumnType("tinyint");
 
-                    b.Property<Guid?>("QuestionsId")
+                    b.Property<Guid?>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Text")
@@ -116,22 +163,49 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<Guid?>("TopicsId")
+                    b.Property<Guid?>("TopicId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnswerGroupsId");
+                    b.HasIndex("AnswerGroupId");
 
-                    b.HasIndex("AnswersId");
+                    b.HasIndex("AnswerId");
 
                     b.HasIndex("LanguageId");
 
-                    b.HasIndex("QuestionsId");
+                    b.HasIndex("QuestionId");
 
-                    b.HasIndex("TopicsId");
+                    b.HasIndex("TopicId");
 
                     b.ToTable("LanguageTexts");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.PermissionEntity", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)0,
+                            Name = "ChangeTopic"
+                        },
+                        new
+                        {
+                            Id = (byte)1,
+                            Name = "GetTopic"
+                        });
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>
@@ -162,6 +236,43 @@ namespace MaterialAdvisor.Data.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.RoleEntity", b =>
+                {
+                    b.Property<byte>("Id")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (byte)0,
+                            Name = "ReadStudent"
+                        },
+                        new
+                        {
+                            Id = (byte)1,
+                            Name = "ReadTeacher"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            Name = "WriteStudent"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            Name = "WriteTeacher"
+                        });
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -189,6 +300,11 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -203,6 +319,51 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PermissionEntityRoleEntity", b =>
+                {
+                    b.Property<byte>("PermissionsId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("RolesId")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("PermissionsId", "RolesId");
+
+                    b.HasIndex("RolesId");
+
+                    b.ToTable("PermissionEntityRoleEntity");
+                });
+
+            modelBuilder.Entity("RoleEntityUserEntity", b =>
+                {
+                    b.Property<byte>("RolesId")
+                        .HasColumnType("tinyint");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleEntityUserEntity");
+                });
+
+            modelBuilder.Entity("GroupEntityUserEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
@@ -227,15 +388,30 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Question");
                 });
 
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
+                        .WithMany("ParentGroups")
+                        .HasForeignKey("GroupEntityId");
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
+                        .WithMany("CreatedGroups")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.LanguageTextEntity", b =>
                 {
-                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroups")
+                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
                         .WithMany("Texts")
-                        .HasForeignKey("AnswerGroupsId");
+                        .HasForeignKey("AnswerGroupId");
 
-                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerEntity", "Answers")
+                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerEntity", "Answer")
                         .WithMany("Texts")
-                        .HasForeignKey("AnswersId");
+                        .HasForeignKey("AnswerId");
 
                     b.HasOne("MaterialAdvisor.Data.Entities.LanguageEntity", "Language")
                         .WithMany()
@@ -243,23 +419,23 @@ namespace MaterialAdvisor.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Questions")
+                    b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
                         .WithMany("Texts")
-                        .HasForeignKey("QuestionsId");
+                        .HasForeignKey("QuestionId");
 
-                    b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topics")
+                    b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany("Texts")
-                        .HasForeignKey("TopicsId");
+                        .HasForeignKey("TopicId");
 
-                    b.Navigation("AnswerGroups");
+                    b.Navigation("Answer");
 
-                    b.Navigation("Answers");
+                    b.Navigation("AnswerGroup");
 
                     b.Navigation("Language");
 
-                    b.Navigation("Questions");
+                    b.Navigation("Question");
 
-                    b.Navigation("Topics");
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>
@@ -284,6 +460,36 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PermissionEntityRoleEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.PermissionEntity", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.RoleEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RoleEntityUserEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.RoleEntity", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
                 {
                     b.Navigation("Texts");
@@ -294,6 +500,11 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Texts");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
+                {
+                    b.Navigation("ParentGroups");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>
@@ -308,6 +519,11 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("Texts");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.UserEntity", b =>
+                {
+                    b.Navigation("CreatedGroups");
                 });
 #pragma warning restore 612, 618
         }

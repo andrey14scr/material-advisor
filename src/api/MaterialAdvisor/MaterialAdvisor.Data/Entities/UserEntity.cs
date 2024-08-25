@@ -18,4 +18,14 @@ public class UserEntity
     [Required]
     [MaxLength(150)]
     public string Email { get; set; } = null!;
+
+    [Required]
+    [MaxLength(150)]
+    public string Hash { get; set; } = null!;
+
+    public virtual ICollection<RoleEntity> Roles { get; set; } = [];
+
+    public virtual ICollection<GroupEntity> Groups { get; set; } = [];
+
+    public virtual ICollection<GroupEntity> CreatedGroups { get; set; } = [];
 }
