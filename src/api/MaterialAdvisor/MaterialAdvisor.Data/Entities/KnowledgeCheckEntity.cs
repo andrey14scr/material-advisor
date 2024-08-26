@@ -21,4 +21,13 @@ public class KnowledgeCheckEntity
     [Required]
     [MaxLength(300)]
     public string Description { get; set; } = null!;
+
+    public DateTime StartDate { get; set; }
+
+    public DateTime? EndDate { get; set; }
+
+    [Range(1, 250)]
+    public byte Attempts { get; set; }
+
+    public virtual ICollection<GroupEntity> Groups { get; set; } = [];
 }

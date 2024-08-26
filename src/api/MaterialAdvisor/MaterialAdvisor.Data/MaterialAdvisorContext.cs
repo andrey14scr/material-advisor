@@ -3,8 +3,6 @@ using MaterialAdvisor.Data.Enums;
 
 using Microsoft.EntityFrameworkCore;
 
-using System.Text.RegularExpressions;
-
 namespace MaterialAdvisor.Data;
 
 public class MaterialAdvisorContext : DbContext
@@ -16,6 +14,11 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<QuestionEntity> Questions { get; set; }
     public DbSet<TopicEntity> Topics { get; set; }
     public DbSet<UserEntity> Users { get; set; }
+    public DbSet<GroupEntity> Groups { get; set; }
+    public DbSet<KnowledgeCheckEntity> KnowledgeChecks { get; set; }
+    public DbSet<PermissionEntity> Permissions { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {

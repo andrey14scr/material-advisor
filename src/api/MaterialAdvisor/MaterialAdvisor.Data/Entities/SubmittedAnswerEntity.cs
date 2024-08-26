@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MaterialAdvisor.Data.Entities;
@@ -19,6 +20,9 @@ public class SubmittedAnswerEntity
     public Guid KnowledgeCheckId { get; set; }
 
     public virtual KnowledgeCheckEntity KnowledgeCheck { get; set; }
+
+    [Range(1, 250)]
+    public byte Attempt { get; set; }
 
     public string? Value { get; set; }
 }

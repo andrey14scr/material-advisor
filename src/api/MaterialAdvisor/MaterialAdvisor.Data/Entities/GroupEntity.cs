@@ -10,7 +10,7 @@ public class GroupEntity
 
     public Guid? ParentGroupId { get; set; }
 
-    public virtual ICollection<GroupEntity> ParentGroups { get; set; } = [];
+    public virtual GroupEntity ParentGroup { get; set; }
 
     public Guid OwnerId { get; set; }
 
@@ -20,5 +20,9 @@ public class GroupEntity
     [MaxLength(150)]
     public string Name { get; set; } = null!;
 
+    public bool WithInheritance { get; set; }
+
     public virtual ICollection<UserEntity> Users { get; set; } = [];
+
+    public virtual ICollection<KnowledgeCheckEntity> KnowledgeChecks { get; set; } = [];
 }

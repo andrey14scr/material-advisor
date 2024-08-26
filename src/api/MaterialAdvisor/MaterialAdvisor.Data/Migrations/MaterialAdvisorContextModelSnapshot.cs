@@ -22,6 +22,21 @@ namespace MaterialAdvisor.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
+                {
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("KnowledgeChecksId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("GroupsId", "KnowledgeChecksId");
+
+                    b.HasIndex("KnowledgeChecksId");
+
+                    b.ToTable("GroupEntityKnowledgeCheckEntity");
+                });
+
             modelBuilder.Entity("GroupEntityUserEntity", b =>
                 {
                     b.Property<Guid>("GroupsId")
@@ -87,9 +102,6 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("GroupEntityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -101,13 +113,54 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<Guid?>("ParentGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("WithInheritance")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("GroupEntityId");
+                    b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
+                    b.HasIndex("ParentGroupId");
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte>("Attempts")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<short>("Number")
+                        .HasColumnType("smallint");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("TopicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("KnowledgeChecks");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.LanguageEntity", b =>
@@ -270,18 +323,44 @@ namespace MaterialAdvisor.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("KnowledgeCheckId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte>("Attempt")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "QuestionId", "KnowledgeCheckId");
+
+                    b.HasIndex("KnowledgeCheckId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("SubmittedAnswers");
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Topics");
                 });
@@ -348,6 +427,21 @@ namespace MaterialAdvisor.Data.Migrations
                     b.ToTable("RoleEntityUserEntity");
                 });
 
+            modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
+                        .WithMany()
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", null)
+                        .WithMany()
+                        .HasForeignKey("KnowledgeChecksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("GroupEntityUserEntity", b =>
                 {
                     b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
@@ -387,17 +481,30 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
                 {
-                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
-                        .WithMany("ParentGroups")
-                        .HasForeignKey("GroupEntityId");
-
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
                         .WithMany("CreatedGroups")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
+                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", "ParentGroup")
+                        .WithMany()
+                        .HasForeignKey("ParentGroupId");
+
                     b.Navigation("Owner");
+
+                    b.Navigation("ParentGroup");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.LanguageTextEntity", b =>
@@ -446,15 +553,42 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Topic");
                 });
 
-            modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
                 {
+                    b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", "KnowledgeCheck")
+                        .WithMany()
+                        .HasForeignKey("KnowledgeCheckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("KnowledgeCheck");
+
+                    b.Navigation("Question");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("PermissionEntityRoleEntity", b =>
@@ -497,11 +631,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Texts");
-                });
-
-            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
-                {
-                    b.Navigation("ParentGroups");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>

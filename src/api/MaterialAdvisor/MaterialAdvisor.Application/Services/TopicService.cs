@@ -109,6 +109,6 @@ public class TopicService(MaterialAdvisorContext dbContext, IUserProvider tenant
     private async Task EnrichWithUserId(TopicEntity topic)
     {
         var userTenant = await tenantService.GetUser();
-        topic.UserId = userTenant.UserId;
+        topic.OwnerId = userTenant.UserId;
     }
 }

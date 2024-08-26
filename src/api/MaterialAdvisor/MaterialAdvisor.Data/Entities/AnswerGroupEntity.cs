@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MaterialAdvisor.Data.Entities;
 
@@ -11,6 +12,7 @@ public class AnswerGroupEntity
 
     public virtual QuestionEntity Question { get; set; }
 
+    [Range(1, 250)]
     public byte Number { get; set; }
 
     public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];

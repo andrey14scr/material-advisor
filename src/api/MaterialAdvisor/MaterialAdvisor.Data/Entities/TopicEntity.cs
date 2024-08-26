@@ -7,9 +7,9 @@ public class TopicEntity
 {
     public Guid Id { get; set; }
 
-    public Guid UserId { get; set; }
+    public Guid OwnerId { get; set; }
 
-    public virtual UserEntity User { get; set; }
+    public virtual UserEntity Owner { get; set; }
 
     public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
 

@@ -1,5 +1,6 @@
 ﻿using MaterialAdvisor.Data.Enums;
 
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MaterialAdvisor.Data.Entities;
@@ -13,8 +14,10 @@ public class QuestionEntity
 
     public virtual TopicEntity Topic { get; set; }
 
+    [Range(1, 250)]
     public byte Number { get; set; }
 
+    [Range(1, 250)]
     public byte Version { get; set; }
 
     public double Points { get; set; }

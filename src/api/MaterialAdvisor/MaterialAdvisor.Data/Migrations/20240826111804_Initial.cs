@@ -95,14 +95,14 @@ namespace MaterialAdvisor.Data.Migrations
                     ParentGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    GroupEntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    WithInheritance = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Groups_Groups_GroupEntityId",
-                        column: x => x.GroupEntityId,
+                        name: "FK_Groups_Groups_ParentGroupId",
+                        column: x => x.ParentGroupId,
                         principalTable: "Groups",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -141,14 +141,14 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Topics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Topics_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Topics_Users_OwnerId",
+                        column: x => x.OwnerId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -179,6 +179,30 @@ namespace MaterialAdvisor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KnowledgeChecks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TopicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Number = table.Column<short>(type: "smallint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Attempts = table.Column<byte>(type: "tinyint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KnowledgeChecks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_KnowledgeChecks_Topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
@@ -201,6 +225,30 @@ namespace MaterialAdvisor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GroupEntityKnowledgeCheckEntity",
+                columns: table => new
+                {
+                    GroupsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KnowledgeChecksId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupEntityKnowledgeCheckEntity", x => new { x.GroupsId, x.KnowledgeChecksId });
+                    table.ForeignKey(
+                        name: "FK_GroupEntityKnowledgeCheckEntity_Groups_GroupsId",
+                        column: x => x.GroupsId,
+                        principalTable: "Groups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupEntityKnowledgeCheckEntity_KnowledgeChecks_KnowledgeChecksId",
+                        column: x => x.KnowledgeChecksId,
+                        principalTable: "KnowledgeChecks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnswerGroups",
                 columns: table => new
                 {
@@ -217,6 +265,37 @@ namespace MaterialAdvisor.Data.Migrations
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubmittedAnswers",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KnowledgeCheckId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Attempt = table.Column<byte>(type: "tinyint", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubmittedAnswers", x => new { x.UserId, x.QuestionId, x.KnowledgeCheckId });
+                    table.ForeignKey(
+                        name: "FK_SubmittedAnswers_KnowledgeChecks_KnowledgeCheckId",
+                        column: x => x.KnowledgeCheckId,
+                        principalTable: "KnowledgeChecks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SubmittedAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_SubmittedAnswers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -323,19 +402,29 @@ namespace MaterialAdvisor.Data.Migrations
                 column: "AnswerGroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GroupEntityKnowledgeCheckEntity_KnowledgeChecksId",
+                table: "GroupEntityKnowledgeCheckEntity",
+                column: "KnowledgeChecksId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GroupEntityUserEntity_UsersId",
                 table: "GroupEntityUserEntity",
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_GroupEntityId",
-                table: "Groups",
-                column: "GroupEntityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Groups_OwnerId",
                 table: "Groups",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_ParentGroupId",
+                table: "Groups",
+                column: "ParentGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KnowledgeChecks_TopicId",
+                table: "KnowledgeChecks",
+                column: "TopicId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LanguageTexts_AnswerGroupId",
@@ -378,9 +467,19 @@ namespace MaterialAdvisor.Data.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Topics_UserId",
+                name: "IX_SubmittedAnswers_KnowledgeCheckId",
+                table: "SubmittedAnswers",
+                column: "KnowledgeCheckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmittedAnswers_QuestionId",
+                table: "SubmittedAnswers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Topics_OwnerId",
                 table: "Topics",
-                column: "UserId");
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -399,6 +498,9 @@ namespace MaterialAdvisor.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "GroupEntityKnowledgeCheckEntity");
+
+            migrationBuilder.DropTable(
                 name: "GroupEntityUserEntity");
 
             migrationBuilder.DropTable(
@@ -409,6 +511,9 @@ namespace MaterialAdvisor.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RoleEntityUserEntity");
+
+            migrationBuilder.DropTable(
+                name: "SubmittedAnswers");
 
             migrationBuilder.DropTable(
                 name: "Groups");
@@ -424,6 +529,9 @@ namespace MaterialAdvisor.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "KnowledgeChecks");
 
             migrationBuilder.DropTable(
                 name: "AnswerGroups");
