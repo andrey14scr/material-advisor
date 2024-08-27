@@ -1,4 +1,6 @@
-﻿using MaterialAdvisor.Application.Exceptions;
+﻿using AutoMapper;
+
+using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Models.Shared;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -7,7 +9,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class UserService(MaterialAdvisorContext dbContext, ISecurityService securityService, IUserProvider userProvider) : IUserService
+public class UserService(MaterialAdvisorContext dbContext, 
+    ISecurityService securityService, 
+    IUserProvider userProvider, 
+    IMapper mapper) : IUserService
 {
     public async Task<UserInfo> Get(string login, string hash)
     {
@@ -20,12 +25,7 @@ public class UserService(MaterialAdvisorContext dbContext, ISecurityService secu
             throw new NotFoundException();
         }
 
-        return new UserInfo
-        {
-            UserId = user.Id,
-            UserEmail = securityService.Decrypt(user.Email),
-            UserName = securityService.Decrypt(user.Name),
-        };
+        return mapper.Map<UserInfo>(user);
     }
 
     public async Task<UserInfo> Create(string username, string email, string hash)

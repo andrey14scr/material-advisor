@@ -1,4 +1,6 @@
-﻿using MaterialAdvisor.Application.Configuration.Options;
+﻿using AutoMapper;
+
+using MaterialAdvisor.Application.Configuration.Options;
 using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Models.Shared;
 using MaterialAdvisor.Data;
@@ -17,7 +19,8 @@ public class UserProvider(MaterialAdvisorContext dbContext,
     IOptions<CachingOptions> cachingOptions, 
     IHttpContextAccessor httpContextAccessor, 
     ISecurityService securityService,
-    IMemoryCache cache) : IUserProvider
+    IMemoryCache cache,
+    IMapper mapper) : IUserProvider
 {
     public UserInfo AddUser(UserEntity user)
     {
@@ -47,17 +50,11 @@ public class UserProvider(MaterialAdvisorContext dbContext,
 
     private UserInfo AddToCache(UserEntity userEntity)
     {
-        var username = securityService.Decrypt(userEntity.Name);
-        var userInfo = new UserInfo
-        {
-            UserEmail = securityService.Decrypt(userEntity.Email),
-            UserId = userEntity.Id,
-            UserName = username
-        };
+        var userInfo = mapper.Map<UserInfo>(userEntity);
 
         var cacheOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(cachingOptions.Value.ExpirationTime));
-        var cacheKey = GetKey(username);
+        var cacheKey = GetKey(userInfo.UserName);
         cache.Set(cacheKey, userInfo, cacheOptions);
 
         return userInfo;
