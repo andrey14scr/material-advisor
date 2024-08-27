@@ -1,4 +1,5 @@
-﻿using MaterialAdvisor.API.Extentions;
+﻿using MaterialAdvisor.API.Exceptions;
+using MaterialAdvisor.API.Extentions;
 using MaterialAdvisor.API.Models;
 
 using System.Net.Mime;
@@ -25,14 +26,12 @@ public class ErrorHandlingMiddleware(RequestDelegate next)
     {
         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-        var statusCode = StatusCodes.Status500InternalServerError;
-
-        //var statusCode = exception switch
-        //{
-        //    UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
-        //    KeyNotFoundException => StatusCodes.Status404NotFound,
-        //    _ => StatusCodes.Status500InternalServerError
-        //};
+        var statusCode = exception switch
+        {
+            //RefreshTokenExpiredException => StatusCodes.Status401Unauthorized,
+            //KeyNotFoundException => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError
+        };
 
         context.Response.StatusCode = statusCode;
 

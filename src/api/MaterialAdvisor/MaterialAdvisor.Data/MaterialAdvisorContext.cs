@@ -19,6 +19,7 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<PermissionEntity> Permissions { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
+    public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {

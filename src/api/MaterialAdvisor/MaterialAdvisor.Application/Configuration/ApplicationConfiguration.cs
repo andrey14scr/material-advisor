@@ -19,10 +19,14 @@ public static class ApplicationConfiguration
 
         services.AddScoped<IUserProvider, UserProvider>();
         services.AddScoped<ITopicService, TopicService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+        services.AddScoped<ISecurityService, SecurityService>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services.Configure<CachingOptions>(configuration.GetSection("Caching"));
+        services.Configure<SecurityOptions>(configuration.GetSection("Security"));
 
         services.AddDbContext<MaterialAdvisorContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }

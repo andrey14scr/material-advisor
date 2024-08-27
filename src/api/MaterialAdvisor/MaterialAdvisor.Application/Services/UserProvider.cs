@@ -1,6 +1,8 @@
 ﻿using MaterialAdvisor.Application.Configuration.Options;
+using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Models.Shared;
 using MaterialAdvisor.Data;
+using MaterialAdvisor.Data.Entities;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -8,31 +10,58 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace MaterialAdvisor.Application.Services;
 
 public class UserProvider(MaterialAdvisorContext dbContext, 
     IOptions<CachingOptions> cachingOptions, 
     IHttpContextAccessor httpContextAccessor, 
+    ISecurityService securityService,
     IMemoryCache cache) : IUserProvider
 {
+    public UserInfo AddUser(UserEntity user)
+    {
+        return AddToCache(user);
+    }
+
     public async Task<UserInfo> GetUser()
     {
-        var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
         var username = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Name)!.Value;
-        var cacheKey = $"user_{username}_{email}";
+        var cacheKey = GetKey(username);
 
-        if (!cache.TryGetValue(cacheKey, out UserInfo? user) || user is null)
+        if (!cache.TryGetValue(cacheKey, out UserInfo? userInfo) || userInfo is null)
         {
-            var userEntity = await dbContext.Users.AsNoTracking().SingleAsync(u => u.Name == username && u.Email == email);
-            user = new UserInfo() { UserId = userEntity.Id, UserEmail = userEntity.Email, UserName = userEntity.Name };
-            
-            var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(cachingOptions.Value.ExpirationTime));
-            cache.Set(cacheKey, user, cacheOptions);
+            var searchName = securityService.Encrypt(username);
+
+            var userEntity = await dbContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Name == searchName);
+            if (userEntity is null)
+            {
+                throw new NotFoundException();
+            }
+
+            userInfo = AddToCache(userEntity);
         }
 
-        return user;
+        return userInfo;
     }
+
+    private UserInfo AddToCache(UserEntity userEntity)
+    {
+        var username = securityService.Decrypt(userEntity.Name);
+        var userInfo = new UserInfo
+        {
+            UserEmail = securityService.Decrypt(userEntity.Email),
+            UserId = userEntity.Id,
+            UserName = username
+        };
+
+        var cacheOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(cachingOptions.Value.ExpirationTime));
+        var cacheKey = GetKey(username);
+        cache.Set(cacheKey, userInfo, cacheOptions);
+
+        return userInfo;
+    }
+
+    private static string GetKey(string userName) => $"user_{userName}";
 }

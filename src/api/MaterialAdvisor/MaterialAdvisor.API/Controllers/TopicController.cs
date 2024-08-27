@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaterialAdvisor.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 [Authorize]
 public class TopicController(ITopicService topicService) : BaseApiController
 {

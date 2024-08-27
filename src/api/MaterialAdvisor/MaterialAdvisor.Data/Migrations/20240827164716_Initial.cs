@@ -113,6 +113,27 @@ namespace MaterialAdvisor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ExpireAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsRevoked = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleEntityUserEntity",
                 columns: table => new
                 {
@@ -462,6 +483,11 @@ namespace MaterialAdvisor.Data.Migrations
                 column: "TopicId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleEntityUserEntity_UsersId",
                 table: "RoleEntityUserEntity",
                 column: "UsersId");
@@ -508,6 +534,9 @@ namespace MaterialAdvisor.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PermissionEntityRoleEntity");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "RoleEntityUserEntity");

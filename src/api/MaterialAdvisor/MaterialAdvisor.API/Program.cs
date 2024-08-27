@@ -51,14 +51,14 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<TokensGenerator>();
 
 var configuration = builder.Configuration;
 ApplicationConfiguration.ConfigureServices(builder.Services, configuration);
 
-var jwtOptionPath = Constants.Configuration.JwtSection;
-builder.Services.Configure<JwtOptions>(configuration.GetSection(jwtOptionPath));
-var jwtOptions = configuration.GetSection(jwtOptionPath).Get<JwtOptions>()!;
+var jwtOptionPath = Constants.Configuration.AuthSection;
+builder.Services.Configure<AuthOptions>(configuration.GetSection(jwtOptionPath));
+var jwtOptions = configuration.GetSection(jwtOptionPath).Get<AuthOptions>()!;
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

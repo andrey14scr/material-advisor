@@ -286,6 +286,33 @@ namespace MaterialAdvisor.Data.Migrations
                     b.ToTable("Questions");
                 });
 
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.RefreshTokenEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpireAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.RoleEntity", b =>
                 {
                     b.Property<byte>("Id")
@@ -551,6 +578,17 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.RefreshTokenEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>

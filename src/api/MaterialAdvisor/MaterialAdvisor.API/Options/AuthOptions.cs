@@ -1,6 +1,6 @@
 ﻿namespace MaterialAdvisor.API.Options;
 
-public class JwtOptions
+public class AuthOptions
 {
     public string Issuer { get; set; } = null!;
 
@@ -9,4 +9,6 @@ public class JwtOptions
     public string Key { get; set; } = null!;
 
     public int ExpireIn { get; set; }
+
+    public int RefreshTime { get; set; }
 }
