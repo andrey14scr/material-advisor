@@ -7,7 +7,7 @@ namespace MaterialAdvisor.Data.Entities;
 [Table("Users")]
 [Index(nameof(Name), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
-public class UserEntity
+public class UserEntity : IEntity
 {
     public Guid Id { get; set; }
 

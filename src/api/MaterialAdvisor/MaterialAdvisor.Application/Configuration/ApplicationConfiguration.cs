@@ -22,6 +22,7 @@ public static class ApplicationConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<ISecurityService, SecurityService>();
+        services.AddScoped<IKnowledgeCheckService, KnowledgeCheckService>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

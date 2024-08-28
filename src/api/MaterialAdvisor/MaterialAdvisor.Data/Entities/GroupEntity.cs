@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Groups")]
-public class GroupEntity
+public class GroupEntity : IEntity
 {
     public Guid Id { get; set; }
 

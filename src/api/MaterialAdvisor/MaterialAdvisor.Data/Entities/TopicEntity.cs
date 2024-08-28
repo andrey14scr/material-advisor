@@ -3,7 +3,7 @@
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Topics")]
-public class TopicEntity
+public class TopicEntity : IEntity
 {
     public Guid Id { get; set; }
 

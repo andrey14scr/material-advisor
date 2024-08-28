@@ -13,9 +13,9 @@ public class AuthController(TokensGenerator tokensGenerator, IUserService userSe
 {
     [AllowAnonymous]
     [HttpPost(Constants.Actions.Register)]
-    public async Task<IActionResult> Register(string username, string email, string hash)
+    public async Task<IActionResult> Register(string userName, string email, string hash)
     {
-        var userInfo = await userService.Create(username, email, hash);
+        var userInfo = await userService.Create(userName, email, hash);
         var tokens = await tokensGenerator.Generate(userInfo);
         return Ok(tokens);
     }

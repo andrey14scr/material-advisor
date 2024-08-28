@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class RefreshTokenService(MaterialAdvisorContext dbContext, IUserProvider userProvider) : IRefreshTokenService
+public class RefreshTokenService(MaterialAdvisorContext _dbContext) : IRefreshTokenService
 {
     public async Task Create(Guid userId, string token, DateTime expireAt)
     {
@@ -16,13 +16,13 @@ public class RefreshTokenService(MaterialAdvisorContext dbContext, IUserProvider
             UserId = userId
         };
 
-        await dbContext.RefreshTokens.AddAsync(refreshToken);
-        await dbContext.SaveChangesAsync();
+        await _dbContext.RefreshTokens.AddAsync(refreshToken);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<RefreshTokenEntity?> Get(Guid userId, string token)
     {
-        var refreshToken = await dbContext.RefreshTokens
+        var refreshToken = await _dbContext.RefreshTokens
             .OrderByDescending(rt => rt.ExpireAt)
             .FirstOrDefaultAsync(rt => !rt.IsRevoked && rt.UserId == userId && rt.Value == token);
 

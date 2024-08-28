@@ -17,7 +17,7 @@ public class TopicController(ITopicService topicService) : BaseApiController
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<EditableTopic>> GetByTopicIdAsync(Guid id)
+    public async Task<ActionResult<EditableTopic>> GetByTopicId(Guid id)
     {
         var result = await topicService.Get<EditableTopic>(id);
         return Ok(result);
@@ -33,7 +33,7 @@ public class TopicController(ITopicService topicService) : BaseApiController
         }
         else
         {
-            var result = await topicService.Update(topic);
+            var result = await topicService.HardUpdate(topic);
             return Ok(result);
         }
     }

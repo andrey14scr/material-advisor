@@ -9,47 +9,47 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class UserService(MaterialAdvisorContext dbContext, 
-    ISecurityService securityService, 
-    IUserProvider userProvider, 
-    IMapper mapper) : IUserService
+public class UserService(MaterialAdvisorContext _dbContext, 
+    ISecurityService _securityService, 
+    IUserProvider _userProvider, 
+    IMapper _mapper) : IUserService
 {
     public async Task<UserInfo> Get(string login, string hash)
     {
-        var searchLogin = securityService.Encrypt(login);
-        var searchHash = securityService.GetHash(hash);
-        var user = await dbContext.Users.SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
+        var searchLogin = _securityService.Encrypt(login);
+        var searchHash = _securityService.GetHash(hash);
+        var user = await _dbContext.Users.SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
         
         if (user is null)
         {
             throw new NotFoundException();
         }
 
-        return mapper.Map<UserInfo>(user);
+        return _mapper.Map<UserInfo>(user);
     }
 
-    public async Task<UserInfo> Create(string username, string email, string hash)
+    public async Task<UserInfo> Create(string userName, string email, string hash)
     {
         var initialGroup = new List<GroupEntity>
         { 
             new GroupEntity()
             {
-                Name = securityService.Encrypt($"{username} group"),
+                Name = _securityService.Encrypt($"{userName} group"),
             }
         };
 
         var userToCreate = new UserEntity
         {
-            Email = securityService.Encrypt(email),
-            Name = securityService.Encrypt(username),
-            Hash = securityService.GetHash(hash),
+            Email = _securityService.Encrypt(email),
+            Name = _securityService.Encrypt(userName),
+            Hash = _securityService.GetHash(hash),
             Groups = initialGroup,
             CreatedGroups = initialGroup
         };
 
-        var user = await dbContext.Users.AddAsync(userToCreate);
-        await dbContext.SaveChangesAsync();
+        var user = await _dbContext.Users.AddAsync(userToCreate);
+        await _dbContext.SaveChangesAsync();
 
-        return userProvider.AddUser(user.Entity);
+        return _userProvider.AddUser(user.Entity);
     }
 }

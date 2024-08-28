@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Questions")]
-public class QuestionEntity
+public class QuestionEntity : IEntity
 {
     public Guid Id { get; set; }
 

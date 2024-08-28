@@ -22,21 +22,6 @@ namespace MaterialAdvisor.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
-                {
-                    b.Property<Guid>("GroupsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("KnowledgeChecksId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("GroupsId", "KnowledgeChecksId");
-
-                    b.HasIndex("KnowledgeChecksId");
-
-                    b.ToTable("GroupEntityKnowledgeCheckEntity");
-                });
-
             modelBuilder.Entity("GroupEntityUserEntity", b =>
                 {
                     b.Property<Guid>("GroupsId")
@@ -142,6 +127,9 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -157,6 +145,8 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.HasIndex("TopicId");
 
@@ -454,21 +444,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.ToTable("RoleEntityUserEntity");
                 });
 
-            modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
-                {
-                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", null)
-                        .WithMany()
-                        .HasForeignKey("KnowledgeChecksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("GroupEntityUserEntity", b =>
                 {
                     b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
@@ -525,11 +500,19 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
                 {
+                    b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", "Group")
+                        .WithMany("KnowledgeChecks")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany()
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
 
                     b.Navigation("Topic");
                 });
@@ -594,7 +577,7 @@ namespace MaterialAdvisor.Data.Migrations
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
                 {
                     b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", "KnowledgeCheck")
-                        .WithMany()
+                        .WithMany("SubmittedAnswers")
                         .HasForeignKey("KnowledgeCheckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -669,6 +652,16 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Texts");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
+                {
+                    b.Navigation("KnowledgeChecks");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
+                {
+                    b.Navigation("SubmittedAnswers");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>

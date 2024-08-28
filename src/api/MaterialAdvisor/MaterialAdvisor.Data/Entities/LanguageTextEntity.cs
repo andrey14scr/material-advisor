@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("LanguageTexts")]
-public class LanguageTextEntity
+public class LanguageTextEntity : IEntity
 {
     public Guid Id { get; set; }
 

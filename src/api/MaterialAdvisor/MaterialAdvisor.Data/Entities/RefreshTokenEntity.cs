@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("RefreshTokens")]
-public class RefreshTokenEntity
+public class RefreshTokenEntity : IEntity
 {
     public Guid Id { get; set; }
 

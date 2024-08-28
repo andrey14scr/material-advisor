@@ -15,12 +15,12 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class UserProvider(MaterialAdvisorContext dbContext, 
-    IOptions<CachingOptions> cachingOptions, 
-    IHttpContextAccessor httpContextAccessor, 
-    ISecurityService securityService,
-    IMemoryCache cache,
-    IMapper mapper) : IUserProvider
+public class UserProvider(MaterialAdvisorContext _dbContext, 
+    IOptions<CachingOptions> _cachingOptions, 
+    IHttpContextAccessor _httpContextAccessor, 
+    ISecurityService _securityService,
+    IMemoryCache _cache,
+    IMapper _mapper) : IUserProvider
 {
     public UserInfo AddUser(UserEntity user)
     {
@@ -29,14 +29,14 @@ public class UserProvider(MaterialAdvisorContext dbContext,
 
     public async Task<UserInfo> GetUser()
     {
-        var username = httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Name)!.Value;
-        var cacheKey = GetKey(username);
+        var userName = _httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Name)!.Value;
+        var cacheKey = GetKey(userName);
 
-        if (!cache.TryGetValue(cacheKey, out UserInfo? userInfo) || userInfo is null)
+        if (!_cache.TryGetValue(cacheKey, out UserInfo? userInfo) || userInfo is null)
         {
-            var searchName = securityService.Encrypt(username);
+            var searchName = _securityService.Encrypt(userName);
 
-            var userEntity = await dbContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Name == searchName);
+            var userEntity = await _dbContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Name == searchName);
             if (userEntity is null)
             {
                 throw new NotFoundException();
@@ -50,12 +50,12 @@ public class UserProvider(MaterialAdvisorContext dbContext,
 
     private UserInfo AddToCache(UserEntity userEntity)
     {
-        var userInfo = mapper.Map<UserInfo>(userEntity);
+        var userInfo = _mapper.Map<UserInfo>(userEntity);
 
         var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(cachingOptions.Value.ExpirationTime));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(_cachingOptions.Value.ExpirationTime));
         var cacheKey = GetKey(userInfo.UserName);
-        cache.Set(cacheKey, userInfo, cacheOptions);
+        _cache.Set(cacheKey, userInfo, cacheOptions);
 
         return userInfo;
     }

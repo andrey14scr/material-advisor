@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("KnowledgeChecks")]
-public class KnowledgeCheckEntity
+public class KnowledgeCheckEntity : IEntity
 {
     public Guid Id { get; set; }
 
@@ -29,5 +29,9 @@ public class KnowledgeCheckEntity
     [Range(1, 250)]
     public byte Attempts { get; set; }
 
-    public virtual ICollection<GroupEntity> Groups { get; set; } = [];
+    public Guid GroupId { get; set; }
+
+    public virtual GroupEntity Group { get; set; }
+
+    public virtual ICollection<SubmittedAnswerEntity> SubmittedAnswers { get; set; } = [];
 }
