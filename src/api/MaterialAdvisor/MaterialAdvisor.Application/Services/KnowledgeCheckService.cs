@@ -27,6 +27,8 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
     protected override async Task<KnowledgeCheckEntity> MapToEntity<TModel>(TModel model)
     {
         var topicEntity = _mapper.Map<KnowledgeCheckEntity>(model);
+        var user = await _tenantService.GetUser();
+        topicEntity.OwnerId = user.UserId;
         return await Task.FromResult(topicEntity);
     }
 

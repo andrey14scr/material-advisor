@@ -138,6 +138,9 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<short>("Number")
                         .HasColumnType("smallint");
 
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -147,6 +150,8 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("TopicId");
 
@@ -506,6 +511,12 @@ namespace MaterialAdvisor.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany()
                         .HasForeignKey("TopicId")
@@ -513,6 +524,8 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Group");
+
+                    b.Navigation("Owner");
 
                     b.Navigation("Topic");
                 });

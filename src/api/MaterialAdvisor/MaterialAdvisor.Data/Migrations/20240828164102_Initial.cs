@@ -205,6 +205,7 @@ namespace MaterialAdvisor.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TopicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<short>(type: "smallint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
@@ -226,6 +227,12 @@ namespace MaterialAdvisor.Data.Migrations
                         name: "FK_KnowledgeChecks_Topics_TopicId",
                         column: x => x.TopicId,
                         principalTable: "Topics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_KnowledgeChecks_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -426,6 +433,11 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "IX_KnowledgeChecks_GroupId",
                 table: "KnowledgeChecks",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_KnowledgeChecks_OwnerId",
+                table: "KnowledgeChecks",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_KnowledgeChecks_TopicId",
