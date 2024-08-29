@@ -40,7 +40,7 @@ public class KnowledgeCheckController(IKnowledgeCheckService knowledgeCheckServi
         }
         else
         {
-            var result = await knowledgeCheckService.SoftUpdate(knowledgeCheck);
+            var result = await knowledgeCheckService.Update(knowledgeCheck);
             return Ok(result);
         }
     }

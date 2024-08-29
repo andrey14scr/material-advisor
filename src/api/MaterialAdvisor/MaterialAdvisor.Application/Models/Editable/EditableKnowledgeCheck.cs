@@ -16,7 +16,7 @@ public class EditableKnowledgeCheck
 
     public DateTime? EndDate { get; set; }
 
-    public byte Attempts { get; set; }
+    public byte? MaxAttempts { get; set; }
 
-    public Guid GroupId { get; set; }
+    public IEnumerable<Guid> GroupIds { get; set; } = [];
 }

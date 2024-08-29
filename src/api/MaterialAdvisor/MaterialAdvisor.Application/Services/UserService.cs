@@ -18,7 +18,8 @@ public class UserService(MaterialAdvisorContext _dbContext,
     {
         var searchLogin = _securityService.Encrypt(login);
         var searchHash = _securityService.GetHash(hash);
-        var user = await _dbContext.Users.SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
         
         if (user is null)
         {

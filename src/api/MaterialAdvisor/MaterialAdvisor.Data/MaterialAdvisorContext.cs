@@ -30,23 +30,9 @@ public class MaterialAdvisorContext : DbContext
 
     }
 
-    public void RemoveUnusedLanguageTexts()
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var textsToDelete = ChangeTracker.Entries<LanguageTextEntity>()
-            .Where(lt => lt.State == EntityState.Modified 
-                && !lt.Entity.AnswerGroupId.HasValue
-                && !lt.Entity.AnswerId.HasValue
-                && !lt.Entity.QuestionId.HasValue
-                && !lt.Entity.TopicId.HasValue)
-            .Select(lt => lt.Entity)
-            .ToList();
-
-        LanguageTexts.RemoveRange(textsToDelete);
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        var result = base.SaveChangesAsync(cancellationToken);
+        var result = await base.SaveChangesAsync(cancellationToken);
         ChangeTracker.Clear();
         return result;
     }

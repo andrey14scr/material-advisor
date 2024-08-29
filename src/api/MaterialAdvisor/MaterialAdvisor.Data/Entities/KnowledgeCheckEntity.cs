@@ -31,11 +31,9 @@ public class KnowledgeCheckEntity : IEntity
     public DateTime? EndDate { get; set; }
 
     [Range(1, 250)]
-    public byte Attempts { get; set; }
+    public byte? MaxAttempts { get; set; }
 
-    public Guid GroupId { get; set; }
+    public virtual ICollection<GroupEntity> Groups { get; set; } = [];
 
-    public virtual GroupEntity Group { get; set; }
-
-    public virtual ICollection<SubmittedAnswerEntity> SubmittedAnswers { get; set; } = [];
+    public virtual ICollection<AttemptEntity> Attempts { get; set; } = [];
 }

@@ -33,7 +33,7 @@ public class TopicController(ITopicService topicService) : BaseApiController
         }
         else
         {
-            var result = await topicService.HardUpdate(topic);
+            var result = await topicService.Update(topic);
             return Ok(result);
         }
     }
