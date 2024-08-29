@@ -30,6 +30,8 @@ public class KnowledgeCheckEntity : IEntity
 
     public DateTime? EndDate { get; set; }
 
+    public ushort? Time { get; set; }
+
     [Range(1, 250)]
     public byte? MaxAttempts { get; set; }
 

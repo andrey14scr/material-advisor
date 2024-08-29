@@ -180,6 +180,9 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("Time")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("TopicId")
                         .HasColumnType("uniqueidentifier");
 

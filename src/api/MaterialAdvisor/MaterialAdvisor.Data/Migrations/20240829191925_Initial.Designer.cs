@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240829191351_Initial")]
+    [Migration("20240829191925_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -182,6 +182,9 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("Time")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("TopicId")
                         .HasColumnType("uniqueidentifier");

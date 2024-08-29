@@ -210,6 +210,7 @@ namespace MaterialAdvisor.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Time = table.Column<int>(type: "int", nullable: true),
                     MaxAttempts = table.Column<byte>(type: "tinyint", nullable: true)
                 },
                 constraints: table =>
