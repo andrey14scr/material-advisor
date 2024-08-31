@@ -13,7 +13,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
     {
         var entityToCreate = await MapToEntity(model);
         var createdEntity = await CreateAndSave(entityToCreate);
-        var createdModel = await MapToModel<TModel>(createdEntity);
+        var createdModel = MapToModel<TModel>(createdEntity);
         return createdModel;
     }
 
@@ -27,7 +27,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
     public async Task<TModel> Get<TModel>(Guid id)
     {
         var entity = await GetFullEntity().AsNoTracking().SingleAsync(t => t.Id == id);
-        var model = await MapToModel<TModel>(entity);
+        var model = MapToModel<TModel>(entity);
         return model;
     }
 
@@ -48,7 +48,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
         {
             await DeleteAndSave(existingEntity);
             var createdEntity = await CreateAndSave(entityToUpdate);
-            return await MapToModel<TModel>(createdEntity);
+            return MapToModel<TModel>(createdEntity);
         }
         catch
         {
@@ -80,10 +80,10 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
         return topicEntity;
     }
 
-    private async Task<TModel> MapToModel<TModel>(TopicEntity entity)
+    private TModel MapToModel<TModel>(TopicEntity entity)
     {
         var topicsModel = _mapper.Map<TModel>(entity);
-        return await Task.FromResult(topicsModel);
+        return topicsModel;
     }
 
     private IQueryable<TopicEntity> GetFullEntity()

@@ -1,19 +1,19 @@
-﻿using MaterialAdvisor.API.Exceptions;
-using MaterialAdvisor.API.Extentions;
+﻿using MaterialAdvisor.API.Extentions;
 using MaterialAdvisor.API.Models;
+using MaterialAdvisor.Application.Exceptions;
 
 using System.Net.Mime;
 using System.Text.Json;
 
 namespace MaterialAdvisor.API.Middleware;
 
-public class ErrorHandlingMiddleware(RequestDelegate next)
+public class ErrorHandlingMiddleware(RequestDelegate _next)
 {
     public async Task InvokeAsync(HttpContext context, ILogger<EndpointLogMiddleware> logger)
     {
         try
         {
-            await next(context);
+            await _next(context);
         }
         catch (Exception ex)
         {
@@ -26,11 +26,12 @@ public class ErrorHandlingMiddleware(RequestDelegate next)
     {
         context.Response.ContentType = MediaTypeNames.Application.Json;
 
-        var statusCode = exception switch
+        var (statusCode, errorCodes) = exception switch
         {
             //RefreshTokenExpiredException => StatusCodes.Status401Unauthorized,
             //KeyNotFoundException => StatusCodes.Status404NotFound,
-            _ => StatusCodes.Status500InternalServerError
+            ActionNotSupportedException => (StatusCodes.Status400BadRequest, (exception as ActionNotSupportedException)!.ErrorCodes),
+            _ => (StatusCodes.Status500InternalServerError, [])
         };
 
         context.Response.StatusCode = statusCode;
@@ -38,6 +39,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next)
         var result = JsonSerializer.Serialize(new ErrorModel
         {
             Message = exception.Message,
+            Codes = errorCodes,
             CorrelationId = context.GetCorrelationId()
         });
 

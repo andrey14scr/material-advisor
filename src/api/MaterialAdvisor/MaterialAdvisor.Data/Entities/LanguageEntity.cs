@@ -13,4 +13,8 @@ public class LanguageEntity
     [Required]
     [MaxLength(50)]
     public string Name { get; set; } = null!;
+
+    [Required]
+    [MaxLength(3)]
+    public string Code { get; set; } = null!;
 }

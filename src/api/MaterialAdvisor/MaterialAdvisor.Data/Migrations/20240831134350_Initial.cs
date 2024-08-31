@@ -18,7 +18,8 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -257,10 +258,11 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<short>(type: "smallint", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     KnowledgeCheckId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsSubmitted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -413,11 +415,11 @@ namespace MaterialAdvisor.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Languages",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Code", "Name" },
                 values: new object[,]
                 {
-                    { (byte)0, "English" },
-                    { (byte)1, "Polish" }
+                    { (byte)0, "", "English" },
+                    { (byte)1, "", "Polish" }
                 });
 
             migrationBuilder.InsertData(

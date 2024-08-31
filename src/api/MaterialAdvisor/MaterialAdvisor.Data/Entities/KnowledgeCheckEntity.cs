@@ -30,6 +30,7 @@ public class KnowledgeCheckEntity : IEntity
 
     public DateTime? EndDate { get; set; }
 
+    [Range(1, 57600)]
     public ushort? Time { get; set; }
 
     [Range(1, 250)]

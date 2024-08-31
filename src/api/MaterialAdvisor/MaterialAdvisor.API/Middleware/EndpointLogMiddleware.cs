@@ -2,7 +2,7 @@
 
 namespace MaterialAdvisor.API.Middleware;
 
-public class EndpointLogMiddleware(RequestDelegate next)
+public class EndpointLogMiddleware(RequestDelegate _next)
 {
     public async Task InvokeAsync(HttpContext context, ILogger<EndpointLogMiddleware> logger)
     {
@@ -26,6 +26,6 @@ public class EndpointLogMiddleware(RequestDelegate next)
             }
         }
         
-        await next(context);
+        await _next(context);
     }
 }

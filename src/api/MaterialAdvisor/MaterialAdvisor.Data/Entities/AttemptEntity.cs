@@ -7,7 +7,7 @@ public class AttemptEntity : IEntity
 {
     public Guid Id { get; set; }
 
-    public short Number { get; set; }
+    public ushort Number { get; set; }
 
     public DateTime StartDate { get; set; }
 
@@ -18,6 +18,8 @@ public class AttemptEntity : IEntity
     public Guid UserId { get; set; }
 
     public virtual UserEntity User { get; set; }
+
+    public bool IsSubmitted { get; set; }
 
     public ICollection<SubmittedAnswerEntity> SubmittedAnswers { get; set; } = [];
 }

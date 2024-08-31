@@ -20,6 +20,7 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
+    public DbSet<AttemptEntity> Attempts { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {
@@ -48,7 +49,7 @@ public class MaterialAdvisorContext : DbContext
 
         var languages = Enum.GetValues(typeof(Language))
             .Cast<Language>()
-            .Select(l => new LanguageEntity { Id = l, Name = l.ToString() })
+            .Select(l => new LanguageEntity { Id = l, Name = l.ToString(), Code = string.Empty })
             .ToList();
 
         var roles = Enum.GetValues(typeof(RoleType))

@@ -102,11 +102,14 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsSubmitted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("KnowledgeCheckId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<short>("Number")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -200,6 +203,11 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<byte>("Id")
                         .HasColumnType("tinyint");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -213,11 +221,13 @@ namespace MaterialAdvisor.Data.Migrations
                         new
                         {
                             Id = (byte)0,
+                            Code = "",
                             Name = "English"
                         },
                         new
                         {
                             Id = (byte)1,
+                            Code = "",
                             Name = "Polish"
                         });
                 });

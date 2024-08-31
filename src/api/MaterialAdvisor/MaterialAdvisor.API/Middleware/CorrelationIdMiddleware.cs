@@ -1,6 +1,6 @@
 ﻿namespace MaterialAdvisor.API.Middleware;
 
-public class CorrelationIdMiddleware(RequestDelegate next)
+public class CorrelationIdMiddleware(RequestDelegate _next)
 {
     public async Task InvokeAsync(HttpContext context, ILogger<EndpointLogMiddleware> logger)
     {
@@ -18,6 +18,6 @@ public class CorrelationIdMiddleware(RequestDelegate next)
 
         context.Items[correlationIdHeaader] = correlationId;
 
-        await next(context);
+        await _next(context);
     }
 }

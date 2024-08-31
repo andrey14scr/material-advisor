@@ -15,26 +15,26 @@ using System.Text;
 
 namespace MaterialAdvisor.API.Services;
 
-public class TokensGenerator(IOptions<AuthOptions> authOptions,
-    IHttpContextAccessor httpContextAccessor, 
-    IRefreshTokenService refreshTokenService)
+public class TokensGenerator(IOptions<AuthOptions> _authOptions,
+    IHttpContextAccessor _httpContextAccessor, 
+    IRefreshTokenService _refreshTokenService)
 {
     public async Task<TokensResult> Generate(UserInfo userInfo)
     {
         var (expireIn, refreshExpireIn) = GetExpirationTimes();
         var claims = CreateClaims(userInfo, expireIn);
         var creds = GetSigningCredentials();
-        var issuer = authOptions.Value.Issuer;
+        var issuer = _authOptions.Value.Issuer;
 
         var identity = new ClaimsIdentity(claims);
-        httpContextAccessor.HttpContext!.User = new ClaimsPrincipal(identity);
+        _httpContextAccessor.HttpContext!.User = new ClaimsPrincipal(identity);
 
         var token = new JwtSecurityToken(issuer: issuer, claims: claims, expires: expireIn, signingCredentials: creds);
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
         
         var refreshToken = Guid.NewGuid().ToString();
         var userId = userInfo.UserId;
-        await refreshTokenService.Create(userId, refreshToken, refreshExpireIn);
+        await _refreshTokenService.Create(userId, refreshToken, refreshExpireIn);
 
         return new TokensResult 
         {
@@ -45,7 +45,7 @@ public class TokensGenerator(IOptions<AuthOptions> authOptions,
 
     public async Task<TokensResult> Refresh(UserInfo userInfo, string token)
     {
-        var refreshToken = await refreshTokenService.Get(userInfo.UserId, token);
+        var refreshToken = await _refreshTokenService.Get(userInfo.UserId, token);
 
         if (refreshToken?.ExpireAt > DateTime.UtcNow)
         {
@@ -57,7 +57,7 @@ public class TokensGenerator(IOptions<AuthOptions> authOptions,
 
     private Claim[] CreateClaims(UserInfo userInfo, DateTime expireIn)
     {
-        var issuer = authOptions.Value.Issuer;
+        var issuer = _authOptions.Value.Issuer;
 
         return
         [
@@ -72,15 +72,15 @@ public class TokensGenerator(IOptions<AuthOptions> authOptions,
     private (DateTime ExpireIn, DateTime RefreshExtraTime) GetExpirationTimes()
     {
         var now = DateTime.UtcNow;
-        var expireIn = now.AddMinutes(authOptions.Value.ExpireIn);
-        var refreshExtraTime = expireIn.AddMinutes(authOptions.Value.RefreshTime);
+        var expireIn = now.AddMinutes(_authOptions.Value.ExpireIn);
+        var refreshExtraTime = expireIn.AddMinutes(_authOptions.Value.RefreshTime);
 
         return (expireIn, refreshExtraTime);
     }
 
     private SigningCredentials GetSigningCredentials()
     {
-        var secret = authOptions.Value.Key;
+        var secret = _authOptions.Value.Key;
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         return creds;

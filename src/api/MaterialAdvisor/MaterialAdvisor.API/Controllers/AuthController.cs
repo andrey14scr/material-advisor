@@ -9,14 +9,14 @@ using Microsoft.Net.Http.Headers;
 
 namespace MaterialAdvisor.API.Controllers;
 
-public class AuthController(TokensGenerator tokensGenerator, IUserService userService, IUserProvider userProvider) : BaseApiController
+public class AuthController(TokensGenerator _tokensGenerator, IUserService _userService, IUserProvider _userProvider) : BaseApiController
 {
     [AllowAnonymous]
     [HttpPost(Constants.Actions.Register)]
     public async Task<IActionResult> Register(string userName, string email, string hash)
     {
-        var userInfo = await userService.Create(userName, email, hash);
-        var tokens = await tokensGenerator.Generate(userInfo);
+        var userInfo = await _userService.Create(userName, email, hash);
+        var tokens = await _tokensGenerator.Generate(userInfo);
         return Ok(tokens);
     }
 
@@ -26,8 +26,8 @@ public class AuthController(TokensGenerator tokensGenerator, IUserService userSe
     {
         try
         {
-            var userInfo = await userService.Get(login, hash);
-            var tokens = await tokensGenerator.Generate(userInfo);
+            var userInfo = await _userService.Get(login, hash);
+            var tokens = await _tokensGenerator.Generate(userInfo);
             return Ok(tokens);
         }
         catch (NotFoundException)
@@ -51,8 +51,8 @@ public class AuthController(TokensGenerator tokensGenerator, IUserService userSe
 
         try
         {
-            var userInfo = await userProvider.GetUser();
-            var tokens = await tokensGenerator.Refresh(userInfo, refreshToken);
+            var userInfo = await _userProvider.GetUser();
+            var tokens = await _tokensGenerator.Refresh(userInfo, refreshToken);
             return Ok(tokens);
         }
         catch (RefreshTokenExpiredException)

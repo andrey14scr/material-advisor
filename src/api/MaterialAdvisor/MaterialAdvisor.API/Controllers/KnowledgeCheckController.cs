@@ -7,48 +7,48 @@ using Microsoft.AspNetCore.Mvc;
 namespace MaterialAdvisor.API.Controllers;
 
 [Authorize]
-public class KnowledgeCheckController(IKnowledgeCheckService knowledgeCheckService) : BaseApiController
+public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckService) : BaseApiController
 {
     [HttpGet("{id}")]
-    public async Task<ActionResult<EditableKnowledgeCheck>> GetByKnowledgeCheckId(Guid id)
+    public async Task<ActionResult<EditableKnowledgeCheck>> GetById(Guid id)
     {
-        var result = await knowledgeCheckService.Get<EditableKnowledgeCheck>(id);
+        var result = await _knowledgeCheckService.Get<EditableKnowledgeCheck>(id);
         return Ok(result);
     }
 
     [HttpGet()]
-    public async Task<ActionResult<IList<EditableKnowledgeCheck>>> GetKnowledgeChecks()
+    public async Task<ActionResult<IList<EditableKnowledgeCheck>>> Get()
     {
-        var result = await knowledgeCheckService.Get<EditableKnowledgeCheck>();
+        var result = await _knowledgeCheckService.Get<EditableKnowledgeCheck>();
         return Ok(result);
     }
 
     [HttpGet("group/{groupId}")]
     public async Task<ActionResult<IList<EditableKnowledgeCheck>>> GetByGroupId(Guid groupId)
     {
-        var result = await knowledgeCheckService.GetByGroup<EditableKnowledgeCheck>(groupId);
+        var result = await _knowledgeCheckService.GetByGroup<EditableKnowledgeCheck>(groupId);
         return Ok(result);
     }
 
     [HttpPost()]
-    public async Task<ActionResult<EditableKnowledgeCheck>> CreateKnowledgeCheck(EditableKnowledgeCheck knowledgeCheck)
+    public async Task<ActionResult<EditableKnowledgeCheck>> CreateOrUpdate(EditableKnowledgeCheck knowledgeCheck)
     {
         if (knowledgeCheck.Id == Guid.Empty)
         {
-            var result = await knowledgeCheckService.Create(knowledgeCheck);
+            var result = await _knowledgeCheckService.Create(knowledgeCheck);
             return Ok(result);
         }
         else
         {
-            var result = await knowledgeCheckService.Update(knowledgeCheck);
+            var result = await _knowledgeCheckService.Update(knowledgeCheck);
             return Ok(result);
         }
     }
 
     [HttpDelete()]
-    public async Task<ActionResult<bool>> DeleteKnowledgeCheck(Guid topicId)
+    public async Task<ActionResult<bool>> Delete(Guid id)
     {
-        var result = await knowledgeCheckService.Delete(topicId);
+        var result = await _knowledgeCheckService.Delete(id);
         return Ok(result);
     }
 }
