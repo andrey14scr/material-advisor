@@ -8,22 +8,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IMapper _mapper) : ISubmittedAnswerService
+public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProvider _tenantService, IMapper _mapper) : ISubmittedAnswerService
 {
     public async Task<TModel> CreateOrUpdate<TModel>(TModel model)
     {
+        var user = await _tenantService.GetUser();
         var entity = MapToEntity(model);
-        var existingSubmittedAnswer = await _dbContext.SubmittedAnswers
-            .Include(sa => sa.Attempt)
+        var existingAttempt = await _dbContext.Attempts
+            .Include(a => a.SubmittedAnswers)
+            .Where(a => a.Id == entity.AttemptId && a.SubmittedAnswers.Any(sa => sa.QuestionId == entity.QuestionId))
             .AsNoTracking()
-            .SingleOrDefaultAsync(sa => sa.AttemptId == entity.AttemptId && sa.QuestionId == entity.QuestionId);
+            .SingleOrDefaultAsync();
 
-        if (existingSubmittedAnswer?.Attempt.IsSubmitted == true)
+        if (existingAttempt?.IsSubmitted == true)
         {
             throw new ActionNotSupportedException(ErrorCode.CannotChangeSubmittedAttempt);
         }
 
-        if (existingSubmittedAnswer is null)
+        if (existingAttempt?.UserId != user.UserId)
+        {
+            throw new ActionNotAllowedException(ErrorCode.CannotAnswerForAnotherUser);
+        }
+
+        if (!existingAttempt.SubmittedAnswers.Any())
         {
             await _dbContext.SubmittedAnswers.AddAsync(entity);
         }

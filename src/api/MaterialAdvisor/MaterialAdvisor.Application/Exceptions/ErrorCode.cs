@@ -2,5 +2,6 @@
 
 public enum ErrorCode
 {
-    CannotChangeSubmittedAttempt = 1001
+    CannotChangeSubmittedAttempt = 1001,
+    CannotAnswerForAnotherUser = 2001,
 }
