@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
@@ -13,6 +14,22 @@ public class AttemptService(MaterialAdvisorContext _dbContext, IUserProvider _te
     {
         var entityToCreate = await MapToEntity(model);
         entityToCreate.IsSubmitted = false;
+
+        var knowledgeCheck = await _dbContext.KnowledgeChecks
+            .Where(kc => kc.Id == entityToCreate.KnowledgeCheckId)
+            .Include(kc => kc.Attempts.Where(a => a.UserId == entityToCreate.UserId))
+            .SingleAsync();
+
+        if (knowledgeCheck.Attempts.Count >= knowledgeCheck.MaxAttempts)
+        {
+            throw new ActionNotAllowedException(ErrorCode.CannotCreateMoreThanMaxAttempts);
+        }
+
+        if (knowledgeCheck.EndDate.HasValue && knowledgeCheck.EndDate.Value <= entityToCreate.StartDate)
+        {
+            throw new ActionNotAllowedException(ErrorCode.CannotAnswerAfterEndDate);
+        }
+
         var createdEntity = await _dbContext.Attempts.AddAsync(entityToCreate);
         await _dbContext.SaveChangesAsync();
         return MapToModel<TModel>(createdEntity.Entity);
