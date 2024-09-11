@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Models.Editable;
+using MaterialAdvisor.Application.Models.Readonly;
 using MaterialAdvisor.Application.Models.Shared;
 using MaterialAdvisor.Data.Entities;
 
@@ -15,5 +16,7 @@ public class TopicProfile : Profile
         CreateMap<EditableQuestion, QuestionEntity>().ReverseMap();
         CreateMap<EditableAnswer, AnswerEntity>().ReverseMap();
         CreateMap<EditableAnswerGroup, AnswerGroupEntity>().ReverseMap();
+
+        CreateMap<TopicEntity, TopicListItem>();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Models.Editable;
+using MaterialAdvisor.Application.Models.Readonly;
 using MaterialAdvisor.Data.Entities;
 
 namespace MaterialAdvisor.Application.Mapping;
@@ -14,5 +15,8 @@ public class KnowledgeCheckProfile : Profile
 
         CreateMap<KnowledgeCheckEntity, EditableKnowledgeCheck>()
             .ForMember(dest => dest.GroupIds, opt => opt.MapFrom(src => src.Groups.Select(g => g.Id).ToList()));
+
+        CreateMap<KnowledgeCheckEntity, KnowledgeCheckListItem>()
+            .ForMember(dest => dest.UsedAttempts, opt => opt.MapFrom(src => src.Groups.Select(g => g.Id).ToList()));
     }
 }

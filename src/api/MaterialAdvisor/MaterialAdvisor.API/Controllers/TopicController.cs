@@ -1,4 +1,5 @@
 using MaterialAdvisor.Application.Models.Editable;
+using MaterialAdvisor.Application.Models.Readonly;
 using MaterialAdvisor.Application.Services;
 
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ public class TopicController(ITopicService _topicService) : BaseApiController
     [HttpGet()]
     public async Task<ActionResult<IList<EditableTopic>>> Get()
     {
-        var result = await _topicService.Get<EditableTopic>();
+        var result = await _topicService.Get<TopicListItem>();
         return Ok(result);
     }
 

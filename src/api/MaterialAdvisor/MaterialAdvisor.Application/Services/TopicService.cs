@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tenantService, IMapper _mapper) : ITopicService
+public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _userService, IMapper _mapper) : ITopicService
 {
     public async Task<TModel> Create<TModel>(TModel model)
     {
@@ -33,7 +33,12 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
 
     public async Task<IList<TModel>> Get<TModel>()
     {
-        var entities = await GetFullEntity().AsNoTracking().ToListAsync();
+        var user = await _userService.GetUser();
+        var entities = await _dbContext.Topics
+            .Include(t => t.KnowledgeChecks)
+            .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.UserId))
+            .AsNoTracking()
+            .ToListAsync();
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
         return entitiesModel;
     }
@@ -75,7 +80,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _tena
     private async Task<TopicEntity> MapToEntity<TModel>(TModel model)
     {
         var topicEntity = _mapper.Map<TopicEntity>(model);
-        var user = await _tenantService.GetUser();
+        var user = await _userService.GetUser();
         topicEntity.OwnerId = user.UserId;
         return topicEntity;
     }
