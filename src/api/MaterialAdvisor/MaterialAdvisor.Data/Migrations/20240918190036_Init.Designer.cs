@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240831134350_Initial")]
-    partial class Initial
+    [Migration("20240918190036_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -321,9 +321,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Version")
-                        .HasColumnType("tinyint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TopicId");
@@ -419,8 +416,17 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PersistentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("Version")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -588,7 +594,7 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
-                        .WithMany()
+                        .WithMany("KnowledgeChecks")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -746,6 +752,8 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
                 {
+                    b.Navigation("KnowledgeChecks");
+
                     b.Navigation("Questions");
 
                     b.Navigation("Texts");

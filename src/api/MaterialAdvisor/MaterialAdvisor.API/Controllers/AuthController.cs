@@ -1,4 +1,5 @@
 ﻿using MaterialAdvisor.API.Exceptions;
+using MaterialAdvisor.API.Models.Requests;
 using MaterialAdvisor.API.Services;
 using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Services;
@@ -13,20 +14,20 @@ public class AuthController(TokensGenerator _tokensGenerator, IUserService _user
 {
     [AllowAnonymous]
     [HttpPost(Constants.Actions.Register)]
-    public async Task<IActionResult> Register(string userName, string email, string hash)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var userInfo = await _userService.Create(userName, email, hash);
+        var userInfo = await _userService.Create(request.UserName, request.Email, request.Password);
         var tokens = await _tokensGenerator.Generate(userInfo);
         return Ok(tokens);
     }
 
     [AllowAnonymous]
     [HttpPost(Constants.Actions.Login)]
-    public async Task<IActionResult> Login(string login, string hash)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         try
         {
-            var userInfo = await _userService.Get(login, hash);
+            var userInfo = await _userService.Get(request.Login, request.Password);
             var tokens = await _tokensGenerator.Generate(userInfo);
             return Ok(tokens);
         }
@@ -42,7 +43,7 @@ public class AuthController(TokensGenerator _tokensGenerator, IUserService _user
 
     [Authorize]
     [HttpPost(Constants.Actions.Refresh)]
-    public async Task<IActionResult> Refresh(string refreshToken)
+    public async Task<IActionResult> Refresh([FromBody] string refreshToken)
     {
         var accessToken = Request.Headers[HeaderNames.Authorization]
             .ToString()

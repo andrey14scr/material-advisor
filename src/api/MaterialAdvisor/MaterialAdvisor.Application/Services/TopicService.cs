@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 
+using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
@@ -35,6 +36,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     {
         var user = await _userService.GetUser();
         var entities = await _dbContext.Topics
+            .Include(t => t.Texts)
             .Include(t => t.KnowledgeChecks)
             .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.UserId))
             .AsNoTracking()
@@ -48,17 +50,42 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
         var entityToUpdate = await MapToEntity(model);
         var existingEntity = await GetFullEntity().SingleAsync(t => t.Id == entityToUpdate.Id);
 
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        try
+        var maxVersion = await _dbContext.Topics
+            .Where(t => t.PersistentId == existingEntity.PersistentId)
+            .MaxAsync(t => t.Version);
+
+        if (entityToUpdate.Version != maxVersion)
         {
-            await DeleteAndSave(existingEntity);
+            throw new ActionNotAllowedException(ErrorCode.TopicVersionIsOutdated);
+        }
+        entityToUpdate.PersistentId = existingEntity.PersistentId;
+
+        var now = DateTime.UtcNow;
+        var hasStartedKnowledgeCheck = await _dbContext.KnowledgeChecks
+            .Where(kc => kc.TopicId == entityToUpdate.Id && kc.StartDate <= now)
+            .AnyAsync();
+
+        if (hasStartedKnowledgeCheck)
+        {
+            entityToUpdate.Id = Guid.NewGuid();
+            entityToUpdate.Version++;
             var createdEntity = await CreateAndSave(entityToUpdate);
             return MapToModel<TModel>(createdEntity);
         }
-        catch
+        else 
         {
-            await transaction.RollbackAsync();
-            throw;
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                await DeleteAndSave(existingEntity);
+                var createdEntity = await CreateAndSave(entityToUpdate);
+                return MapToModel<TModel>(createdEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 
@@ -73,6 +100,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     private async Task<TopicEntity> CreateAndSave(TopicEntity entity)
     {
         var createdTopic = await _dbContext.Topics.AddAsync(entity);
+        createdTopic.Entity.PersistentId = createdTopic.Entity.Id;
         await _dbContext.SaveChangesAsync();
         return createdTopic.Entity;
     }

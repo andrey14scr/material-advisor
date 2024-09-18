@@ -4,6 +4,10 @@ public abstract class AbstractTopic<TQuestion>
 {
     public Guid Id { get; set; }
 
+    public ushort Number { get; set; }
+
+    public uint Version { get; set; }
+
     public IEnumerable<TQuestion> Questions { get; set; } = [];
 
     public IEnumerable<LanguageText> Texts { get; set; } = [];

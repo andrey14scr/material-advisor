@@ -14,10 +14,10 @@ public class UserService(MaterialAdvisorContext _dbContext,
     IUserProvider _userProvider, 
     IMapper _mapper) : IUserService
 {
-    public async Task<UserInfo> Get(string login, string hash)
+    public async Task<UserInfo> Get(string login, string password)
     {
         var searchLogin = _securityService.Encrypt(login);
-        var searchHash = _securityService.GetHash(hash);
+        var searchHash = _securityService.GetHash(password);
         var user = await _dbContext.Users
             .SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
         
@@ -29,7 +29,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
         return _mapper.Map<UserInfo>(user);
     }
 
-    public async Task<UserInfo> Create(string userName, string email, string hash)
+    public async Task<UserInfo> Create(string userName, string email, string password)
     {
         var initialGroup = new List<GroupEntity>
         { 
@@ -43,7 +43,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
         {
             Email = _securityService.Encrypt(email),
             Name = _securityService.Encrypt(userName),
-            Hash = _securityService.GetHash(hash),
+            Hash = _securityService.GetHash(password),
             Groups = initialGroup,
             CreatedGroups = initialGroup
         };

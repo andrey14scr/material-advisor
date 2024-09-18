@@ -7,4 +7,5 @@ public enum ErrorCode
     CannotAnswerForAnotherUser = 2001,
     CannotCreateMoreThanMaxAttempts = 2002,
     CannotAnswerAfterEndDate = 2003,
+    TopicVersionIsOutdated = 2004,
 }

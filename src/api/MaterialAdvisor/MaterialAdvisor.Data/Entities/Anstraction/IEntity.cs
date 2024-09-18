@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Data.Entities;
+﻿namespace MaterialAdvisor.Data.Entities.Anstraction;
 
 public interface IEntity
 {

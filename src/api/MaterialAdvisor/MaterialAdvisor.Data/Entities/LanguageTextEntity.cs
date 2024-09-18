@@ -1,4 +1,5 @@
-﻿using MaterialAdvisor.Data.Enums;
+﻿using MaterialAdvisor.Data.Entities.Anstraction;
+using MaterialAdvisor.Data.Enums;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

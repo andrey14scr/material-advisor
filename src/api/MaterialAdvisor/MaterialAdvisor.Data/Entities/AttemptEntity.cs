@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using MaterialAdvisor.Data.Entities.Anstraction;
 
 namespace MaterialAdvisor.Data.Entities;
 

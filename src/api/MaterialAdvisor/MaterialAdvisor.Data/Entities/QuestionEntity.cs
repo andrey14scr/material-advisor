@@ -1,4 +1,5 @@
-﻿using MaterialAdvisor.Data.Enums;
+﻿using MaterialAdvisor.Data.Entities.Anstraction;
+using MaterialAdvisor.Data.Enums;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,9 +17,6 @@ public class QuestionEntity : IEntity
 
     [Range(1, 250)]
     public byte Number { get; set; }
-
-    [Range(1, 250)]
-    public byte Version { get; set; }
 
     public double Points { get; set; }
 
