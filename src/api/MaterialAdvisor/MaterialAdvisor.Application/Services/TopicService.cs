@@ -100,8 +100,9 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
 
     private async Task<TopicEntity> CreateAndSave(TopicEntity entity)
     {
+        var isNewEntity = entity.Id == default;
         var createdTopic = await _dbContext.Topics.AddAsync(entity);
-        if (entity.Id == default) 
+        if (isNewEntity) 
         {
             createdTopic.Entity.PersistentId = createdTopic.Entity.Id;
         }

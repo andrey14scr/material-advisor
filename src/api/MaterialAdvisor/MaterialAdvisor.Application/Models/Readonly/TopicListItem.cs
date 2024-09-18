@@ -6,6 +6,8 @@ public class TopicListItem
 {
     public Guid Id { get; set; }
 
+    public ushort Number { get; set; }
+
     public IEnumerable<LanguageText> Texts { get; set; } = [];
 
     public IEnumerable<KnowledgeCheckListItem> KnowledgeChecks { get; set; } = [];

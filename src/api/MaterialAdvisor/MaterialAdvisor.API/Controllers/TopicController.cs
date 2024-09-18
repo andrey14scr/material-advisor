@@ -11,7 +11,7 @@ namespace MaterialAdvisor.API.Controllers;
 public class TopicController(ITopicService _topicService) : BaseApiController
 {
     [HttpGet()]
-    public async Task<ActionResult<IList<EditableTopic>>> Get()
+    public async Task<ActionResult<IList<TopicListItem>>> Get()
     {
         var result = await _topicService.Get<TopicListItem>();
         return Ok(result);
