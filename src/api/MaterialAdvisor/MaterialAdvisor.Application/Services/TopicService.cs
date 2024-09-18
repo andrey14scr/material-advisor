@@ -79,6 +79,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
             {
                 await DeleteAndSave(existingEntity);
                 var createdEntity = await CreateAndSave(entityToUpdate);
+                await transaction.CommitAsync();
                 return MapToModel<TModel>(createdEntity);
             }
             catch
@@ -100,7 +101,10 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     private async Task<TopicEntity> CreateAndSave(TopicEntity entity)
     {
         var createdTopic = await _dbContext.Topics.AddAsync(entity);
-        createdTopic.Entity.PersistentId = createdTopic.Entity.Id;
+        if (entity.Id == default) 
+        {
+            createdTopic.Entity.PersistentId = createdTopic.Entity.Id;
+        }
         await _dbContext.SaveChangesAsync();
         return createdTopic.Entity;
     }
