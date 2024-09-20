@@ -4,7 +4,9 @@ namespace MaterialAdvisor.Application.Services;
 
 public interface IUserService
 {
-    Task<UserInfo> Get(string login, string password);
+    Task<User> Get(string login, string password);
 
-    Task<UserInfo> Create(string userName, string email, string password);
+    Task<User> Create(string userName, string email, string password);
+
+    Task<IEnumerable<Role>> GetRoles(Guid userId);
 }

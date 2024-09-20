@@ -48,7 +48,7 @@ public class AttemptService(MaterialAdvisorContext _dbContext, IUserProvider _te
     {
         var topicEntity = _mapper.Map<AttemptEntity>(model);
         var user = await _tenantService.GetUser();
-        topicEntity.UserId = user.UserId;
+        topicEntity.UserId = user.Id;
         return topicEntity;
     }
 

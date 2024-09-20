@@ -13,7 +13,7 @@ public class RoleEntity
     [MaxLength(25)]
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<UserEntity> Users { get; set; } = [];
-
     public virtual ICollection<PermissionEntity> Permissions { get; set; } = [];
+
+    public virtual ICollection<GroupRoleEntity> GroupRoles { get; set; } = [];
 }

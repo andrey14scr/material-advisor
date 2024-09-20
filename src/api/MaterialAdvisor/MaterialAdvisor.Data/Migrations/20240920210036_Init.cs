@@ -79,13 +79,13 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.PermissionsId,
                         principalTable: "Permissions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PermissionEntityRoleEntity_Roles_RolesId",
                         column: x => x.RolesId,
                         principalTable: "Roles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,7 +109,8 @@ namespace MaterialAdvisor.Data.Migrations
                         name: "FK_Groups_Users_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,31 +131,7 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoleEntityUserEntity",
-                columns: table => new
-                {
-                    RolesId = table.Column<byte>(type: "tinyint", nullable: false),
-                    UsersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleEntityUserEntity", x => new { x.RolesId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_RoleEntityUserEntity_Roles_RolesId",
-                        column: x => x.RolesId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_RoleEntityUserEntity_Users_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,31 +152,38 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.OwnerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "GroupEntityUserEntity",
+                name: "GroupRoles",
                 columns: table => new
                 {
-                    GroupsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UsersId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupEntityUserEntity", x => new { x.GroupsId, x.UsersId });
+                    table.PrimaryKey("PK_GroupRoles", x => new { x.UserId, x.GroupId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_GroupEntityUserEntity_Groups_GroupsId",
-                        column: x => x.GroupsId,
+                        name: "FK_GroupRoles_Groups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GroupEntityUserEntity_Users_UsersId",
-                        column: x => x.UsersId,
+                        name: "FK_GroupRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GroupRoles_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,13 +209,13 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.TopicId,
                         principalTable: "Topics",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_KnowledgeChecks_Users_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,7 +236,7 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.TopicId,
                         principalTable: "Topics",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,13 +258,13 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.KnowledgeCheckId,
                         principalTable: "KnowledgeChecks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Attempts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -298,13 +282,13 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.GroupsId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GroupEntityKnowledgeCheckEntity_KnowledgeChecks_KnowledgeChecksId",
                         column: x => x.KnowledgeChecksId,
                         principalTable: "KnowledgeChecks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,7 +307,7 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -342,13 +326,13 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.AttemptId,
                         principalTable: "Attempts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SubmittedAnswers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,7 +353,7 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.AnswerGroupId,
                         principalTable: "AnswerGroups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -402,7 +386,7 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_LanguageTexts_Questions_QuestionId",
                         column: x => x.QuestionId,
@@ -470,9 +454,14 @@ namespace MaterialAdvisor.Data.Migrations
                 column: "KnowledgeChecksId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupEntityUserEntity_UsersId",
-                table: "GroupEntityUserEntity",
-                column: "UsersId");
+                name: "IX_GroupRoles_GroupId",
+                table: "GroupRoles",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupRoles_RoleId",
+                table: "GroupRoles",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Groups_OwnerId",
@@ -535,11 +524,6 @@ namespace MaterialAdvisor.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoleEntityUserEntity_UsersId",
-                table: "RoleEntityUserEntity",
-                column: "UsersId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SubmittedAnswers_AttemptId",
                 table: "SubmittedAnswers",
                 column: "AttemptId");
@@ -569,7 +553,7 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "GroupEntityKnowledgeCheckEntity");
 
             migrationBuilder.DropTable(
-                name: "GroupEntityUserEntity");
+                name: "GroupRoles");
 
             migrationBuilder.DropTable(
                 name: "LanguageTexts");
@@ -579,9 +563,6 @@ namespace MaterialAdvisor.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
-
-            migrationBuilder.DropTable(
-                name: "RoleEntityUserEntity");
 
             migrationBuilder.DropTable(
                 name: "SubmittedAnswers");

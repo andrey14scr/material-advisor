@@ -21,6 +21,7 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<AttemptEntity> Attempts { get; set; }
+    public DbSet<GroupRoleEntity> GroupRoles { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {
@@ -65,11 +66,5 @@ public class MaterialAdvisorContext : DbContext
         modelBuilder.Entity<LanguageEntity>().HasData(languages);
         modelBuilder.Entity<RoleEntity>().HasData(roles);
         modelBuilder.Entity<PermissionEntity>().HasData(permissions);
-
-        modelBuilder.Entity<GroupEntity>()
-            .HasOne(g => g.Owner)
-            .WithMany(u => u.CreatedGroups)
-            .HasForeignKey(g => g.OwnerId)
-            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

@@ -12,17 +12,19 @@ using System.IdentityModel.Tokens.Jwt;
 
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace MaterialAdvisor.API.Services;
 
 public class TokensGenerator(IOptions<AuthOptions> _authOptions,
     IHttpContextAccessor _httpContextAccessor, 
-    IRefreshTokenService _refreshTokenService)
+    IRefreshTokenService _refreshTokenService,
+    IUserService _userService)
 {
-    public async Task<TokensResult> Generate(UserInfo userInfo)
+    public async Task<TokensResult> Generate(User user)
     {
         var (expireIn, refreshExpireIn) = GetExpirationTimes();
-        var claims = CreateClaims(userInfo, expireIn);
+        var claims = await CreateClaims(user, expireIn);
         var creds = GetSigningCredentials();
         var issuer = _authOptions.Value.Issuer;
 
@@ -33,7 +35,7 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
         
         var refreshToken = Guid.NewGuid().ToString();
-        var userId = userInfo.UserId;
+        var userId = user.Id;
         await _refreshTokenService.Create(userId, refreshToken, refreshExpireIn);
 
         return new TokensResult 
@@ -43,29 +45,35 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
         };
     }
 
-    public async Task<TokensResult> Refresh(UserInfo userInfo, string token)
+    public async Task<TokensResult> Refresh(User user, string token)
     {
-        var refreshToken = await _refreshTokenService.Get(userInfo.UserId, token);
+        var refreshToken = await _refreshTokenService.Get(user.Id, token);
 
         if (refreshToken?.ExpireAt > DateTime.UtcNow)
         {
-            return await Generate(userInfo);
+            return await Generate(user);
         }
 
         throw new RefreshTokenExpiredException();
     }
 
-    private Claim[] CreateClaims(UserInfo userInfo, DateTime expireIn)
+    private async Task<IEnumerable<Claim>> CreateClaims(User user, DateTime expireIn)
     {
         var issuer = _authOptions.Value.Issuer;
+        var iat = EpochTime.GetIntDate(expireIn).ToString(CultureInfo.InvariantCulture);
 
-        return
+        var roles = await _userService.GetRoles(user.Id);
+        var rolesDictionary = roles.ToDictionary(k => (int)k.RoleId, e => e.GroupIds);
+        var rolesClaim = JsonSerializer.Serialize(rolesDictionary);
+
+        return 
         [
-            new Claim(JwtRegisteredClaimNames.Sub, userInfo.UserName),
-            new Claim(JwtRegisteredClaimNames.Name, userInfo.UserName),
-            new Claim(JwtRegisteredClaimNames.Email, userInfo.UserEmail),
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Iss, issuer),
-            new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(expireIn).ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64)
+            new Claim(JwtRegisteredClaimNames.Iat, iat, ClaimValueTypes.Integer64),
+            new Claim(Constants.Claims.RolesGroups, rolesClaim)
         ];
     }
 

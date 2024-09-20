@@ -70,7 +70,7 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
     {
         var topicEntity = _mapper.Map<KnowledgeCheckEntity>(model);
         var user = await _tenantService.GetUser();
-        topicEntity.OwnerId = user.UserId;
+        topicEntity.OwnerId = user.Id;
         return topicEntity;
     }
 

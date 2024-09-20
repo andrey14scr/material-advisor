@@ -25,7 +25,7 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
             throw new ActionNotSupportedException(ErrorCode.CannotChangeSubmittedAttempt);
         }
 
-        if (existingAttempt?.UserId != user.UserId)
+        if (existingAttempt?.UserId != user.Id)
         {
             throw new ActionNotAllowedException(ErrorCode.CannotAnswerForAnotherUser);
         }

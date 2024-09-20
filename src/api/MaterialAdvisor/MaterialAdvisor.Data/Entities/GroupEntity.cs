@@ -21,7 +21,7 @@ public class GroupEntity : IEntity
     [MaxLength(150)]
     public string Name { get; set; } = null!;
 
-    public virtual ICollection<UserEntity> Users { get; set; } = [];
-
     public virtual ICollection<KnowledgeCheckEntity> KnowledgeChecks { get; set; } = [];
+
+    public virtual ICollection<GroupRoleEntity> GroupRoles { get; set; } = [];
 }

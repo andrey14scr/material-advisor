@@ -22,17 +22,12 @@ public class UserProvider(MaterialAdvisorContext _dbContext,
     IMemoryCache _cache,
     IMapper _mapper) : IUserProvider
 {
-    public UserInfo AddUser(UserEntity user)
-    {
-        return AddToCache(user);
-    }
-
-    public async Task<UserInfo> GetUser()
+    public async Task<User> GetUser()
     {
         var userName = _httpContextAccessor.HttpContext.User.FindFirst(JwtRegisteredClaimNames.Name)!.Value;
         var cacheKey = GetKey(userName);
 
-        if (!_cache.TryGetValue(cacheKey, out UserInfo? userInfo) || userInfo is null)
+        if (!_cache.TryGetValue(cacheKey, out User? userInfo) || userInfo is null)
         {
             var searchName = _securityService.Encrypt(userName);
 
@@ -48,9 +43,9 @@ public class UserProvider(MaterialAdvisorContext _dbContext,
         return userInfo;
     }
 
-    private UserInfo AddToCache(UserEntity userEntity)
+    private User AddToCache(UserEntity userEntity)
     {
-        var userInfo = _mapper.Map<UserInfo>(userEntity);
+        var userInfo = _mapper.Map<User>(userEntity);
 
         var cacheOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(_cachingOptions.Value.ExpirationTime));

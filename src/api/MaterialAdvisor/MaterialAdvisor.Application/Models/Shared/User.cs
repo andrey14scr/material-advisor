@@ -1,10 +1,10 @@
 ﻿namespace MaterialAdvisor.Application.Models.Shared;
 
-public class UserInfo
+public class User
 {
     public string UserName { get; set; } = null!;
 
-    public string UserEmail { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
-    public Guid UserId { get; set; }
+    public Guid Id { get; set; }
 }

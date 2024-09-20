@@ -10,30 +10,30 @@ public class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<UserEntity, UserInfo>()
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
+        CreateMap<UserEntity, User>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .AfterMap<DecryptUserInfoAction>();
 
-        CreateMap<UserInfo, UserEntity>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+        CreateMap<User, UserEntity>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .AfterMap<EncryptUserInfoAction>();
     }
 
-    public class DecryptUserInfoAction(ISecurityService _securityService) : IMappingAction<UserEntity, UserInfo>
+    public class DecryptUserInfoAction(ISecurityService _securityService) : IMappingAction<UserEntity, User>
     {
-        public void Process(UserEntity source, UserInfo destination, ResolutionContext context)
+        public void Process(UserEntity source, User destination, ResolutionContext context)
         {
             destination.UserName = _securityService.Decrypt(source.Name);
-            destination.UserEmail = _securityService.Decrypt(source.Email);
+            destination.Email = _securityService.Decrypt(source.Email);
         }
     }
 
-    public class EncryptUserInfoAction(ISecurityService _securityService) : IMappingAction<UserInfo, UserEntity>
+    public class EncryptUserInfoAction(ISecurityService _securityService) : IMappingAction<User, UserEntity>
     {
-        public void Process(UserInfo source, UserEntity destination, ResolutionContext context)
+        public void Process(User source, UserEntity destination, ResolutionContext context)
         {
             destination.Name = _securityService.Encrypt(source.UserName);
-            destination.Email = _securityService.Encrypt(source.UserEmail);
+            destination.Email = _securityService.Encrypt(source.Email);
         }
     }
 }

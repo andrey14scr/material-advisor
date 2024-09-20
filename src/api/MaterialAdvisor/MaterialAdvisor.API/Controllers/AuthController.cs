@@ -16,8 +16,8 @@ public class AuthController(TokensGenerator _tokensGenerator, IUserService _user
     [HttpPost(Constants.Actions.Register)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var userInfo = await _userService.Create(request.UserName, request.Email, request.Password);
-        var tokens = await _tokensGenerator.Generate(userInfo);
+        var user = await _userService.Create(request.UserName, request.Email, request.Password);
+        var tokens = await _tokensGenerator.Generate(user);
         return Ok(tokens);
     }
 
