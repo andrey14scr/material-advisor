@@ -10,16 +10,18 @@ namespace MaterialAdvisor.Application.Services;
 public class SecurityService : ISecurityService
 {
     private readonly string _key;
+    private readonly string _salt;
     const int KeySize = 16;
 
     public SecurityService(IOptions<SecurityOptions> securityOptions)
     {
         _key = securityOptions.Value.Key;
+        _salt = securityOptions.Value.Salt;
     }
 
     public string GetHash(string input)
     {
-        var inputBytes = Encoding.UTF8.GetBytes(input);
+        var inputBytes = Encoding.UTF8.GetBytes(input + _salt);
         var keyBytes = Encoding.UTF8.GetBytes(_key);
 
         using (HMACSHA256 hmac = new HMACSHA256(keyBytes))

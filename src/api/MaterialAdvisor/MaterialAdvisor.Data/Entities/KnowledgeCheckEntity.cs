@@ -13,10 +13,6 @@ public class KnowledgeCheckEntity : IEntity
 
     public virtual TopicEntity Topic { get; set; }
 
-    public Guid OwnerId { get; set; }
-
-    public virtual UserEntity Owner { get; set; }
-
     public short Number { get; set; }
 
     [Required]

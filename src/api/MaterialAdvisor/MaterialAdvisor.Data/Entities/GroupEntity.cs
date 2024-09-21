@@ -13,10 +13,6 @@ public class GroupEntity : IEntity
 
     public virtual GroupEntity ParentGroup { get; set; }
 
-    public Guid OwnerId { get; set; }
-
-    public virtual UserEntity Owner { get; set; }
-
     [Required]
     [MaxLength(150)]
     public string Name { get; set; } = null!;
@@ -24,4 +20,6 @@ public class GroupEntity : IEntity
     public virtual ICollection<KnowledgeCheckEntity> KnowledgeChecks { get; set; } = [];
 
     public virtual ICollection<GroupRoleEntity> GroupRoles { get; set; } = [];
+
+    public virtual ICollection<GroupEntity> ChildrenGroups { get; set; } = [];
 }

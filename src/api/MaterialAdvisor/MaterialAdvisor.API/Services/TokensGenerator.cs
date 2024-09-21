@@ -24,7 +24,7 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
     public async Task<TokensResult> Generate(User user)
     {
         var (expireIn, refreshExpireIn) = GetExpirationTimes();
-        var claims = await CreateClaims(user, expireIn);
+        var claims = await CreateClaims(user);
         var creds = GetSigningCredentials();
         var issuer = _authOptions.Value.Issuer;
 
@@ -57,10 +57,9 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
         throw new RefreshTokenExpiredException();
     }
 
-    private async Task<IEnumerable<Claim>> CreateClaims(User user, DateTime expireIn)
+    private async Task<IEnumerable<Claim>> CreateClaims(User user)
     {
         var issuer = _authOptions.Value.Issuer;
-        var iat = EpochTime.GetIntDate(expireIn).ToString(CultureInfo.InvariantCulture);
 
         var roles = await _userService.GetRoles(user.Id);
         var rolesDictionary = roles.ToDictionary(k => (int)k.RoleId, e => e.GroupIds);
@@ -68,11 +67,8 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
 
         return 
         [
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Iss, issuer),
-            new Claim(JwtRegisteredClaimNames.Iat, iat, ClaimValueTypes.Integer64),
             new Claim(Constants.Claims.RolesGroups, rolesClaim)
         ];
     }

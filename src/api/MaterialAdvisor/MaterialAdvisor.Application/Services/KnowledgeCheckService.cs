@@ -68,16 +68,15 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
 
     private async Task<KnowledgeCheckEntity> MapToEntity<TModel>(TModel model)
     {
-        var topicEntity = _mapper.Map<KnowledgeCheckEntity>(model);
+        var entity = _mapper.Map<KnowledgeCheckEntity>(model);
         var user = await _tenantService.GetUser();
-        topicEntity.OwnerId = user.Id;
-        return topicEntity;
+        return entity;
     }
 
     private TModel MapToModel<TModel>(KnowledgeCheckEntity entity)
     {
-        var topicsModel = _mapper.Map<TModel>(entity);
-        return topicsModel;
+        var model = _mapper.Map<TModel>(entity);
+        return model;
     }
 
     private async Task<int> DeleteAndSave(KnowledgeCheckEntity entity)
@@ -89,10 +88,10 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
 
     private async Task<KnowledgeCheckEntity> CreateAndSave(KnowledgeCheckEntity entity)
     {
-        var createdTopic = await _dbContext.KnowledgeChecks.AddAsync(entity);
+        var created = await _dbContext.KnowledgeChecks.AddAsync(entity);
         IgnoreGroups();
         await _dbContext.SaveChangesAsync();
-        return createdTopic.Entity;
+        return created.Entity;
     }
 
     private IQueryable<KnowledgeCheckEntity> GetFullEntity()

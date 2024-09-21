@@ -2,8 +2,7 @@
 
 public enum RoleType : byte
 {
-    ReadStudent,
-    ReadTeacher,
-    WriteStudent,
-    WriteTeacher
+    Admin,
+    Student,
+    Teacher
 }

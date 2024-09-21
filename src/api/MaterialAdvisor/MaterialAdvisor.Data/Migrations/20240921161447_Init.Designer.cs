@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240920210036_Init")]
+    [Migration("20240921161447_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -125,15 +125,10 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("ParentGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("ParentGroupId");
 
@@ -185,9 +180,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<short>("Number")
                         .HasColumnType("smallint");
 
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -198,8 +190,6 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.HasIndex("TopicId");
 
@@ -299,12 +289,37 @@ namespace MaterialAdvisor.Data.Migrations
                         new
                         {
                             Id = (byte)0,
-                            Name = "ChangeTopic"
+                            Name = "EditTopic"
                         },
                         new
                         {
                             Id = (byte)1,
-                            Name = "GetTopic"
+                            Name = "ReadTopic"
+                        },
+                        new
+                        {
+                            Id = (byte)2,
+                            Name = "EditKnowledgeCheck"
+                        },
+                        new
+                        {
+                            Id = (byte)3,
+                            Name = "ReadKnowledgeCheck"
+                        },
+                        new
+                        {
+                            Id = (byte)4,
+                            Name = "PassKnowledgeCheck"
+                        },
+                        new
+                        {
+                            Id = (byte)5,
+                            Name = "EditGroups"
+                        },
+                        new
+                        {
+                            Id = (byte)6,
+                            Name = "ReadGroups"
                         });
                 });
 
@@ -378,22 +393,17 @@ namespace MaterialAdvisor.Data.Migrations
                         new
                         {
                             Id = (byte)0,
-                            Name = "ReadStudent"
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = (byte)1,
-                            Name = "ReadTeacher"
+                            Name = "Student"
                         },
                         new
                         {
                             Id = (byte)2,
-                            Name = "WriteStudent"
-                        },
-                        new
-                        {
-                            Id = (byte)3,
-                            Name = "WriteTeacher"
+                            Name = "Teacher"
                         });
                 });
 
@@ -472,19 +482,66 @@ namespace MaterialAdvisor.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PermissionEntityRoleEntity", b =>
+            modelBuilder.Entity("RolesPermissions", b =>
                 {
-                    b.Property<byte>("PermissionsId")
+                    b.Property<byte>("RoleId")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("RolesId")
+                    b.Property<byte>("PermissionId")
                         .HasColumnType("tinyint");
 
-                    b.HasKey("PermissionsId", "RolesId");
+                    b.HasKey("RoleId", "PermissionId");
 
-                    b.HasIndex("RolesId");
+                    b.HasIndex("PermissionId");
 
-                    b.ToTable("PermissionEntityRoleEntity");
+                    b.ToTable("RolesPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = (byte)2,
+                            PermissionId = (byte)1
+                        },
+                        new
+                        {
+                            RoleId = (byte)2,
+                            PermissionId = (byte)0
+                        },
+                        new
+                        {
+                            RoleId = (byte)2,
+                            PermissionId = (byte)3
+                        },
+                        new
+                        {
+                            RoleId = (byte)2,
+                            PermissionId = (byte)2
+                        },
+                        new
+                        {
+                            RoleId = (byte)1,
+                            PermissionId = (byte)3
+                        },
+                        new
+                        {
+                            RoleId = (byte)1,
+                            PermissionId = (byte)1
+                        },
+                        new
+                        {
+                            RoleId = (byte)1,
+                            PermissionId = (byte)4
+                        },
+                        new
+                        {
+                            RoleId = (byte)0,
+                            PermissionId = (byte)5
+                        },
+                        new
+                        {
+                            RoleId = (byte)0,
+                            PermissionId = (byte)6
+                        });
                 });
 
             modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
@@ -545,17 +602,10 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
                 {
-                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
-                        .WithMany("CreatedGroups")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", "ParentGroup")
-                        .WithMany()
-                        .HasForeignKey("ParentGroupId");
-
-                    b.Navigation("Owner");
+                        .WithMany("ChildrenGroups")
+                        .HasForeignKey("ParentGroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentGroup");
                 });
@@ -589,19 +639,11 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
                 {
-                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany("KnowledgeChecks")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Owner");
 
                     b.Navigation("Topic");
                 });
@@ -693,17 +735,17 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("PermissionEntityRoleEntity", b =>
+            modelBuilder.Entity("RolesPermissions", b =>
                 {
                     b.HasOne("MaterialAdvisor.Data.Entities.PermissionEntity", null)
                         .WithMany()
-                        .HasForeignKey("PermissionsId")
+                        .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.RoleEntity", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -727,6 +769,8 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
                 {
+                    b.Navigation("ChildrenGroups");
+
                     b.Navigation("GroupRoles");
                 });
 
@@ -758,8 +802,6 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.UserEntity", b =>
                 {
-                    b.Navigation("CreatedGroups");
-
                     b.Navigation("GroupRoles");
                 });
 #pragma warning restore 612, 618

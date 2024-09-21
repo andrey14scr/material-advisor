@@ -8,8 +8,6 @@ using MaterialAdvisor.Data.Enums;
 
 using Microsoft.EntityFrameworkCore;
 
-using System.Text.RegularExpressions;
-
 namespace MaterialAdvisor.Application.Services;
 
 public class UserService(MaterialAdvisorContext _dbContext, 
@@ -44,16 +42,15 @@ public class UserService(MaterialAdvisorContext _dbContext,
 
         var initialGroup = new GroupEntity()
         {
-            Name = $"{userName} group",
-            OwnerId = user.Entity.Id,
+            Name = $"{userName}'s group",
         };
 
         var group = await _dbContext.Groups.AddAsync(initialGroup);
 
         var initialGroupRole = new GroupRoleEntity
         {
-            UserId = user.Entity.Id, 
-            RoleId = RoleType.WriteTeacher, 
+            UserId = user.Entity.Id,
+            RoleId = RoleType.Admin,
             GroupId = group.Entity.Id
         };
 

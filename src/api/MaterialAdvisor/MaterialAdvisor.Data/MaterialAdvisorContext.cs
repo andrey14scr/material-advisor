@@ -66,5 +66,39 @@ public class MaterialAdvisorContext : DbContext
         modelBuilder.Entity<LanguageEntity>().HasData(languages);
         modelBuilder.Entity<RoleEntity>().HasData(roles);
         modelBuilder.Entity<PermissionEntity>().HasData(permissions);
+
+        modelBuilder.Entity<RoleEntity>()
+                .HasMany(r => r.Permissions)
+                .WithMany(p => p.Roles)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RolesPermissions",
+                    r => r.HasOne<PermissionEntity>().WithMany().HasForeignKey("PermissionId"),
+                    l => l.HasOne<RoleEntity>().WithMany().HasForeignKey("RoleId"),
+                    je =>
+                    {
+                        je.HasKey("RoleId", "PermissionId");
+                        je.HasData(
+                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.ReadTopic },
+                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.EditTopic },
+                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.ReadKnowledgeCheck },
+                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.EditKnowledgeCheck },
+
+                            new { RoleId = RoleType.Student, PermissionId = PermissionType.ReadKnowledgeCheck },
+                            new { RoleId = RoleType.Student, PermissionId = PermissionType.ReadTopic },
+                            new { RoleId = RoleType.Student, PermissionId = PermissionType.PassKnowledgeCheck },
+
+                            new { RoleId = RoleType.Admin, PermissionId = PermissionType.EditGroups },
+                            new { RoleId = RoleType.Admin, PermissionId = PermissionType.ReadGroups }
+                        );
+                    });
+
+        modelBuilder.Entity<GroupEntity>(entity =>
+        {
+            entity.HasOne(x => x.ParentGroup)
+                .WithMany(x => x.ChildrenGroups)
+                .HasForeignKey(x => x.ParentGroupId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 }

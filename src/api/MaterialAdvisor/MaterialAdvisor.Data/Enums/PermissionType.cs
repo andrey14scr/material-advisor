@@ -2,6 +2,13 @@
 
 public enum PermissionType : byte
 {
-    ChangeTopic,
-    GetTopic,
+    EditTopic,
+    ReadTopic,
+
+    EditKnowledgeCheck,
+    ReadKnowledgeCheck,
+    PassKnowledgeCheck,
+
+    EditGroups,
+    ReadGroups,
 }
