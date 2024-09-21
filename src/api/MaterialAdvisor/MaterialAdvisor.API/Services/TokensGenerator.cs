@@ -7,24 +7,21 @@ using MaterialAdvisor.Application.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 
 using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace MaterialAdvisor.API.Services;
 
 public class TokensGenerator(IOptions<AuthOptions> _authOptions,
     IHttpContextAccessor _httpContextAccessor, 
-    IRefreshTokenService _refreshTokenService,
-    IUserService _userService)
+    IRefreshTokenService _refreshTokenService)
 {
     public async Task<TokensResult> Generate(User user)
     {
         var (expireIn, refreshExpireIn) = GetExpirationTimes();
-        var claims = await CreateClaims(user);
+        var claims = CreateClaims(user);
         var creds = GetSigningCredentials();
         var issuer = _authOptions.Value.Issuer;
 
@@ -57,19 +54,14 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
         throw new RefreshTokenExpiredException();
     }
 
-    private async Task<IEnumerable<Claim>> CreateClaims(User user)
+    private IEnumerable<Claim> CreateClaims(User user)
     {
         var issuer = _authOptions.Value.Issuer;
-
-        var roles = await _userService.GetRoles(user.Id);
-        var rolesDictionary = roles.ToDictionary(k => (int)k.RoleId, e => e.GroupIds);
-        var rolesClaim = JsonSerializer.Serialize(rolesDictionary);
 
         return 
         [
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(Constants.Claims.RolesGroups, rolesClaim)
         ];
     }
 

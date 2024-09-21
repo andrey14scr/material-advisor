@@ -24,5 +24,7 @@ public class UserEntity : IEntity
     [MaxLength(150)]
     public string Hash { get; set; } = null!;
 
-    public virtual ICollection<GroupRoleEntity> GroupRoles { get; set; } = [];
+    public virtual ICollection<GroupEntity> Groups { get; set; } = [];
+
+    public virtual ICollection<GroupEntity> CreatedGroups { get; set; } = [];
 }

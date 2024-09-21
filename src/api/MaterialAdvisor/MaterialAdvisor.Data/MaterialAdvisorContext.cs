@@ -16,12 +16,9 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<GroupEntity> Groups { get; set; }
     public DbSet<KnowledgeCheckEntity> KnowledgeChecks { get; set; }
-    public DbSet<PermissionEntity> Permissions { get; set; }
-    public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<AttemptEntity> Attempts { get; set; }
-    public DbSet<GroupRoleEntity> GroupRoles { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {
@@ -53,52 +50,15 @@ public class MaterialAdvisorContext : DbContext
             .Select(l => new LanguageEntity { Id = l, Name = l.ToString(), Code = string.Empty })
             .ToList();
 
-        var roles = Enum.GetValues(typeof(RoleType))
-            .Cast<RoleType>()
-            .Select(r => new RoleEntity { Id = r, Name = r.ToString() })
-            .ToList();
-
-        var permissions = Enum.GetValues(typeof(PermissionType))
-            .Cast<PermissionType>()
-            .Select(p => new PermissionEntity { Id = p, Name = p.ToString() })
-            .ToList();
-
         modelBuilder.Entity<LanguageEntity>().HasData(languages);
-        modelBuilder.Entity<RoleEntity>().HasData(roles);
-        modelBuilder.Entity<PermissionEntity>().HasData(permissions);
 
-        modelBuilder.Entity<RoleEntity>()
-                .HasMany(r => r.Permissions)
-                .WithMany(p => p.Roles)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RolesPermissions",
-                    r => r.HasOne<PermissionEntity>().WithMany().HasForeignKey("PermissionId"),
-                    l => l.HasOne<RoleEntity>().WithMany().HasForeignKey("RoleId"),
-                    je =>
-                    {
-                        je.HasKey("RoleId", "PermissionId");
-                        je.HasData(
-                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.ReadTopic },
-                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.EditTopic },
-                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.ReadKnowledgeCheck },
-                            new { RoleId = RoleType.Teacher, PermissionId = PermissionType.EditKnowledgeCheck },
+        modelBuilder.Entity<GroupEntity>()
+            .HasMany(x => x.Users)
+            .WithMany(x => x.Groups);
 
-                            new { RoleId = RoleType.Student, PermissionId = PermissionType.ReadKnowledgeCheck },
-                            new { RoleId = RoleType.Student, PermissionId = PermissionType.ReadTopic },
-                            new { RoleId = RoleType.Student, PermissionId = PermissionType.PassKnowledgeCheck },
-
-                            new { RoleId = RoleType.Admin, PermissionId = PermissionType.EditGroups },
-                            new { RoleId = RoleType.Admin, PermissionId = PermissionType.ReadGroups }
-                        );
-                    });
-
-        modelBuilder.Entity<GroupEntity>(entity =>
-        {
-            entity.HasOne(x => x.ParentGroup)
-                .WithMany(x => x.ChildrenGroups)
-                .HasForeignKey(x => x.ParentGroupId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
+        modelBuilder.Entity<GroupEntity>()
+            .HasOne(x => x.Owner)
+            .WithMany(x => x.CreatedGroups)
+            .HasForeignKey(x => x.OwnerId);
     }
 }

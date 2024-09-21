@@ -17,6 +17,7 @@ public class TopicProfile : Profile
         CreateMap<EditableAnswer, AnswerEntity>().ReverseMap();
         CreateMap<EditableAnswerGroup, AnswerGroupEntity>().ReverseMap();
 
-        CreateMap<TopicEntity, TopicListItem>();
+        CreateMap<TopicEntity, TopicListItem>()
+            .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner.Name));
     }
 }

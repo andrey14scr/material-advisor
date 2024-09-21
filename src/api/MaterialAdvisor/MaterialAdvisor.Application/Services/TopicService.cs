@@ -36,11 +36,11 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     {
         var user = await _userService.GetUser();
         var entities = await _dbContext.Topics
-            .Where(t => t.OwnerId == user.Id || t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.GroupRoles.Any(gr => gr.UserId == user.Id))))
+            .Where(t => t.OwnerId == user.Id || t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id))))
+            .Include(t => t.Owner)
             .Include(t => t.Texts)
-            .Include(t => t.KnowledgeChecks)
-            .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
-            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Groups).ThenInclude(kc => kc.GroupRoles)
+            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
+            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Groups).ThenInclude(kc => kc.Users)
             .AsNoTracking()
             .ToListAsync();
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);

@@ -7,6 +7,4 @@ public interface IUserService
     Task<User> Get(string login, string password);
 
     Task<User> Create(string userName, string email, string password);
-
-    Task<IEnumerable<Role>> GetRoles(Guid userId);
 }

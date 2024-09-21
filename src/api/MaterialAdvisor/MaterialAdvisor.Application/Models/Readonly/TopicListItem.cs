@@ -6,6 +6,8 @@ public class TopicListItem
 {
     public Guid Id { get; set; }
 
+    public string Owner { get; set; }
+
     public ushort Number { get; set; }
 
     public IEnumerable<LanguageText> Texts { get; set; } = [];

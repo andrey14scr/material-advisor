@@ -7,11 +7,6 @@ public class Constants
         public const string CorrelationIdHeader = "X-Correlation-ID";
     }
 
-    public class Claims
-    {
-        public const string RolesGroups = "roles_groups";
-    }
-
     public class Configuration
     {
         public const string AuthSection = "Auth";
