@@ -1,0 +1,41 @@
+{
+    "languageName": "English",
+    "navigation": {
+        "mainPage": "Main page",
+        "testConstructor": "Test constructor",
+        "information": "Information",
+        "account": "Account",
+        "title": "Navigation"
+    },
+    "auth":{
+        "LoginHeader": "Login",
+        "RegisterHeader": "Register",
+        "Email": "Email",
+        "UserName": "Username",
+        "Login": "Login",
+        "Password": "Password",
+        "ConfirmPassword": "Confirm Password",
+        "EmailPlaceholder": "Enter your email",
+        "UserNamePlaceholder": "Enter your username",
+        "LoginPlaceholder": "Enter your email or username",
+        "PasswordPlaceholder": "Enter your password",
+        "ConfirmPasswordPlaceholder": "Confirm your password",
+        "EmailRequired": "Email is required.",
+        "UserNameRequired": "Username is required.",
+        "LoginRequired": "Login is required.",
+        "PasswordRequired": "Password is required.",
+        "ConfirmPasswordRequired": "You should confirm password.",
+        "EnterEqualPasswords": "Passwords must be equal.",
+        "ToLogin": "Login",
+        "ToRegister": "Register",
+        "LoginOffer": "Already have an account? Login",
+        "RegisterOffer": "Don't have an account? Register",
+        "WrongCredentialsProvided": "Login or password is wrong, try again",
+        "WrongRegisterDataProvided": "Wrong register data provided",
+        "UnknownAuthorizationError": "Unknown error during authorization"
+    },
+    "mainPage": {
+        "title": "Topics list",
+        "usedAttempts": "Used attempts"
+    }
+}

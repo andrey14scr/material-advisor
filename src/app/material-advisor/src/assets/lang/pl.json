@@ -1,0 +1,41 @@
+{
+    "languageName": "Polski",
+    "navigation": {
+        "mainPage": "Strona główna",
+        "testConstructor": "Konstruktor testów",
+        "information": "Informacja",
+        "account": "Konto",
+        "title": "Nawigacja"
+    },
+    "auth":{
+        "LoginHeader": "Logowanie",
+        "RegisterHeader": "Rejestracja",
+        "Email": "E-mail",
+        "UserName": "Nazwa użytkownika",
+        "Login": "Login",
+        "Password": "Hasło",
+        "ConfirmPassword": "Potwierdź hasło",
+        "EmailPlaceholder": "Wprowadź swój e-mail",
+        "UserNamePlaceholder": "Wprowadź swoją nazwę użytkownika",
+        "LoginPlaceholder": "Wprowadź swój e-mail lub nazwę użytkownika",
+        "PasswordPlaceholder": "Wprowadź swoje hasło",
+        "ConfirmPasswordPlaceholder": "Potwierdź swoje hasło",
+        "EmailRequired": "E-mail jest wymagany.",
+        "UserNameRequired": "Nazwa użytkownika jest wymagana.",
+        "LoginRequired": "Login jest wymagany.",
+        "PasswordRequired": "Hasło jest wymagany.",
+        "ConfirmPasswordRequired": "Powinieneś potwierdzić hasło.",
+        "EnterEqualPasswords": "Hasła muszą być równe.",
+        "ToLogin": "Zalogować się",
+        "ToRegister": "Zarejestrować się",
+        "LoginOffer": "Masz już konto? Zaloguj się",
+        "RegisterOffer": "Nie masz konta? Zarejestruj się",
+        "WrongCredentialsProvided": "Login lub hasło jest błędne, spróbuj ponownie",
+        "WrongRegisterDataProvided": "Niepoprawne dane są przedstawiane do rejestracji",
+        "UnknownAuthorizationError": "Nieznany błąd podczas autoryzacji"
+    },
+    "mainPage": {
+        "title": "Lista tematów",
+        "usedAttempts": "Używane próby"
+    }
+}
