@@ -16,7 +16,7 @@ export class KnowledgeCheckListItemModel {
         time: number,
         startDate: Date,
         endDate: Date | undefined,
-        usedAttempts: number | undefined,
+        usedAttempts: number,
         maxAttempts: number | undefined) {
         this.id = id;
         this.name = name;

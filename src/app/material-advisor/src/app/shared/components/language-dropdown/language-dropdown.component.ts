@@ -5,7 +5,7 @@ import { TranslationService } from '../../services/translation.service';
 
 interface Language {
   name: string;
-  tag: string;
+  code: string;
   flag: string;
 }
 
@@ -34,7 +34,7 @@ export class LanguageDropdownComponent implements OnInit {
         this.http.get<{ languageName: string }>(`${langPath}${langTag}.json`).subscribe(data => {
           this.languages.push({
             name: data.languageName,
-            tag: langTag,
+            code: langTag,
             flag: `assets/img/${langTag}.png`
           });
         });
@@ -43,16 +43,15 @@ export class LanguageDropdownComponent implements OnInit {
   }
 
   setCurrentLanguage(): void {
-    this.translationService.getCurrentLanguage().subscribe(currentTag => {
-      const currentLanguage = this.languages.find(language => language.tag === currentTag);
-      if (currentLanguage) {
-        this.selectedLanguage = currentLanguage;
-      }
-    });
+    const currentCode = this.translationService.getCurrentLanguageCode();
+    const currentLanguage = this.languages.find(language => language.code === currentCode);
+    if (currentLanguage) {
+      this.selectedLanguage = currentLanguage;
+    }
   }
 
   languageChanged(selectedLanguage: Language) {
     this.selectedLanguage = selectedLanguage;
-    this.translationService.changeLanguage(selectedLanguage.tag);
+    this.translationService.changeLanguage(selectedLanguage.code);
   }
 }
