@@ -1,8 +1,18 @@
 {
+    "languages":{
+        "en": "Angielski",
+        "pl": "Polski"
+    },
+    "questionTypes":{
+        "Select": "Single select pl",
+        "MultiSelect": "Multiple select pl",
+        "Group": "Grouping pl",
+        "OpenText": "Open pl"
+    },
     "languageName": "Polski",
     "navigation": {
         "mainPage": "Strona główna",
-        "testConstructor": "Konstruktor testów",
+        "topicConstructor": "Konstruktor tematów",
         "information": "Informacja",
         "account": "Konto",
         "title": "Nawigacja"

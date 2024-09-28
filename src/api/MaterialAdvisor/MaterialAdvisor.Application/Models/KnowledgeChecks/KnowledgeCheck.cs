@@ -1,12 +1,16 @@
-﻿namespace MaterialAdvisor.Application.Models.Readonly;
+﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
-public class KnowledgeCheckListItem
+public class KnowledgeCheck
 {
     public Guid Id { get; set; }
+
+    public Guid TopicId { get; set; }
 
     public short Number { get; set; }
 
     public string Name { get; set; } = null!;
+
+    public string Description { get; set; } = null!;
 
     public DateTime StartDate { get; set; }
 
@@ -16,5 +20,5 @@ public class KnowledgeCheckListItem
 
     public byte? MaxAttempts { get; set; }
 
-    public byte? UsedAttempts { get; set; }
+    public IEnumerable<Guid> GroupIds { get; set; } = [];
 }

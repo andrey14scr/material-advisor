@@ -1,4 +1,4 @@
-﻿using MaterialAdvisor.Application.Models.Editable;
+﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.Services;
 
 using Microsoft.AspNetCore.Authorization;
@@ -10,28 +10,28 @@ namespace MaterialAdvisor.API.Controllers;
 public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckService) : BaseApiController
 {
     [HttpGet("{id}")]
-    public async Task<ActionResult<EditableKnowledgeCheck>> GetById(Guid id)
+    public async Task<ActionResult<KnowledgeCheck>> GetById(Guid id)
     {
-        var result = await _knowledgeCheckService.Get<EditableKnowledgeCheck>(id);
+        var result = await _knowledgeCheckService.Get<KnowledgeCheck>(id);
         return Ok(result);
     }
 
     [HttpGet()]
-    public async Task<ActionResult<IList<EditableKnowledgeCheck>>> Get()
+    public async Task<ActionResult<IList<KnowledgeCheck>>> Get()
     {
-        var result = await _knowledgeCheckService.Get<EditableKnowledgeCheck>();
+        var result = await _knowledgeCheckService.Get<KnowledgeCheck>();
         return Ok(result);
     }
 
     [HttpGet("group/{groupId}")]
-    public async Task<ActionResult<IList<EditableKnowledgeCheck>>> GetByGroupId(Guid groupId)
+    public async Task<ActionResult<IList<KnowledgeCheck>>> GetByGroupId(Guid groupId)
     {
-        var result = await _knowledgeCheckService.GetByGroup<EditableKnowledgeCheck>(groupId);
+        var result = await _knowledgeCheckService.GetByGroup<KnowledgeCheck>(groupId);
         return Ok(result);
     }
 
     [HttpPost()]
-    public async Task<ActionResult<EditableKnowledgeCheck>> CreateOrUpdate(EditableKnowledgeCheck knowledgeCheck)
+    public async Task<ActionResult<KnowledgeCheck>> CreateOrUpdate(KnowledgeCheck knowledgeCheck)
     {
         if (knowledgeCheck.Id == Guid.Empty)
         {

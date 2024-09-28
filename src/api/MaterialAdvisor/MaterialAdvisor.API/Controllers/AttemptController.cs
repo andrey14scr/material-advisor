@@ -1,4 +1,4 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
+﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.Services;
 
 using Microsoft.AspNetCore.Authorization;

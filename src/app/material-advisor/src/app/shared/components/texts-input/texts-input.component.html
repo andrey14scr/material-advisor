@@ -1,0 +1,24 @@
+<div [formGroup]="form" class="texts-form">
+  <div formArrayName="texts">
+    <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroup]="toForm(textGroup)" class="text-row">
+      <mat-form-field appearance="outline" class="language-select" subscriptSizing="dynamic">
+        <mat-label>Language</mat-label>
+        <mat-select formControlName="languageId" required>
+          <mat-option *ngFor="let language of languages" [value]="language.languageId">{{ getLanguageName(language.code) }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="text-input" subscriptSizing="dynamic">
+        <mat-label>Text</mat-label>
+        <input *ngIf="isOneRow" matInput formControlName="text" required />
+        <textarea *ngIf="!isOneRow" matInput formControlName="text" required></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" (click)="removeText(i)" [disabled]="i === 0">-</button>
+    </div>
+  </div>
+
+  <div class="add-button-container">
+    <button mat-raised-button color="primary" (click)="addText()" [disabled]="languages.length == textsFormArray.controls.length">+</button>
+  </div>
+</div>

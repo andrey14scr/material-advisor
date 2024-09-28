@@ -57,7 +57,6 @@ export class MainPageComponent {
   }
 
   isOwner(model: TopicListItemModel): boolean {
-    console.log(this.authService.getCurrentUser());
     return this.authService.getCurrentUser()?.name === model.owner;
   }
 

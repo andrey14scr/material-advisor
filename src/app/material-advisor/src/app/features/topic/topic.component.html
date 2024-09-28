@@ -1,1 +1,22 @@
-<p>topic works!</p>
+<mat-card>
+  <mat-label class="section-label">Topic</mat-label>
+  <form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="topic-form">
+    <mat-form-field appearance="outline" class="topic-number" subscriptSizing="dynamic">
+      <mat-label>Number</mat-label>
+      <input matInput formControlName="number" type="number" min="1" />
+    </mat-form-field>
+
+    <texts-input [form]="topicForm" [textsFormArray]="textsFormArray"/>
+
+    <div class="questions">
+      <mat-label class="section-label">Questions:</mat-label>
+      <questions-input [form]="topicForm" [questionsFormArray]="questionsFormArray"/>
+    </div>
+
+    <div class="submit-button-container">
+      <button mat-raised-button color="primary" type="submit">
+        {{ this.currentTopic.id ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</mat-card>

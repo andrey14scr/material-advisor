@@ -1,1 +1,1 @@
-export type GUID = string ;//& { isGuid: true; };
+export type GUID = string;

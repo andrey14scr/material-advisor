@@ -1,0 +1,37 @@
+.text-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+button {
+  min-width: 40px;
+}
+
+.language-select {
+  width: 20%;
+}
+
+.language-text {
+  width: 100%;
+}
+
+.text-input {
+  flex: 1;
+}
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.texts-form {
+  background-color: rgb(197, 190, 218);
+}

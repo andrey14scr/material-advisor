@@ -1,13 +1,10 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
-using MaterialAdvisor.Data.Enums;
+﻿using MaterialAdvisor.Data.Enums;
 
-namespace MaterialAdvisor.Application.Models.Readonly;
+namespace MaterialAdvisor.Application.Models.Topics;
 
 public class Question
 {
     public byte Number { get; set; }
-
-    public byte Version { get; set; }
 
     public double Points { get; set; }
 

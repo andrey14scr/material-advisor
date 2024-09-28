@@ -1,5 +1,4 @@
-using MaterialAdvisor.Application.Models.Editable;
-using MaterialAdvisor.Application.Models.Readonly;
+using MaterialAdvisor.Application.Models.Topics;
 using MaterialAdvisor.Application.Services;
 
 using Microsoft.AspNetCore.Authorization;
@@ -18,14 +17,14 @@ public class TopicController(ITopicService _topicService) : BaseApiController
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<EditableTopic>> GetById(Guid id)
+    public async Task<ActionResult<Topic>> GetById(Guid id)
     {
-        var result = await _topicService.Get<EditableTopic>(id);
+        var result = await _topicService.Get<Topic>(id);
         return Ok(result);
     }
 
     [HttpPost()]
-    public async Task<ActionResult<EditableTopic>> CreateOrUpdate(EditableTopic topic)
+    public async Task<ActionResult<Topic>> CreateOrUpdate(Topic topic)
     {
         if (topic.Id == Guid.Empty)
         {

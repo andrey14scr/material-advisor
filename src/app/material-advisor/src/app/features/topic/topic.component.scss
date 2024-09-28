@@ -1,0 +1,39 @@
+mat-card {
+  //margin: 20px auto;
+  padding: 10px;
+}
+
+.topic-form {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.topic-number {
+  width: 20%;
+}
+
+.section-label {
+  margin-bottom: 15px;
+  display: block;
+  font-size: 1.2em;
+  //color: rgba(0, 0, 0, 0.87);
+}
+
+.topic-form {
+
+}
+
+.questions {
+  //margin-left: 2%;
+}

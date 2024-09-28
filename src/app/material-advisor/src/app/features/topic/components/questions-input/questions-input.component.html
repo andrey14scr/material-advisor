@@ -1,0 +1,29 @@
+<div [formGroup]="form" class="question-form">
+  <div formArrayName="questions">
+    <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroup]="toForm(questionGroup)" class="text-row">
+      <div class="all-width">
+        <div class="text-row">
+          <mat-form-field appearance="outline" class="type-select" subscriptSizing="dynamic">
+            <mat-label>Type</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option *ngFor="let type of questionTypes" [value]="type">{{ translateQuestionType(type) }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="points-select" subscriptSizing="dynamic">
+            <mat-label>Points</mat-label>
+            <input matInput formControlName="points" type="number" min="1" />
+          </mat-form-field>
+        </div>
+    
+        <texts-input [form]="toForm(questionGroup)" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+      </div>
+
+      <button mat-raised-button color="warn" (click)="removeQuestion(i)">-</button>
+    </div>
+  </div>
+
+  <div class="add-button-container">
+    <button mat-raised-button color="primary" (click)="addQuestion()">+</button>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 ﻿using MaterialAdvisor.Data.Enums;
 
-namespace MaterialAdvisor.Application.Models.Shared;
+namespace MaterialAdvisor.Application.Models.Topics;
 
 public class LanguageText
 {

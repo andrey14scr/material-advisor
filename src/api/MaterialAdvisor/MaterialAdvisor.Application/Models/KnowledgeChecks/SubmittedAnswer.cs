@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Application.Models.Shared;
+﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
 public class SubmittedAnswer
 {

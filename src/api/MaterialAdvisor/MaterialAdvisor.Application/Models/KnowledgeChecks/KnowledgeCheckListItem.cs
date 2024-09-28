@@ -1,16 +1,12 @@
-﻿namespace MaterialAdvisor.Application.Models.Editable;
+﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
-public class EditableKnowledgeCheck
+public class KnowledgeCheckListItem
 {
     public Guid Id { get; set; }
-
-    public Guid TopicId { get; set; }
 
     public short Number { get; set; }
 
     public string Name { get; set; } = null!;
-
-    public string Description { get; set; } = null!;
 
     public DateTime StartDate { get; set; }
 
@@ -20,5 +16,5 @@ public class EditableKnowledgeCheck
 
     public byte? MaxAttempts { get; set; }
 
-    public IEnumerable<Guid> GroupIds { get; set; } = [];
+    public byte? UsedAttempts { get; set; }
 }

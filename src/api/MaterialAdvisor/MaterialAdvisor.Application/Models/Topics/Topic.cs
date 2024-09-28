@@ -1,6 +1,6 @@
-﻿namespace MaterialAdvisor.Application.Models.Shared;
+﻿namespace MaterialAdvisor.Application.Models.Topics;
 
-public abstract class AbstractTopic<TQuestion>
+public class Topic
 {
     public Guid Id { get; set; }
 
@@ -8,7 +8,7 @@ public abstract class AbstractTopic<TQuestion>
 
     public uint Version { get; set; }
 
-    public IEnumerable<TQuestion> Questions { get; set; } = [];
+    public IEnumerable<Question> Questions { get; set; } = [];
 
     public IEnumerable<LanguageText> Texts { get; set; } = [];
 }

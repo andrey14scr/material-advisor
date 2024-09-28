@@ -1,0 +1,41 @@
+.text-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.all-width{
+  width: 100%;
+}
+
+button {
+  min-width: 40px;
+}
+
+.type-select {
+  //width: 20%;
+}
+
+.texts-input {
+  width: 100%;
+}
+
+.points-select {
+  //width: 20%;
+}
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.question-form {
+  background-color: rgb(221, 219, 216);
+}

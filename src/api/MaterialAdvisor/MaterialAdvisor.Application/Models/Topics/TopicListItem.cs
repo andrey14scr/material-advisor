@@ -1,6 +1,6 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
+﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
 
-namespace MaterialAdvisor.Application.Models.Readonly;
+namespace MaterialAdvisor.Application.Models.Topics;
 
 public class TopicListItem
 {

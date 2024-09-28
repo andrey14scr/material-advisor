@@ -13,6 +13,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     public async Task<TModel> Create<TModel>(TModel model)
     {
         var entityToCreate = await MapToEntity(model);
+        entityToCreate.Version = 1;
         var createdEntity = await CreateAndSave(entityToCreate);
         var createdModel = MapToModel<TModel>(createdEntity);
         return createdModel;

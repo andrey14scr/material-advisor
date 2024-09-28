@@ -1,6 +1,4 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
-
-namespace MaterialAdvisor.Application.Models.Readonly;
+﻿namespace MaterialAdvisor.Application.Models.Topics;
 
 public class Answer
 {
