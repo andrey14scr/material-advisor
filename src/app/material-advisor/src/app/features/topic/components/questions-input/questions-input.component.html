@@ -1,8 +1,9 @@
-<mat-card>
-  <div [formGroup]="form">
-    <div formArrayName="questions">
-      <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroup]="toForm(questionGroup)" class="text-row">
-        <div class="all-width">
+
+<div [formGroup]="form">
+  <div formArrayName="questions">
+    <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroup]="toForm(questionGroup)" class="text-row">
+      <mat-card class="question-card all-width">
+        <div>
           <div class="text-row">
             <mat-form-field appearance="outline" class="type-select" subscriptSizing="dynamic">
               <mat-label>Type</mat-label>
@@ -24,13 +25,12 @@
             <answer-groups-input [form]="toForm(questionGroup)" [answerGroupsFormArray]="getAnswerGroupsFormArray(i)"/>
           </div>
         </div>
-
-        <button mat-raised-button color="warn" (click)="removeQuestion(i)">-</button>
-      </div>
-    </div>
-
-    <div class="add-button-container">
-      <button mat-raised-button color="primary" (click)="addQuestion()">+</button>
+      </mat-card>
+      <button mat-raised-button color="warn" (click)="removeQuestion(i)">-</button>
     </div>
   </div>
-</mat-card>
+
+  <div class="add-button-container">
+    <button mat-raised-button color="primary" (click)="addQuestion()">+</button>
+  </div>
+</div>

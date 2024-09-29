@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class="texts-card">
   <div [formGroup]="form">
     <div formArrayName="texts">
       <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroup]="toForm(textGroup)" class="text-row">

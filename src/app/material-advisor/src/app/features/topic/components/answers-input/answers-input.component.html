@@ -1,7 +1,8 @@
-<mat-card>
-  <div [formGroup]="form">
-    <div formArrayName="answers">
-      <div *ngFor="let answerGroup of answersFormArray.controls; let i = index;" [formGroup]="toForm(answerGroup)" class="text-row">
+
+<div [formGroup]="form">
+  <div formArrayName="answers">
+    <div *ngFor="let answerGroup of answersFormArray.controls; let i = index;" [formGroup]="toForm(answerGroup)" class="text-row">
+      <mat-card class="answer-card all-width">
         <div class="all-width">
           <div class="text-row">          
             <mat-form-field appearance="outline" class="points-select" subscriptSizing="dynamic">
@@ -12,13 +13,13 @@
       
           <texts-input [form]="toForm(answerGroup)" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
         </div>
-  
-        <button mat-raised-button color="warn" (click)="removeAnswer(i)">-</button>
-      </div>
-    </div>
-  
-    <div class="add-button-container">
-      <button mat-raised-button color="primary" (click)="addAnswer()">+</button>
+
+      </mat-card>
+      <button mat-raised-button color="warn" (click)="removeAnswer(i)">-</button>
     </div>
   </div>
-</mat-card>
+
+  <div class="add-button-container">
+    <button mat-raised-button color="primary" (click)="addAnswer()">+</button>
+  </div>
+</div>
