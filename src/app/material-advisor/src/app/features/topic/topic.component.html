@@ -1,6 +1,6 @@
 <mat-card>
   <mat-label class="section-label">Topic</mat-label>
-  <form [formGroup]="topicForm" (ngSubmit)="onSubmit()" class="topic-form">
+  <form [formGroup]="topicForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="topic-number" subscriptSizing="dynamic">
       <mat-label>Number</mat-label>
       <input matInput formControlName="number" type="number" min="1" />

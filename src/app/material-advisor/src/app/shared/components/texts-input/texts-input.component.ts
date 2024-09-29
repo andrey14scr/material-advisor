@@ -8,11 +8,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Language } from '@shared/types/Language';
 import { TranslationService } from '@shared/services/translation.service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'texts-input',
   standalone: true,
-  imports: [CommonModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatSelectModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    MatInputModule, 
+    MatButtonModule, 
+    MatFormFieldModule, 
+    MatSelectModule, 
+    MatCardModule, 
+    ReactiveFormsModule
+  ],
   templateUrl: './texts-input.component.html',
   styleUrl: './texts-input.component.scss'
 })

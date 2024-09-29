@@ -12,7 +12,7 @@ import { TextsInputComponent } from "@shared/components/texts-input/texts-input.
 import { QuestionsInputComponent } from './components/questions-input/questions-input.component';
 
 @Component({
-  selector: 'app-topic',  
+  selector: 'topic',  
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -22,7 +22,7 @@ import { QuestionsInputComponent } from './components/questions-input/questions-
     MatCardModule,
     TextsInputComponent,
     QuestionsInputComponent
-],
+  ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
 })

@@ -1,1 +1,21 @@
-<p>answer-groups-input works!</p>
+<mat-card>
+  <div [formGroup]="form">
+    <div formArrayName="answerGroups">
+      <div *ngFor="let answerGroupGroup of answerGroupsFormArray.controls; let i = index;" [formGroup]="toForm(answerGroupGroup)" class="text-row">
+        <div class="all-width">    
+          <texts-input [form]="toForm(answerGroupGroup)" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+
+          <div class="answers">
+            <mat-label class="section-label">Answers:</mat-label>
+            <answers-input [form]="toForm(answerGroupGroup)" [answersFormArray]="getAnswersFormArray(i)"/>
+          </div>
+        </div>
+        <button mat-raised-button color="warn" (click)="removeAnswerGroup(i)">-</button>
+      </div>
+    </div>
+
+    <div class="add-button-container">
+      <button mat-raised-button color="primary" (click)="addAnswerGroup()">+</button>
+    </div>
+  </div>
+</mat-card>
