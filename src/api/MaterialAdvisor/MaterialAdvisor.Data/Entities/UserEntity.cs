@@ -20,6 +20,14 @@ public class UserEntity : IEntity
     [MaxLength(150)]
     public string Email { get; set; } = null!;
 
+    [MaxLength(150)]
+    public string? FirstName { get; set; }
+
+    [MaxLength(150)]
+    public string? SecondName { get; set; }
+
+    public string? CurrentLanguage { get; set; }
+
     [Required]
     [MaxLength(150)]
     public string Hash { get; set; } = null!;

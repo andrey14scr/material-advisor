@@ -8,6 +8,8 @@ public class TopicEntity : IEntity, IVersion
 {
     public Guid Id { get; set; }
 
+    public string? FilePath { get; set; }
+
     public Guid PersistentId { get; set; }
 
     public ushort Number { get; set; }

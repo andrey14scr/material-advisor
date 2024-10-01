@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20240921170920_Init")]
+    [Migration("20241001213306_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -342,6 +342,9 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
@@ -367,8 +370,15 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CurrentLanguage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("FirstName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -379,6 +389,10 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("SecondName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 

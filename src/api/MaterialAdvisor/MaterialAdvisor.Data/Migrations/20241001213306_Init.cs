@@ -33,6 +33,9 @@ namespace MaterialAdvisor.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    SecondName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    CurrentLanguage = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hash = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
                 constraints: table =>
@@ -85,6 +88,7 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PersistentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
