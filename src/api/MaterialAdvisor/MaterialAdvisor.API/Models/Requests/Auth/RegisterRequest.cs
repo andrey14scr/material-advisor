@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.API.Models.Requests;
+﻿namespace MaterialAdvisor.API.Models.Requests.Auth;
 
 public class RegisterRequest
 {

@@ -2,8 +2,7 @@
 using MaterialAdvisor.API.Models;
 using MaterialAdvisor.API.Options;
 using MaterialAdvisor.Application.Models.Shared;
-using MaterialAdvisor.Application.Services;
-
+using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 

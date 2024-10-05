@@ -1,6 +1,5 @@
 ﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
-using MaterialAdvisor.Application.Services;
-
+using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

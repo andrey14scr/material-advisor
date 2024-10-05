@@ -3,6 +3,7 @@
 using MaterialAdvisor.Application.Configuration.Options;
 using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 

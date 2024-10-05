@@ -1,6 +1,6 @@
 ﻿using MaterialAdvisor.Application.Models.Shared;
 
-namespace MaterialAdvisor.Application.Services;
+namespace MaterialAdvisor.Application.Services.Abstraction;
 
 public interface IUserService
 {
@@ -9,4 +9,6 @@ public interface IUserService
     Task<User> Create(string userName, string email, string password);
 
     Task UpdateSettings(UserSettings userSettings);
+
+    Task<string?> CetCurrentLanguage();
 }

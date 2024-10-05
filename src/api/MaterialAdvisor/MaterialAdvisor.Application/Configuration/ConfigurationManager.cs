@@ -1,6 +1,7 @@
 ﻿using MaterialAdvisor.Application.Configuration.Options;
 using MaterialAdvisor.Application.Mapping;
 using MaterialAdvisor.Application.Services;
+using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 
 using Microsoft.AspNetCore.Http;
@@ -10,13 +11,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MaterialAdvisor.Application.Configuration;
 
-public static class ApplicationConfiguration
+public static class ConfigurationManager
 {
-    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMemoryCache();
         services.AddAutoMapper(typeof(TopicProfile));
 
+        // Services registering:
         services.AddScoped<IUserProvider, UserProvider>();
         services.AddScoped<ITopicService, TopicService>();
         services.AddScoped<IUserService, UserService>();
@@ -28,9 +30,16 @@ public static class ApplicationConfiguration
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+        //services.AddSingleton<IStorageService, LocalStorageService>();
+        services.AddSingleton<IStorageService, BlobStorageService>();
+
+        // Options registering:
         services.Configure<CachingOptions>(configuration.GetSection("Caching"));
         services.Configure<SecurityOptions>(configuration.GetSection("Security"));
+        services.Configure<StorageOptions>(configuration.GetSection("Storage"));
+        services.Configure<AzureOptions>(configuration.GetSection("Azure"));
 
+        // Databse registering:
         services.AddDbContext<MaterialAdvisorContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }
 }

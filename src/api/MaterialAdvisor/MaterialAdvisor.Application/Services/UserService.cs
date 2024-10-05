@@ -2,6 +2,7 @@
 
 using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
@@ -50,8 +51,16 @@ public class UserService(MaterialAdvisorContext _dbContext,
 
         await _dbContext.Users
             .Where(u => u.Id == user.Id)
-            .ExecuteUpdateAsync(u => u.SetProperty(p => p.CurrentLanguage, userSettings.CurrentLanguage)
-                .SetProperty(p => p.FirstName, userSettings.FirstName)
-                .SetProperty(p => p.SecondName, userSettings.SecondName));
+            .ExecuteUpdateAsync(u => u.SetProperty(p => p.CurrentLanguage, userSettings.CurrentLanguage));
+                //.SetProperty(p => p.FirstName, userSettings.FirstName)
+                //.SetProperty(p => p.SecondName, userSettings.SecondName)
+                
+    }
+
+    public async Task<string?> CetCurrentLanguage()
+    {
+        var user = await _userProvider.GetUser();
+        var userEntity = await _dbContext.Users.SingleAsync(u => u.Id == user.Id);
+        return userEntity.CurrentLanguage;
     }
 }

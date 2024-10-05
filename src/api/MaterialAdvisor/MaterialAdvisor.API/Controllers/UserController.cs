@@ -1,6 +1,5 @@
 ﻿using MaterialAdvisor.Application.Models.Shared;
-using MaterialAdvisor.Application.Services;
-
+using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,5 +13,12 @@ public class UserController(IUserService _userService) : BaseApiController
     {
         await _userService.UpdateSettings(userSettings);
         return Ok();
+    }
+
+    [HttpGet("language")]
+    public async Task<ActionResult> GetCurrentLanguage()
+    {
+        var currentLanguage = await _userService.CetCurrentLanguage();
+        return Ok(currentLanguage);
     }
 }

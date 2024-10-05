@@ -3,7 +3,8 @@ using MaterialAdvisor.API.Middleware;
 using MaterialAdvisor.API.Options;
 using MaterialAdvisor.API.Services;
 using MaterialAdvisor.Application.Configuration;
-
+using MaterialAdvisor.QueueStorage.Configuration;
+using MaterialAdvisor.SignalR.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -59,7 +60,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddScoped<TokensGenerator>();
 
 var configuration = builder.Configuration;
-ApplicationConfiguration.ConfigureServices(builder.Services, configuration);
+builder.Services.ConfigureServices(configuration);
+builder.Services.ConfigureQueueStorage(configuration);
+builder.Services.ConfigureSignalR(configuration);
 
 var jwtOptionPath = Constants.Configuration.AuthSection;
 builder.Services.Configure<AuthOptions>(configuration.GetSection(jwtOptionPath));
@@ -98,6 +101,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureHubs();
 
 app.UseHttpsRedirection();
 

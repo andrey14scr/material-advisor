@@ -1,5 +1,5 @@
 ﻿using MaterialAdvisor.Application.Configuration.Options;
-
+using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.Extensions.Options;
 
 using System.Security.Cryptography;

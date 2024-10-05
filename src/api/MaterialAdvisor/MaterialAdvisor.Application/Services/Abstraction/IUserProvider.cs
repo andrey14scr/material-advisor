@@ -1,6 +1,6 @@
 ﻿using MaterialAdvisor.Application.Models.Shared;
 
-namespace MaterialAdvisor.Application.Services;
+namespace MaterialAdvisor.Application.Services.Abstraction;
 
 public interface IUserProvider
 {

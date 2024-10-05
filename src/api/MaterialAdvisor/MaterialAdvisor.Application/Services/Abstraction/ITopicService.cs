@@ -1,6 +1,6 @@
-﻿namespace MaterialAdvisor.Application.Services;
+﻿namespace MaterialAdvisor.Application.Services.Abstraction;
 
-public interface IKnowledgeCheckService
+public interface ITopicService
 {
     Task<TModel> Create<TModel>(TModel model);
 
@@ -9,8 +9,6 @@ public interface IKnowledgeCheckService
     Task<TModel> Get<TModel>(Guid id);
 
     Task<IList<TModel>> Get<TModel>();
-
-    Task<IList<TModel>> GetByGroup<TModel>(Guid groupId);
 
     Task<TModel> Update<TModel>(TModel model);
 }

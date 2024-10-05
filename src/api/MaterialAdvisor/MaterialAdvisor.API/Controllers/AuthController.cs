@@ -1,9 +1,8 @@
 ﻿using MaterialAdvisor.API.Exceptions;
-using MaterialAdvisor.API.Models.Requests;
+using MaterialAdvisor.API.Models.Requests.Auth;
 using MaterialAdvisor.API.Services;
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Services;
-
+using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;

@@ -6,5 +6,7 @@ public class Answer
 
     public double Points { get; set; }
 
-    public IEnumerable<LanguageText> Texts { get; set; } = [];
+    public bool IsRight { get; set; }
+
+    public IEnumerable<LanguageText> Content { get; set; } = [];
 }

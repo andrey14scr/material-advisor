@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Application.Services;
+﻿namespace MaterialAdvisor.Application.Services.Abstraction;
 
 public interface IAttemptService
 {

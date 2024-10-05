@@ -10,7 +10,7 @@ public class TopicListItem
 
     public ushort Number { get; set; }
 
-    public IEnumerable<LanguageText> Texts { get; set; } = [];
+    public IEnumerable<LanguageText> Name { get; set; } = [];
 
     public IEnumerable<KnowledgeCheckListItem> KnowledgeChecks { get; set; } = [];
 }

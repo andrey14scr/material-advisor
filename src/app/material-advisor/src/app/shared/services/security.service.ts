@@ -16,3 +16,4 @@ export class SecurityService {
     return crypto.HmacSHA256(input, this.key).toString();
   }
 }
+

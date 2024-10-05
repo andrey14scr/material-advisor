@@ -2,7 +2,7 @@
 
 namespace MaterialAdvisor.API.Extentions;
 
-public static class HttpContextExtentions
+public static class SignalRExtentions
 {
     public static async Task<string> ReadBody(this HttpRequest request)
     {

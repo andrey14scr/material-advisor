@@ -1,6 +1,6 @@
 ﻿using MaterialAdvisor.Data.Entities;
 
-namespace MaterialAdvisor.Application.Services;
+namespace MaterialAdvisor.Application.Services.Abstraction;
 
 public interface IRefreshTokenService
 {

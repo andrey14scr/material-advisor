@@ -20,5 +20,5 @@ public class AnswerEntity : IEntity
 
     public bool IsRight { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
+    public virtual ICollection<LanguageTextEntity> Content { get; set; } = [];
 }

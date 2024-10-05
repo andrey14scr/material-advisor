@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Models.Shared;
-using MaterialAdvisor.Application.Services;
+using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data.Entities;
 
 namespace MaterialAdvisor.Application.Mapping;

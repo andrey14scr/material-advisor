@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
+using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
@@ -13,7 +14,6 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     public async Task<TModel> Create<TModel>(TModel model)
     {
         var entityToCreate = await MapToEntity(model);
-        entityToCreate.Version = 1;
         var createdEntity = await CreateAndSave(entityToCreate);
         var createdModel = MapToModel<TModel>(createdEntity);
         return createdModel;
@@ -39,7 +39,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
         var entities = await _dbContext.Topics
             .Where(t => t.OwnerId == user.Id || t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id))))
             .Include(t => t.Owner)
-            .Include(t => t.Texts)
+            .Include(t => t.Name)
             .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
             .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Groups).ThenInclude(kc => kc.Users)
             .AsNoTracking()
@@ -130,10 +130,10 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     private IQueryable<TopicEntity> GetFullEntity()
     {
         return _dbContext.Topics
-                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(ag => ag.Answers).ThenInclude(a => a.Texts)
-                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(a => a.Texts)
-                    .Include(t => t.Questions).ThenInclude(a => a.Texts)
-                    .Include(a => a.Texts);
+                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(ag => ag.Answers).ThenInclude(a => a.Content)
+                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(a => a.Content)
+                    .Include(t => t.Questions).ThenInclude(a => a.Content)
+                    .Include(a => a.Name);
     }
 
     private void RemoveUnusedLanguageTexts()

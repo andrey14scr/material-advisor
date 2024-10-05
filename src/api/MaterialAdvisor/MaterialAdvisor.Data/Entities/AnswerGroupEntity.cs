@@ -16,7 +16,7 @@ public class AnswerGroupEntity : IEntity
     [Range(1, 250)]
     public byte Number { get; set; }
 
-    public virtual ICollection<LanguageTextEntity> Texts { get; set; } = [];
+    public virtual ICollection<LanguageTextEntity> Content { get; set; } = [];
 
     public virtual ICollection<AnswerEntity> Answers { get; set; } = [];
 }
