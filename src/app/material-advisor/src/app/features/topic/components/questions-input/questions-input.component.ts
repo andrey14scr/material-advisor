@@ -40,7 +40,7 @@ export class QuestionsInputComponent implements OnInit {
   }
 
   get textsFormArray() {
-    return this.form.get('texts') as FormArray;
+    return this.form.get('content') as FormArray;
   }
 
   getAnswerGroupsFormArray(index: number) {
@@ -48,7 +48,7 @@ export class QuestionsInputComponent implements OnInit {
   }
 
   getTextsFormArray(index: number) {
-    return this.questionsFormArray.controls[index].get('texts') as FormArray;
+    return this.questionsFormArray.controls[index].get('content') as FormArray;
   }
 
   addQuestion(): void {
@@ -58,7 +58,7 @@ export class QuestionsInputComponent implements OnInit {
       number: [nextNumber],
       points: ['', Validators.required],
       type: ['', Validators.required],
-      texts: this.fb.array([]),
+      content: this.fb.array([]),
       answerGroups: this.fb.array([]),
     });
     this.questionsFormArray.push(questionGroup);

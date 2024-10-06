@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20241001213306_Init")]
+    [Migration("20241006142330_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -284,6 +284,9 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("tinyint");
 
+                    b.Property<byte>("Version")
+                        .HasColumnType("tinyint");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TopicId");
@@ -345,9 +348,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<string>("FilePath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
 
@@ -378,10 +378,6 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
                     b.Property<string>("Hash")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -389,10 +385,6 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("SecondName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -503,11 +495,11 @@ namespace MaterialAdvisor.Data.Migrations
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.LanguageTextEntity", b =>
                 {
                     b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
-                        .WithMany("Texts")
+                        .WithMany("Content")
                         .HasForeignKey("AnswerGroupId");
 
                     b.HasOne("MaterialAdvisor.Data.Entities.AnswerEntity", "Answer")
-                        .WithMany("Texts")
+                        .WithMany("Content")
                         .HasForeignKey("AnswerId");
 
                     b.HasOne("MaterialAdvisor.Data.Entities.LanguageEntity", "Language")
@@ -517,11 +509,11 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
-                        .WithMany("Texts")
+                        .WithMany("Content")
                         .HasForeignKey("QuestionId");
 
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
-                        .WithMany("Texts")
+                        .WithMany("Name")
                         .HasForeignKey("TopicId");
 
                     b.Navigation("Answer");
@@ -589,14 +581,14 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
                 {
-                    b.Navigation("Texts");
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerGroupEntity", b =>
                 {
                     b.Navigation("Answers");
 
-                    b.Navigation("Texts");
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AttemptEntity", b =>
@@ -613,16 +605,16 @@ namespace MaterialAdvisor.Data.Migrations
                 {
                     b.Navigation("AnswerGroups");
 
-                    b.Navigation("Texts");
+                    b.Navigation("Content");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
                 {
                     b.Navigation("KnowledgeChecks");
 
-                    b.Navigation("Questions");
+                    b.Navigation("Name");
 
-                    b.Navigation("Texts");
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.UserEntity", b =>

@@ -1,6 +1,6 @@
 <mat-card class="texts-card">
   <div [formGroup]="form">
-    <div formArrayName="texts">
+    <div formArrayName="name">
       <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroup]="toForm(textGroup)" class="text-row">
         <mat-form-field appearance="outline" class="language-select" subscriptSizing="dynamic">
           <mat-label>Language</mat-label>

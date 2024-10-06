@@ -2,10 +2,10 @@
 
 public class SignalRConstants
 {
-    public const string TopicGenerationHubName = "/topic-generation";
+    public const string TopicGenerationHubName = "/topic-generation-hub";
 
     public class Messages
     {
-        public const string TopicGeneratedMessage = "ReceiveMessage";
+        public const string TopicGeneratedMessage = "TopicGenerated";
     }
 }

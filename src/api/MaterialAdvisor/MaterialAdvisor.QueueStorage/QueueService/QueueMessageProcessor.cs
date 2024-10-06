@@ -1,24 +1,17 @@
-﻿using MaterialAdvisor.QueueStorage.Handlers;
+﻿using MaterialAdvisor.Data;
+using MaterialAdvisor.QueueStorage.Handlers;
 using MaterialAdvisor.QueueStorage.Messages;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace MaterialAdvisor.QueueStorage.QueueService;
 
-public class QueueMessageProcessor : BackgroundService
+public class QueueMessageProcessor(IMessagesQueueService _queueService, 
+    IServiceProvider _serviceProvider, 
+    ILogger<QueueMessageProcessor> _logger) : BackgroundService
 {
-    private readonly IMessagesQueueService _queueService;
-    private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<QueueMessageProcessor> _logger;
-
-    public QueueMessageProcessor(IMessagesQueueService queueService, IServiceProvider serviceProvider, ILogger<QueueMessageProcessor> logger)
-    {
-        _queueService = queueService;
-        _serviceProvider = serviceProvider;
-        _logger = logger;
-    }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Messages Queue processing started.");
@@ -49,8 +42,13 @@ public class QueueMessageProcessor : BackgroundService
     {
         var messageType = message.GetType();
         var handlerType = typeof(IMessageHandler<>).MakeGenericType(messageType);
-
-        var handler = _serviceProvider.GetService(handlerType);
+        using var scope = _serviceProvider.CreateScope();
+        
+        //var _emailRepository = scope.ServiceProvider.GetRequiredService<MaterialAdvisorContext>();
+        
+        //var dbContext = _serviceProvider.GetRequiredService<MaterialAdvisorContext>();
+        
+        var handler = scope.ServiceProvider.GetService(handlerType);
         if (handler == null)
         {
             throw new ArgumentNullException(nameof(handler), "Appropriate handler was not found");

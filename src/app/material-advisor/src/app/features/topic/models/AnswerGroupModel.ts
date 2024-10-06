@@ -3,15 +3,15 @@ import { AnswerModel } from "./AnswerModel";
 
 export class AnswerGroupModel {
   number: number;
-  texts: LanguageText[];
+  content: LanguageText[];
   answers: AnswerModel[];
 
   constructor(
     number: number,
-    texts: LanguageText[],
+    content: LanguageText[],
     answers: AnswerModel[]) {
     this.number = number;
-    this.texts = texts;
+    this.content = content;
     this.answers = answers;
   }
 }

@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using MaterialAdvisor.Data.Entities.Anstraction;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Topics")]

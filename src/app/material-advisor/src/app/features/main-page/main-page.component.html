@@ -1,7 +1,7 @@
 <h1>{{ translate('mainPage.title') }}</h1> 
 
 <div class="mb-4" *ngFor="let topic of topics">
-  <span>{{ translateText(topic.texts) }}</span>
+  <span>{{ translateText(topic.name) }}</span>
   <span *ngIf="isOwner(topic)">
     <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
       <mat-icon>edit</mat-icon>
@@ -17,7 +17,7 @@
     </span>
     <span *ngIf="!isOwner(topic)">
       <a href="/pass/{{knowledgeCheck.id}}">
-        {{ knowledgeCheck.number }}. {{ knowledgeCheck.name }} ({{ translateText(topic.texts) }}: {{knowledgeCheck.usedAttempts}}{{knowledgeCheck.maxAttempts == undefined ? "" : ("/" + knowledgeCheck.maxAttempts)}})
+        {{ knowledgeCheck.number }}. {{ knowledgeCheck.name }} ({{ translateText(topic.name) }}: {{knowledgeCheck.usedAttempts}}{{knowledgeCheck.maxAttempts == undefined ? "" : ("/" + knowledgeCheck.maxAttempts)}})
       </a>
     </span>
   </div>

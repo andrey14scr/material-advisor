@@ -3,14 +3,14 @@ import { LanguageText } from "@shared/models/LanguageText";
 export class AnswerModel {
   number: number;
   points: number;
-  texts: LanguageText[];
+  content: LanguageText[];
 
   constructor(
     number: number,
     points: number,
-    texts: LanguageText[]) {
+    content: LanguageText[]) {
     this.number = number;
     this.points = points;
-    this.texts = texts;
+    this.content = content;
   }
 }

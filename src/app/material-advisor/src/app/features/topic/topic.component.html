@@ -1,22 +1,54 @@
 <mat-card>
-  <mat-label class="section-label">Topic</mat-label>
-  <form [formGroup]="topicForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" class="topic-number" subscriptSizing="dynamic">
-      <mat-label>Number</mat-label>
-      <input matInput formControlName="number" type="number" min="1" />
-    </mat-form-field>
+  <mat-label class="section-label">Generate Topic</mat-label>
+  <form [formGroup]="form" enctype="multipart/form-data">
+    <texts-input [form]="form" [textsFormArray]="textsFormArray" [isOneRow]="false" />
 
-    <texts-input [form]="topicForm" [textsFormArray]="textsFormArray"/>
+    <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
 
-    <div class="questions">
-      <mat-label class="section-label">Questions:</mat-label>
-      <questions-input [form]="topicForm" [questionsFormArray]="questionsFormArray"/>
+    <div class="d-flex justify-content-center">
+      <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
+        <mat-button-toggle [value]="TopicCreationMode.Generate">Generate</mat-button-toggle>
+        <mat-button-toggle [value]="TopicCreationMode.Create">Create</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  
+    <!-- Generation section -->
+    <div *ngIf="!currentTopic.id && selectedMode == TopicCreationMode.Generate">
+      <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+        <mat-label>Max Questions Count</mat-label>
+        <input matInput formControlName="maxQuestionsCount" type="number" placeholder="Max Questions Count">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="mt-2" subscriptSizing="dynamic">
+        <mat-label>Languages</mat-label>
+        <mat-select formControlName="languages" multiple>
+          <mat-option *ngFor="let language of allLanguages" [value]="language.languageId">{{ getLanguageName(language.code) }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <input type="file" (change)="onFileChange($event)">
+    
+      <div *ngIf="isSubmittingGeneration" class="d-flex justify-content-center">
+        <mat-progress-spinner [diameter]="32" mode="indeterminate"/>
+      </div>
+    
+      <div class="submit-button-container">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmittingGeneration" (click)="onGenerateSubmit()">Generate</button>
+      </div>
     </div>
 
-    <div class="submit-button-container">
-      <button mat-raised-button color="primary" type="submit">
-        {{ this.currentTopic.id ? 'Update' : 'Create' }}
-      </button>
+    <!-- Creation section -->
+    <div *ngIf="selectedMode === TopicCreationMode.Create">
+      <div class="questions">
+        <mat-label class="section-label">Questions:</mat-label>
+        <questions-input [form]="form" [questionsFormArray]="questionsFormArray"/>
+      </div>
+
+      <div class="submit-button-container">
+        <button mat-raised-button color="primary" type="submit" (click)="onCreateSubmit()">
+          {{ this.currentTopic.id ? 'Update' : 'Create' }}
+        </button>
+      </div>
     </div>
   </form>
 </mat-card>

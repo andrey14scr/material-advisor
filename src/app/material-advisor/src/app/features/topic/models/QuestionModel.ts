@@ -7,19 +7,19 @@ export class QuestionModel {
   number: number;
   points: number;
   type: QuestionEnum;
-  texts: LanguageText[];
+  content: LanguageText[];
   answerGroups: AnswerGroupModel[];
 
   constructor(
     number: number,
     points: number,
     type: QuestionEnum,
-    texts: LanguageText[],
+    content: LanguageText[],
     answerGroups: AnswerGroupModel[]) {
     this.number = number;
     this.points = points;
     this.type = type;
-    this.texts = texts;
+    this.content = content;
     this.answerGroups = answerGroups;
   }
 }

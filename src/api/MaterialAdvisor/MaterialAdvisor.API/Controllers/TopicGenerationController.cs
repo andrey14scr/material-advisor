@@ -18,7 +18,7 @@ public class TopicGenerationController(ITopicService _topicService,
     [HttpPost()]
     public async Task<ActionResult> Generate([FromForm]TopicGenerationRequest request)
     {
-        var filePath = await _storageService.SaveFileAsync(request.File, request.File.FileName);
+        var filePath = await _storageService.SaveFileAsync(request.File, $"{Guid.NewGuid()}_{request.File.FileName}");
         var topicToCreate = new Topic()
         {
             Name = request.TopicName,

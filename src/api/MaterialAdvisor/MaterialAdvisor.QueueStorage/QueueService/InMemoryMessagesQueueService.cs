@@ -13,5 +13,10 @@ public class InMemoryMessagesQueueService : IMessagesQueueService
         _queue.Enqueue(message);
     }
 
+    public bool TryDequeue(out QueueMessage message)
+    {
+        return _queue.TryDequeue(out message);
+    }
+
     public bool IsEmpty => _queue.IsEmpty;
 }

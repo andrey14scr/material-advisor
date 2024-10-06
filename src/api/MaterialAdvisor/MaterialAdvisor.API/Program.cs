@@ -4,6 +4,7 @@ using MaterialAdvisor.API.Options;
 using MaterialAdvisor.API.Services;
 using MaterialAdvisor.Application.Configuration;
 using MaterialAdvisor.QueueStorage.Configuration;
+using MaterialAdvisor.SignalR;
 using MaterialAdvisor.SignalR.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,8 @@ using Serilog;
 
 using System.Text;
 
+const string ApiCorsPolicy = "ApiCorsPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
@@ -21,12 +24,18 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
+builder.Services.AddCors(options => options.AddPolicy(ApiCorsPolicy, builder =>
 {
-    builder.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+    builder
+        .WithOrigins("http://localhost", "http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .SetIsOriginAllowedToAllowWildcardSubdomains();
 }));
 
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -81,16 +90,28 @@ builder.Services
             ValidIssuer = jwtOptions.Issuer,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments(SignalRConstants.TopicGenerationHubName)))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-app.UseCors(builder => builder
-     .AllowAnyOrigin()
-     .AllowAnyMethod()
-     .AllowAnyHeader());
+app.UseCors(ApiCorsPolicy);
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<ErrorHandlingMiddleware>();
@@ -111,5 +132,4 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-
 app.Run();

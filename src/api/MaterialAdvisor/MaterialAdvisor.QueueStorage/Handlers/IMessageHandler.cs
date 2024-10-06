@@ -1,4 +1,5 @@
-﻿using MaterialAdvisor.QueueStorage.Messages;
+﻿using MaterialAdvisor.Data;
+using MaterialAdvisor.QueueStorage.Messages;
 
 namespace MaterialAdvisor.QueueStorage.Handlers;
 

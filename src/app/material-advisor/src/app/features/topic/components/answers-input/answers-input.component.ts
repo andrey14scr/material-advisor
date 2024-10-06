@@ -36,11 +36,11 @@ export class AnswersInputComponent implements OnInit {
   }
 
   get textsFormArray() {
-    return this.form.get('texts') as FormArray;
+    return this.form.get('content') as FormArray;
   }
 
   getTextsFormArray(index: number) {
-    return this.answersFormArray.controls[index].get('texts') as FormArray;
+    return this.answersFormArray.controls[index].get('content') as FormArray;
   }
 
   addAnswer(): void {
@@ -49,7 +49,7 @@ export class AnswersInputComponent implements OnInit {
     const answerGroup = this.fb.group({
       number: [nextNumber],
       points: ['', Validators.required],
-      texts: this.fb.array([]),
+      content: this.fb.array([]),
     });
     this.answersFormArray.push(answerGroup);
   }

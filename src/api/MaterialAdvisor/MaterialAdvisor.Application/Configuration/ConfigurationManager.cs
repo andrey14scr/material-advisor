@@ -39,7 +39,7 @@ public static class ConfigurationManager
         services.Configure<StorageOptions>(configuration.GetSection("Storage"));
         services.Configure<AzureOptions>(configuration.GetSection("Azure"));
 
-        // Databse registering:
+        // Database registering:
         services.AddDbContext<MaterialAdvisorContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
     }
 }

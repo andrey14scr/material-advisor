@@ -24,7 +24,7 @@ public class BlobStorageService : IStorageService
     public async Task<string> SaveFileAsync(IFormFile file, string name)
     {
         var blobContainerClient = await GetOrCreateContainerAsync(_containerName);
-        var blobClient = blobContainerClient.GetBlobClient($"{name}_{Guid.NewGuid()}");
+        var blobClient = blobContainerClient.GetBlobClient(name);
 
         using (var stream = file.OpenReadStream())
         {

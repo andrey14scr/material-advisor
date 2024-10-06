@@ -6,19 +6,19 @@ export class TopicModel {
   id: GUID | null;
   number: number;
   version: number;
-  texts: LanguageText[];
+  name: LanguageText[];
   questions: QuestionModel[];
 
   constructor(
     id: GUID | null, 
     number: number, 
     version: number, 
-    texts: LanguageText[], 
+    name: LanguageText[], 
     questions: QuestionModel[]) {
       this.id = id;
       this.number = number;
       this.version = version;
-      this.texts = texts;
+      this.name = name;
       this.questions = questions;
   }
 }

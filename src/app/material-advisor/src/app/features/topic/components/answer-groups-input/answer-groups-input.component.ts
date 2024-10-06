@@ -38,7 +38,7 @@ export class AnswerGroupsInputComponent implements OnInit {
   }
 
   get textsFormArray() {
-    return this.form.get('texts') as FormArray;
+    return this.form.get('content') as FormArray;
   }
 
   getAnswersFormArray(index: number) {
@@ -46,7 +46,7 @@ export class AnswerGroupsInputComponent implements OnInit {
   }
 
   getTextsFormArray(index: number) {
-    return this.answerGroupsFormArray.controls[index].get('texts') as FormArray;
+    return this.answerGroupsFormArray.controls[index].get('content') as FormArray;
   }
 
   addAnswerGroup(): void {
@@ -54,7 +54,7 @@ export class AnswerGroupsInputComponent implements OnInit {
 
     const answerGroupGroup = this.fb.group({
       number: [nextNumber],
-      texts: this.fb.array([]),
+      content: this.fb.array([]),
       answers: this.fb.array([]),
     });
     this.answerGroupsFormArray.push(answerGroupGroup);
