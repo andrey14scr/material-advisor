@@ -18,11 +18,15 @@ import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
 import { AuthService } from '@shared/services/auth.service';
 import { LineSeparatorComponent } from "../../shared/components/line-separator/line-separator.component";
-import { Language } from '@shared/types/Language';
 import { TranslationService } from '@shared/services/translation.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TopicGenerationService } from './services/topicGeneration.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { GUID } from '@shared/types/GUID';
 
 export enum TopicCreationMode {
   Generate,
@@ -45,7 +49,9 @@ export enum TopicCreationMode {
     MatButtonToggleModule,
     TextsInputComponent,
     QuestionsInputComponent,
-    LineSeparatorComponent
+    LineSeparatorComponent,
+    MatDialogModule,
+    MatButtonModule,
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
@@ -58,7 +64,6 @@ export class TopicComponent implements OnInit, OnDestroy {
 
   isSubmittingGeneration: boolean = false;
   hubConnection!: signalR.HubConnection;
-  allLanguages: Language[] = [];
 
   selectedMode = TopicCreationMode.Generate;
   readonly TopicCreationMode: typeof TopicCreationMode = TopicCreationMode;
@@ -66,6 +71,7 @@ export class TopicComponent implements OnInit, OnDestroy {
   constructor(private topicService: TopicService, 
     private router: Router, 
     private snackBar: MatSnackBar, 
+    private dialog: MatDialog,
     private authService: AuthService,
     private translationService: TranslationService,
     private topicGenerationService: TopicGenerationService) {
@@ -73,7 +79,6 @@ export class TopicComponent implements OnInit, OnDestroy {
       name: this.fb.array([]),
       questions: this.fb.array([]),
       maxQuestionsCount: [null],
-      languages: [[]],
       file: [null]
     });
 
@@ -87,11 +92,8 @@ export class TopicComponent implements OnInit, OnDestroy {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.getTopicById(id);
+      this.selectedMode = TopicCreationMode.Create;
     }
-
-    this.translationService.getLanguages().subscribe(lang => {
-      this.allLanguages.push(lang);
-    });
 
     this.initializeSignalRConnection();
   }
@@ -131,17 +133,16 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     console.log(body);
 
-    // this.topicService.postTopic(body).subscribe({
-    //   next: () => {
-    //     this.router.navigate(['/main-page']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error updating topic', error);
-    //   }
-    // });
+    this.topicService.postTopic(body).subscribe({
+      next: (response) => {
+        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.router.navigate([`/topic/${response.id}`]);
+      },
+      error: (error) => {
+        console.error('Error updating topic', error);
+      }
+    });
   }
-
-  ///////////////////////////////////////////////////////////////////////////////////////
 
   initializeSignalRConnection() {
     const accessToken = this.authService.getAccessToken() ?? '';
@@ -173,8 +174,12 @@ export class TopicComponent implements OnInit, OnDestroy {
   }
 
   onGenerateSubmit() {
+    this.isSubmittingGeneration = true;
+
     const formData = new FormData();
-    formData.append('MaxQuestionsCount', this.form.value.maxQuestionsCount);
+    if (this.form.value.maxQuestionsCount) {
+      formData.append('MaxQuestionsCount', this.form.value.maxQuestionsCount);
+    }
     formData.append('File', this.form.value.file);
 
     const topicNames = this.form.get('name')?.value;
@@ -183,15 +188,10 @@ export class TopicComponent implements OnInit, OnDestroy {
       formData.append(`TopicName[${index}].Text`, item.text);
     });
 
-    const languages = this.form.get('languages')?.value;
-    languages.forEach((item: any, index: number) => {
-      formData.append(`Languages[]`, item.toString());
-    });
-
     this.topicGenerationService.generateTopic(formData).subscribe({
-      next: () => {
-        this.isSubmittingGeneration = true;
-        console.log('Form submitted successfully');
+      next: (response) => {
+        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.router.navigate([`/topic/${response.id}`]);
       },
       error: (err) => {
         this.isSubmittingGeneration = false;
@@ -199,5 +199,34 @@ export class TopicComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     });;
+  }
+
+  onDeleteSubmit(): void {
+    if (!this.currentTopic.id) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: { message: 'Are you sure you want to proceed?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.topicService.deleteTopic(this.currentTopic.id!).subscribe({
+          next: (response) => {
+            if (response) {
+              this.router.navigate([`/main-page`]);
+            }
+            else {
+              console.error('Topic was not deleted');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting topic', error);
+          }
+        });
+      }
+    });
   }
 }

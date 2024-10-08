@@ -8,7 +8,7 @@
             <mat-form-field appearance="outline" class="type-select" subscriptSizing="dynamic">
               <mat-label>Type</mat-label>
               <mat-select formControlName="type" required>
-                <mat-option *ngFor="let type of questionTypes" [value]="type">{{ translateQuestionType(type) }}</mat-option>
+                <mat-option *ngFor="let type of questionTypes" [value]="type.key">{{ translateQuestionType(type.value) }}</mat-option>
               </mat-select>
             </mat-form-field>
             
@@ -18,7 +18,7 @@
             </mat-form-field>
           </div>
       
-          <texts-input [form]="toForm(questionGroup)" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+          <texts-input [form]="toForm(questionGroup)" formName="content" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
 
           <div class="answer-groups">
             <mat-label class="section-label">Answer groups:</mat-label>

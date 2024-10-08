@@ -2,9 +2,12 @@
 
 <div class="mb-4" *ngFor="let topic of topics">
   <span>{{ translateText(topic.name) }}</span>
-  <span *ngIf="isOwner(topic)">
+  <span *ngIf="isOwner(topic)" class="ms-2">
     <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
       <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-icon-button (click)="deleteTopic(topic.id)">
+      <mat-icon>delete</mat-icon>
     </button>
   </span>
   

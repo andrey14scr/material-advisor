@@ -4,7 +4,7 @@
         "pl": "Polski"
     },
     "questionTypes":{
-        "Select": "Single select pl",
+        "SingleSelect": "Single select pl",
         "MultiSelect": "Multiple select pl",
         "Group": "Grouping pl",
         "OpenText": "Open pl"

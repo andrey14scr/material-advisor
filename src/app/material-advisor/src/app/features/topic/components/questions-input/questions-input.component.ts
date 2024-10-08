@@ -29,7 +29,12 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './questions-input.component.scss'
 })
 export class QuestionsInputComponent implements OnInit {
-  questionTypes = Object.values(QuestionEnum).filter(value => typeof value === String.name.toLowerCase());
+  questionTypes = Object.keys(QuestionEnum)
+    .filter(key => !isNaN(Number(key)))
+    .map(key => ({
+      key: Number(key),
+      value: QuestionEnum[key as any] as string
+    }));
   @Input() form!: FormGroup;
   @Input() questionsFormArray!: FormArray;
 
@@ -57,7 +62,7 @@ export class QuestionsInputComponent implements OnInit {
     const questionGroup = this.fb.group({
       number: [nextNumber],
       points: ['', Validators.required],
-      type: ['', Validators.required],
+      type: [QuestionEnum.SingleSelect, Validators.required],
       content: this.fb.array([]),
       answerGroups: this.fb.array([]),
     });

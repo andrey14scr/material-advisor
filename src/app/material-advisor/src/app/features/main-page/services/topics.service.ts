@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TopicListItemModel } from '../models/TopicListItem.model';
 import { environment } from '@environments/environment';
+import { GUID } from '@shared/types/GUID';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TopicService {
+export class TopicsService {
   private apiRoot = `${environment.apiUrl}/api/topic`;
 
   constructor(private http: HttpClient) {}

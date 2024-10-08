@@ -20,4 +20,12 @@ export class TopicService {
   postTopic(topic: any): Observable<TopicModel> {
     return this.http.post<TopicModel>(this.apiRoot, topic);
   }
+
+  deleteTopic(id: GUID): Observable<boolean> {
+    return this.http.delete<boolean>(this.apiRoot, {
+      params: {
+        id: id,
+      }
+    });
+  }
 }

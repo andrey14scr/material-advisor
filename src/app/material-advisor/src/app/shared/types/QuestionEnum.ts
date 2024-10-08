@@ -1,5 +1,5 @@
 export enum QuestionEnum {
-  Select,
+  SingleSelect,
   MultiSelect,
   Group,
   OpenText

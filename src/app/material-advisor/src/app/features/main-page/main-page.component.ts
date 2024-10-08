@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TopicService } from './services/topic.service';
+import { TopicsService as TopicsService } from './services/topics.service';
 import { NgFor, NgIf } from '@angular/common';
 import { TopicListItemModel } from './models/TopicListItem.model';
 import { TranslationService } from '@shared/services/translation.service';
@@ -11,6 +11,9 @@ import { GUID } from '@shared/types/GUID';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { KnowledgeCheckListItemModel } from './models/KnowledgeCheckListItem.model';
+import { TopicService } from '@features/topic/services/topic.service';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-main-page',
@@ -24,12 +27,14 @@ export class MainPageComponent {
   currentTag: string | undefined;
   
   constructor(private translationService: TranslationService, 
+    private topicsService: TopicsService,
     private topicService: TopicService,
     private authService: AuthService,
+    private dialog: MatDialog,
     private router: Router) {}
 
   ngOnInit(): void {
-    this.topicService.getTopics()
+    this.topicsService.getTopics()
       .pipe(
         map(data => 
           data.sort((a, b) => a.number - b.number)
@@ -73,5 +78,30 @@ export class MainPageComponent {
     return model.startDate >= now 
       && (model.endDate == undefined || model.endDate >= now) 
       && (model.maxAttempts == undefined || model.usedAttempts < model.maxAttempts);
+  }
+
+  deleteTopic(id: GUID): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: { message: 'Are you sure you want to proceed?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.topicService.deleteTopic(id).subscribe({
+          next: (response) => {
+            if (response) {
+              this.topics = this.topics.filter(topic => topic.id !== id);
+            }
+            else {
+              console.error('Topic was not deleted');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting topic', error);
+          }
+        });
+      }
+    });
   }
 }

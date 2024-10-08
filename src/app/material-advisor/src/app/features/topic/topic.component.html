@@ -1,15 +1,19 @@
 <mat-card>
-  <mat-label class="section-label">Generate Topic</mat-label>
+  <mat-label class="section-label">
+    Topic
+  </mat-label>
   <form [formGroup]="form" enctype="multipart/form-data">
-    <texts-input [form]="form" [textsFormArray]="textsFormArray" [isOneRow]="false" />
+    <texts-input [form]="form" formName="name" [textsFormArray]="textsFormArray" [isOneRow]="false" />
 
-    <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
+    <div *ngIf="!currentTopic.id">
+      <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
 
-    <div class="d-flex justify-content-center">
-      <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
-        <mat-button-toggle [value]="TopicCreationMode.Generate">Generate</mat-button-toggle>
-        <mat-button-toggle [value]="TopicCreationMode.Create">Create</mat-button-toggle>
-      </mat-button-toggle-group>
+      <div class="d-flex justify-content-center">
+        <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
+          <mat-button-toggle [value]="TopicCreationMode.Generate">Generate</mat-button-toggle>
+          <mat-button-toggle [value]="TopicCreationMode.Create">Create</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
     </div>
   
     <!-- Generation section -->
@@ -17,13 +21,6 @@
       <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
         <mat-label>Max Questions Count</mat-label>
         <input matInput formControlName="maxQuestionsCount" type="number" placeholder="Max Questions Count">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="mt-2" subscriptSizing="dynamic">
-        <mat-label>Languages</mat-label>
-        <mat-select formControlName="languages" multiple>
-          <mat-option *ngFor="let language of allLanguages" [value]="language.languageId">{{ getLanguageName(language.code) }}</mat-option>
-        </mat-select>
       </mat-form-field>
     
       <input type="file" (change)="onFileChange($event)">
@@ -47,6 +44,9 @@
       <div class="submit-button-container">
         <button mat-raised-button color="primary" type="submit" (click)="onCreateSubmit()">
           {{ this.currentTopic.id ? 'Update' : 'Create' }}
+        </button>
+        <button *ngIf="currentTopic.id" mat-raised-button class="ms-2" color="warn" type="submit" (click)="onDeleteSubmit()">
+          Delete
         </button>
       </div>
     </div>

@@ -3,7 +3,7 @@
     <div *ngFor="let answerGroupGroup of answerGroupsFormArray.controls; let i = index;" [formGroup]="toForm(answerGroupGroup)" class="text-row">
       <mat-card class="answer-group-card all-width">
         <div class="all-width">    
-          <texts-input [form]="toForm(answerGroupGroup)" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+          <texts-input [form]="toForm(answerGroupGroup)" formName="content" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
 
           <div class="answers">
             <mat-label class="section-label">Answers:</mat-label>

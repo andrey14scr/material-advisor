@@ -20,6 +20,7 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
             var topic = await _dbContext.Topics.SingleAsync(t => t.Id == message.TopicId);
 
             // ...
+            await Task.Delay(3000);
 
             await _topicGenerationHubContext.Clients
                 .User(message.UserName)
