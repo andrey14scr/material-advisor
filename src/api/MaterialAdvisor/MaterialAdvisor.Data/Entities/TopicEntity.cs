@@ -10,7 +10,7 @@ public class TopicEntity : IEntity, IVersion
 {
     public Guid Id { get; set; }
 
-    public string? FilePath { get; set; }
+    public string? File { get; set; }
 
     public Guid PersistentId { get; set; }
 

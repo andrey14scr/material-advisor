@@ -2,6 +2,8 @@
 using MaterialAdvisor.Application.Mapping;
 using MaterialAdvisor.Application.Services;
 using MaterialAdvisor.Application.Services.Abstraction;
+using MaterialAdvisor.Application.Storage;
+using MaterialAdvisor.Application.Storage.Configuration.Options;
 using MaterialAdvisor.Data;
 
 using Microsoft.AspNetCore.Http;

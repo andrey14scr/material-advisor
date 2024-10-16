@@ -6,7 +6,7 @@ public class Topic
 
     public uint Version { get; set; }
 
-    public string? FilePath { get; set; }
+    public string? File { get; set; }
 
     public IEnumerable<Question> Questions { get; set; } = [];
 

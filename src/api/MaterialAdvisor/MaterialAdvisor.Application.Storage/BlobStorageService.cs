@@ -1,16 +1,15 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Core;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
-using MaterialAdvisor.Application.Configuration.Options;
-using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Services.Abstraction;
+using MaterialAdvisor.Application.Storage.Configuration.Options;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace MaterialAdvisor.Application.Services;
+namespace MaterialAdvisor.Application.Storage;
 
-public class BlobStorageService : IStorageService
+public class BlobStorageService : AbstractStorageService, IStorageService
 {
     private readonly BlobServiceClient _blobServiceClient;
     private readonly string _containerName;
@@ -21,34 +20,37 @@ public class BlobStorageService : IStorageService
         _blobServiceClient = new BlobServiceClient(azureOptions.Value.ConnectionString);
     }
 
-    public async Task<string> SaveFileAsync(IFormFile file, string name)
+    public async Task<string> SaveFile(IFormFile file)
     {
         var blobContainerClient = await GetOrCreateContainerAsync(_containerName);
-        var blobClient = blobContainerClient.GetBlobClient(name);
+        var blobClient = blobContainerClient.GetBlobClient(GetUniqueFileName(file.FileName));
 
         using (var stream = file.OpenReadStream())
         {
             await blobClient.UploadAsync(stream, overwrite: true);
         }
 
-        return blobClient.Uri.ToString();
+        return blobClient.Name;
     }
 
-    public async Task<byte[]> GetFileAsync(string name)
+    public async Task<FileToDownload> GetFile(string name)
     {
         var blobContainerClient = await GetOrCreateContainerAsync(_containerName);
         var blobClient = blobContainerClient.GetBlobClient(name);
 
         if (!await blobClient.ExistsAsync())
         {
-            throw new NotFoundException();
+            throw new FileNotFoundException();
         }
-
-        var downloadResponse = await blobClient.DownloadAsync();
+        
         using (var memoryStream = new MemoryStream())
         {
-            await downloadResponse.Value.Content.CopyToAsync(memoryStream);
-            return memoryStream.ToArray();
+            await blobClient.DownloadToAsync(memoryStream);
+            return new FileToDownload 
+            { 
+                Data = memoryStream.ToArray(), 
+                OriginalName = GetOriginalFileName(name) 
+            };
         }
     }
 

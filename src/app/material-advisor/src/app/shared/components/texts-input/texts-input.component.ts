@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Language } from '@shared/types/Language';
 import { TranslationService } from '@shared/services/translation.service';
 import { MatCardModule } from '@angular/material/card';
+import { LanguageText } from '@shared/models/LanguageText';
+import { LanguageEnum } from '@shared/types/LanguageEnum';
 
 @Component({
   selector: 'texts-input',
@@ -30,27 +32,36 @@ export class TextsInputComponent implements OnInit {
   @Input() formName!: string;
   @Input() isOneRow: boolean = true;
   @Input() form!: FormGroup;
-  @Input() textsFormArray!: FormArray;
+  @Input() formData!: LanguageText[];
 
-  constructor(private fb: FormBuilder, private translationService: TranslationService) {}
+  constructor(private fb: FormBuilder, private translationService: TranslationService) { }
   
   ngOnInit(): void {
     this.translationService.getLanguages().subscribe(lang => {
       this.languages.push(lang);
     });
 
-    this.addText();
+    if (this.formData && this.formData.length) {
+      this.formData.forEach(x => this.addForm(x.languageId, x.text));
+    }
+    else {
+      this.addEmptyForm();
+    }
   }
 
-  addText(): void {
-    let defaultLanguage = null;
-    if (this.textsFormArray.controls.length === 0) {
-      defaultLanguage = this.translationService.getLanguageId(this.translationService.getCurrentLanguageCode());
-    }
+  get textsFormArray(): FormArray {
+    return this.form.get(this.formName) as FormArray;
+  }
 
+  addEmptyForm(): void {
+    const defaultLanguage = this.translationService.getLanguageId(this.translationService.getCurrentLanguageCode());
+    this.addForm(defaultLanguage, '');
+  }
+
+  addForm(languageId: LanguageEnum, text: string): void {
     const textGroup = this.fb.group({
-      languageId: [defaultLanguage ?? '', Validators.required],
-      text: ['', Validators.required],
+      languageId: [languageId, Validators.required],
+      text: [text, Validators.required],
     });
     this.textsFormArray.push(textGroup);
   }

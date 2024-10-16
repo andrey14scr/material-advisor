@@ -1,14 +1,17 @@
-
 <div [formGroup]="form">
   <div formArrayName="questions">
-    <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroup]="toForm(questionGroup)" class="text-row">
+    <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroupName]="i" class="text-row">
       <mat-card class="question-card all-width">
         <div>
           <div class="text-row">
             <mat-form-field appearance="outline" class="type-select" subscriptSizing="dynamic">
-              <mat-label>Type</mat-label>
+              <mat-label>
+                Type
+              </mat-label>
               <mat-select formControlName="type" required>
-                <mat-option *ngFor="let type of questionTypes" [value]="type.key">{{ translateQuestionType(type.value) }}</mat-option>
+                <mat-option *ngFor="let type of questionTypes" [value]="type.key">
+                  {{ translateQuestionType(type.value) }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
             
@@ -17,20 +20,26 @@
               <input matInput formControlName="points" type="number" min="1" />
             </mat-form-field>
           </div>
-      
-          <texts-input [form]="toForm(questionGroup)" formName="content" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+
+          <texts-input [formData]="getContent(i)" [form]="toForm(questionGroup)" formName="content" [isOneRow]="false" />
 
           <div class="answer-groups">
-            <mat-label class="section-label">Answer groups:</mat-label>
-            <answer-groups-input [form]="toForm(questionGroup)" [answerGroupsFormArray]="getAnswerGroupsFormArray(i)"/>
+            <mat-label class="section-label">
+              Answer groups:
+            </mat-label>
+            <answer-groups-input [formData]="getAnswerGroups(i)" [form]="toForm(questionGroup)" [answerGroupsFormArray]="getAnswerGroupsFormArray(i)"/>
           </div>
         </div>
       </mat-card>
-      <button mat-raised-button color="warn" (click)="removeQuestion(i)">-</button>
+      <button mat-raised-button color="warn" (click)="removeQuestion(i)">
+        -
+      </button>
     </div>
   </div>
 
   <div class="add-button-container">
-    <button mat-raised-button color="primary" (click)="addQuestion()">+</button>
+    <button mat-raised-button color="primary" (click)="addEmptyForm()">
+      +
+    </button>
   </div>
 </div>

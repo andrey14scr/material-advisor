@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import { Observable } from "rxjs";
-import { TopicModel } from "../models/Topic.model";
+import { TopicModel } from "../models/Topic";
 
 
 @Injectable({

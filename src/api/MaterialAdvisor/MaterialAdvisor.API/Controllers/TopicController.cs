@@ -27,6 +27,7 @@ public class TopicController(ITopicService _topicService) : BaseApiController
     {
         if (topic.Id == Guid.Empty)
         {
+            topic.Version = 1;
             var result = await _topicService.Create(topic);
             return Ok(result);
         }

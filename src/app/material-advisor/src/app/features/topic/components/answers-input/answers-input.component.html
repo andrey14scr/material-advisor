@@ -1,4 +1,3 @@
-
 <div [formGroup]="form">
   <div formArrayName="answers">
     <div *ngFor="let answerGroup of answersFormArray.controls; let i = index;" [formGroup]="toForm(answerGroup)" class="text-row">
@@ -11,7 +10,7 @@
             </mat-form-field>
           </div>
       
-          <texts-input [form]="toForm(answerGroup)" formName="content" [textsFormArray]="getTextsFormArray(i)" [isOneRow]="false" />
+          <texts-input [formData]="getContent(i)" [form]="toForm(answerGroup)" formName="content" [isOneRow]="false" />
         </div>
 
       </mat-card>
@@ -20,6 +19,6 @@
   </div>
 
   <div class="add-button-container">
-    <button mat-raised-button color="primary" (click)="addAnswer()">+</button>
+    <button mat-raised-button color="primary" (click)="addEmptyForm()">+</button>
   </div>
 </div>

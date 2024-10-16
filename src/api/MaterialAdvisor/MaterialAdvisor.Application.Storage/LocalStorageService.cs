@@ -1,12 +1,12 @@
-﻿using MaterialAdvisor.Application.Configuration.Options;
-using MaterialAdvisor.Application.Services.Abstraction;
-
+﻿using MaterialAdvisor.Application.Storage.Configuration.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace MaterialAdvisor.Application.Services;
+using System.IO;
 
-public class LocalStorageService : IStorageService
+namespace MaterialAdvisor.Application.Storage;
+
+public class LocalStorageService : AbstractStorageService, IStorageService
 {
     private readonly string _storageDirectory;
 
@@ -15,9 +15,9 @@ public class LocalStorageService : IStorageService
         _storageDirectory = Path.Combine(Directory.GetCurrentDirectory(), storageOptions.Value.Root);
     }
 
-    public async Task<string> SaveFileAsync(IFormFile file, string name)
+    public async Task<string> SaveFile(IFormFile file)
     {
-        var filePath = Path.Combine(_storageDirectory, name);
+        var filePath = Path.Combine(_storageDirectory, GetUniqueFileName(file.FileName));
 
         if (!Directory.Exists(_storageDirectory))
         {
@@ -32,7 +32,7 @@ public class LocalStorageService : IStorageService
         return filePath;
     }
 
-    public async Task<byte[]> GetFileAsync(string name)
+    public async Task<FileToDownload> GetFile(string name)
     {
         var filePath = Path.Combine(_storageDirectory, name);
 
@@ -41,7 +41,11 @@ public class LocalStorageService : IStorageService
             throw new ArgumentException($"File {filePath} was not found", nameof(name));
         }
 
-        return await File.ReadAllBytesAsync(filePath);
+        return new FileToDownload 
+        { 
+            Data = await File.ReadAllBytesAsync(filePath), 
+            OriginalName = GetOriginalFileName(name) 
+        };
     }
 
     public Task DeleteFile(string name)

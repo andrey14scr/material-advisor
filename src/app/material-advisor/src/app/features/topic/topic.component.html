@@ -1,17 +1,23 @@
-<mat-card>
+<loader [isLoading]="isLoading"/>
+
+<mat-card *ngIf="!isLoading">
   <mat-label class="section-label">
     Topic
   </mat-label>
   <form [formGroup]="form" enctype="multipart/form-data">
-    <texts-input [form]="form" formName="name" [textsFormArray]="textsFormArray" [isOneRow]="false" />
+    <texts-input [formData]="currentTopic.name" [form]="form" formName="name" [isOneRow]="true" />
 
     <div *ngIf="!currentTopic.id">
       <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
 
       <div class="d-flex justify-content-center">
         <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
-          <mat-button-toggle [value]="TopicCreationMode.Generate">Generate</mat-button-toggle>
-          <mat-button-toggle [value]="TopicCreationMode.Create">Create</mat-button-toggle>
+          <mat-button-toggle [value]="TopicCreationMode.Generate">
+            Generate
+          </mat-button-toggle>
+          <mat-button-toggle [value]="TopicCreationMode.Create">
+            Create
+          </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
     </div>
@@ -30,15 +36,19 @@
       </div>
     
       <div class="submit-button-container">
-        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmittingGeneration" (click)="onGenerateSubmit()">Generate</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="isSubmittingGeneration" (click)="onGenerateSubmit()">
+          Generate
+        </button>
       </div>
     </div>
 
     <!-- Creation section -->
-    <div *ngIf="selectedMode === TopicCreationMode.Create">
+    <div *ngIf="currentTopic.id || selectedMode === TopicCreationMode.Create">
       <div class="questions">
-        <mat-label class="section-label">Questions:</mat-label>
-        <questions-input [form]="form" [questionsFormArray]="questionsFormArray"/>
+        <mat-label class="section-label">
+          Questions:
+        </mat-label>
+        <questions-input [formData]="currentTopic.questions" [form]="form" [questionsFormArray]="questionsFormArray"/>
       </div>
 
       <div class="submit-button-container">

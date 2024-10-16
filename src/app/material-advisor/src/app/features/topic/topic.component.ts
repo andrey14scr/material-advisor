@@ -1,11 +1,11 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { TopicModel } from './models/Topic.model';
+import { TopicModel } from './models/Topic';
 import { MatCardModule } from '@angular/material/card';
 import { TopicService } from './services/topic.service';
 import { TextsInputComponent } from "@shared/components/texts-input/texts-input.component";
@@ -18,15 +18,12 @@ import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
 import { AuthService } from '@shared/services/auth.service';
 import { LineSeparatorComponent } from "../../shared/components/line-separator/line-separator.component";
-import { TranslationService } from '@shared/services/translation.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { TopicGenerationService } from './services/topicGeneration.service';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
-import { GUID } from '@shared/types/GUID';
+import { LoaderComponent } from "@shared/components/loader/loader.component";
 
 export enum TopicCreationMode {
   Generate,
@@ -52,12 +49,18 @@ export enum TopicCreationMode {
     LineSeparatorComponent,
     MatDialogModule,
     MatButtonModule,
+    LoaderComponent
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
 })
 export class TopicComponent implements OnInit, OnDestroy {
-  currentTopic: TopicModel = new TopicModel(null, 0, 0, [], []);
+  currentTopic: TopicModel = {
+    id: null,
+    version: 0,
+    name: [],
+    questions: []
+  };
   form: FormGroup;
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -68,55 +71,48 @@ export class TopicComponent implements OnInit, OnDestroy {
   selectedMode = TopicCreationMode.Generate;
   readonly TopicCreationMode: typeof TopicCreationMode = TopicCreationMode;
 
-  constructor(private topicService: TopicService, 
+  isLoading: boolean = true;
+
+  constructor(
+    private topicService: TopicService, 
     private router: Router, 
     private snackBar: MatSnackBar, 
     private dialog: MatDialog,
     private authService: AuthService,
-    private translationService: TranslationService,
-    private topicGenerationService: TopicGenerationService) {
+    private topicGenerationService: TopicGenerationService
+  ) {
     this.form = this.fb.group({
       name: this.fb.array([]),
       questions: this.fb.array([]),
       maxQuestionsCount: [null],
       file: [null]
     });
-
-    this.form.valueChanges.subscribe((formValues) => {
-      this.currentTopic.name = formValues.name;
-      this.currentTopic.questions = formValues.questions;
-    });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.getTopicById(id);
-      this.selectedMode = TopicCreationMode.Create;
     }
-
-    this.initializeSignalRConnection();
+    else {
+      this.initializeSignalRConnection();
+      this.isLoading = false;
+    }
   }
 
   ngOnDestroy() {
-    this.hubConnection.stop();
-  }
-
-  get textsFormArray() {
-    return this.form.get('name') as FormArray;
+    this.hubConnection?.stop();
   }
 
   get questionsFormArray() {
     return this.form.get('questions') as FormArray;
   }
 
-  getTopicById(id: string): void {
+  getTopicById(id: string) {
     this.topicService.getTopic(id).subscribe({
       next: (data) => {
         this.currentTopic = data;
-        this.form.patchValue({
-          name: this.currentTopic.name,
-        });
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching the topic', error);
@@ -124,14 +120,16 @@ export class TopicComponent implements OnInit, OnDestroy {
     });
   }
 
-  onCreateSubmit(): void {
-    this.currentTopic.number = this.form.value.number;
+  onCreateSubmit() {
+    let body: any = {
+      version: this.currentTopic.version,
+      name: this.form.value.name,
+      questions: this.form.value.questions,
+    };
 
-    const { id, ...withoutId } = this.currentTopic;
-
-    const body = this.currentTopic.id ? this.currentTopic : withoutId;
-
-    console.log(body);
+    if (this.currentTopic?.id) {
+      body.id = this.currentTopic.id;
+    }
 
     this.topicService.postTopic(body).subscribe({
       next: (response) => {
@@ -154,7 +152,7 @@ export class TopicComponent implements OnInit, OnDestroy {
       .build();
 
     this.hubConnection.on('TopicGenerated', (topicId: string, status: any) => {
-      console.log('Received:', topicId, status);
+      console.log('TopicGenerated fired')
       this.isSubmittingGeneration = false;
       this.snackBar.open('', 'Close', { duration: 2000 });
     });
@@ -167,10 +165,6 @@ export class TopicComponent implements OnInit, OnDestroy {
   onFileChange(event: any) {
     const file = (event.target as HTMLInputElement).files?.[0];
     this.form.patchValue({ file: file });
-  }
-
-  getLanguageName(langCode: string){
-    return this.translationService.translate(`languages.${langCode}`);
   }
 
   onGenerateSubmit() {

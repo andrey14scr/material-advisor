@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, forkJoin, map, mergeMap, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, map, mergeMap, Observable, of } from 'rxjs';
 import { LanguageText } from '@shared/models/LanguageText';
-import { LanguageEnum } from "@shared/types/LanguageEnum";
 import { CookieStorageService } from './cookie-storage.service';
 import { Language } from '@shared/types/Language';
+import { LanguageEnum } from '@shared/types/LanguageEnum';
 
 @Injectable({
   providedIn: 'root'

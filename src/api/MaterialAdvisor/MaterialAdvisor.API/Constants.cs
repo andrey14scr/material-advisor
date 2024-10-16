@@ -1,23 +1,23 @@
 ﻿namespace MaterialAdvisor.API;
 
-public class Constants
+public static class Constants
 {
-    public class Headers
+    public static class Headers
     {
         public const string CorrelationIdHeader = "X-Correlation-ID";
     }
 
-    public class Configuration
+    public static class Configuration
     {
         public const string AuthSection = "Auth";
     }
 
-    public class Entities
+    public static class Entities
     {
         public const string Topic = "topic";
     }
 
-    public class Actions
+    public static class Actions
     {
         public const string Login = "login";
         public const string Refresh = "refresh";

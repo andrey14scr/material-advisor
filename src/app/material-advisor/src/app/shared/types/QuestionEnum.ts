@@ -1,4 +1,4 @@
-export enum QuestionEnum {
+export enum QuestionType {
   SingleSelect,
   MultiSelect,
   Group,

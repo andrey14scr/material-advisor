@@ -9,6 +9,9 @@ import { TextsInputComponent } from '@shared/components/texts-input/texts-input.
 import { TranslationService } from '@shared/services/translation.service';
 import { AnswersInputComponent } from "../answers-input/answers-input.component";
 import { MatCardModule } from '@angular/material/card';
+import { AnswerGroupModel } from '@features/topic/models/AnswerGroup';
+import { LanguageText } from '@shared/models/LanguageText';
+import { AnswerModel } from '@features/topic/models/Answer.model';
 
 @Component({
   selector: 'answer-groups-input',
@@ -30,42 +33,48 @@ import { MatCardModule } from '@angular/material/card';
 export class AnswerGroupsInputComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() answerGroupsFormArray!: FormArray;
+  @Input() formData!: AnswerGroupModel[];
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
-  ngOnInit(): void {
-    
+  ngOnInit() {
+    if (this.formData && this.formData.length) {
+      this.formData.forEach(answerGroup => this.addForm(answerGroup.number));
+    }
   }
 
-  get textsFormArray() {
-    return this.form.get('content') as FormArray;
+  getAnswers(index: number): AnswerModel[] {
+    return this.formData[index]?.answers ?? [];
+  }
+
+  getContent(index: number): LanguageText[] {
+    return this.formData[index]?.content ?? [];
   }
 
   getAnswersFormArray(index: number) {
     return this.answerGroupsFormArray.controls[index].get('answers') as FormArray;
   }
 
-  getTextsFormArray(index: number) {
-    return this.answerGroupsFormArray.controls[index].get('content') as FormArray;
+  addEmptyForm() {
+    const nextNumber = this.answerGroupsFormArray.controls.length + 1;
+    this.addForm(nextNumber);
   }
 
-  addAnswerGroup(): void {
-    const nextNumber = this.answerGroupsFormArray.controls.length + 1;
-
+  addForm(number: number) {
     const answerGroupGroup = this.fb.group({
-      number: [nextNumber],
+      number: [number],
       content: this.fb.array([]),
       answers: this.fb.array([]),
     });
     this.answerGroupsFormArray.push(answerGroupGroup);
   }
 
-  removeAnswerGroup(index: number): void {
+  removeAnswerGroup(index: number) {
     this.answerGroupsFormArray.removeAt(index);
     this.updateNumbers();
   }
 
-  updateNumbers(): void {
+  updateNumbers() {
     for (let i = 0; i < this.answerGroupsFormArray.length; i++) {
       this.answerGroupsFormArray.controls[i].value.number = i + 1;
     }

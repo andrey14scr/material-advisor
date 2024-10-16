@@ -2,8 +2,8 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TranslationService } from '../../services/translation.service';
 import { Language } from '@shared/types/Language';
-import { LanguageEnum } from '@shared/types/LanguageEnum';
 import { UserService } from '@shared/services/user.service';
+import { LanguageEnum } from '@shared/types/LanguageEnum';
 
 @Component({
   selector: 'app-language-dropdown',

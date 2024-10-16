@@ -7,9 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { TranslationService } from '@shared/services/translation.service';
-import { QuestionEnum } from '@shared/types/QuestionEnum';
 import { AnswerGroupsInputComponent } from "../answer-groups-input/answer-groups-input.component";
 import { MatCardModule } from '@angular/material/card';
+import { QuestionModel } from '@features/topic/models/Question';
+import { AnswerGroupModel } from '@features/topic/models/AnswerGroup';
+import { LanguageText } from '@shared/models/LanguageText';
+import { QuestionType } from '@shared/types/QuestionEnum';
 
 @Component({
   selector: 'questions-input',
@@ -29,40 +32,47 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './questions-input.component.scss'
 })
 export class QuestionsInputComponent implements OnInit {
-  questionTypes = Object.keys(QuestionEnum)
+  questionTypes = Object.keys(QuestionType)
     .filter(key => !isNaN(Number(key)))
     .map(key => ({
       key: Number(key),
-      value: QuestionEnum[key as any] as string
+      value: QuestionType[key as any] as string
     }));
   @Input() form!: FormGroup;
   @Input() questionsFormArray!: FormArray;
+  @Input() formData!: QuestionModel[];
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
-  ngOnInit(): void {
-    
+  ngOnInit() {
+    if (this.formData && this.formData.length) {
+      this.formData.forEach(question => this.addForm(question.number, question.points, question.type));
+    }
   }
 
-  get textsFormArray() {
-    return this.form.get('content') as FormArray;
+  getAnswerGroups(index: number): AnswerGroupModel[] {
+    return this.formData[index]?.answerGroups ?? [];
   }
 
-  getAnswerGroupsFormArray(index: number) {
+  getAnswerGroupsFormArray(index: number): FormArray {
     return this.questionsFormArray.controls[index].get('answerGroups') as FormArray;
   }
 
-  getTextsFormArray(index: number) {
-    return this.questionsFormArray.controls[index].get('content') as FormArray;
+  getContent(index: number): LanguageText[] {
+    return this.formData[index]?.content ?? [];
   }
 
-  addQuestion(): void {
+  addEmptyForm() {
     const nextNumber = this.questionsFormArray.controls.length + 1;
+    this.addForm(0, nextNumber, QuestionType.SingleSelect,
+    );
+  }
 
+  addForm(number: number, points: number, type: QuestionType) {
     const questionGroup = this.fb.group({
-      number: [nextNumber],
-      points: ['', Validators.required],
-      type: [QuestionEnum.SingleSelect, Validators.required],
+      number: [number],
+      points: [points, Validators.required],
+      type: [type, Validators.required],
       content: this.fb.array([]),
       answerGroups: this.fb.array([]),
     });
@@ -84,7 +94,7 @@ export class QuestionsInputComponent implements OnInit {
     return control as FormGroup;
   }
 
-  translateQuestionType(questionType: string | QuestionEnum){
+  translateQuestionType(questionType: string | QuestionType){
     return this.translationService.translate(`questionTypes.${questionType.toString()}`);
   }
 }

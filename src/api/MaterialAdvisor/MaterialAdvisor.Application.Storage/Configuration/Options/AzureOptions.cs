@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Application.Configuration.Options;
+﻿namespace MaterialAdvisor.Application.Storage.Configuration.Options;
 
 public class AzureOptions
 {

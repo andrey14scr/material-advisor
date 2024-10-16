@@ -8,7 +8,7 @@ public class Question
 
     public double Points { get; set; }
 
-    public byte Version { get; set; }
+    //public byte Version { get; set; }
 
     public QuestionType Type { get; set; }
 
