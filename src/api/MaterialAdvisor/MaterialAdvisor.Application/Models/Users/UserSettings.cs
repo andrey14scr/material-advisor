@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Application.Models.Shared;
+﻿namespace MaterialAdvisor.Application.Models.Users;
 
 public class UserSettings
 {

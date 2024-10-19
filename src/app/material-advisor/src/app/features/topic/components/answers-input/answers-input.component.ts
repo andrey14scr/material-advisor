@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { AnswerModel } from '@features/topic/models/Answer.model';
+import { AnswerModel } from '@features/topic/models/Answer';
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { LanguageText } from '@shared/models/LanguageText';
 import { TranslationService } from '@shared/services/translation.service';

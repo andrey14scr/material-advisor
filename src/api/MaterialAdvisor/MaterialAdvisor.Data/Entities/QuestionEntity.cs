@@ -20,8 +20,6 @@ public class QuestionEntity : IEntity
 
     public double Points { get; set; }
 
-    public byte Version { get; set; }
-
     public QuestionType Type { get; set; }
 
     public virtual ICollection<LanguageTextEntity> Content { get; set; } = [];

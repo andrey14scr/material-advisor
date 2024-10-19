@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MaterialAdvisor.Application.Services;
 
-public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvider _tenantService, IMapper _mapper) 
+public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvider _userProvider, IMapper _mapper) 
     : IKnowledgeCheckService
 {
     public async Task<TModel> Create<TModel>(TModel model)
@@ -69,7 +69,7 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
     private async Task<KnowledgeCheckEntity> MapToEntity<TModel>(TModel model)
     {
         var entity = _mapper.Map<KnowledgeCheckEntity>(model);
-        var user = await _tenantService.GetUser();
+        var user = await _userProvider.GetUser();
         return entity;
     }
 

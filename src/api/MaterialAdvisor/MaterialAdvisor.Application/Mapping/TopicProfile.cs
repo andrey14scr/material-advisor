@@ -17,14 +17,6 @@ public class TopicProfile : Profile
         CreateMap<AnswerGroup, AnswerGroupEntity>().ReverseMap();
 
         CreateMap<TopicEntity, TopicListItem>()
-            .AfterMap<DecryptUserNameAction>();
-    }
-
-    public class DecryptUserNameAction(ISecurityService _securityService) : IMappingAction<TopicEntity, TopicListItem>
-    {
-        public void Process(TopicEntity source, TopicListItem destination, ResolutionContext context)
-        {
-            destination.Owner = _securityService.Decrypt(source.Owner.Name);
-        }
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Owner.Name));
     }
 }

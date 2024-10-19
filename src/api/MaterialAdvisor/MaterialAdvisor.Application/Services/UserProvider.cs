@@ -2,7 +2,7 @@
 
 using MaterialAdvisor.Application.Configuration.Options;
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -30,9 +30,7 @@ public class UserProvider(MaterialAdvisorContext _dbContext,
 
         if (!_cache.TryGetValue(cacheKey, out User? userInfo) || userInfo is null)
         {
-            var searchName = _securityService.Encrypt(userName);
-
-            var userEntity = await _dbContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Name == searchName);
+            var userEntity = await _dbContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Name == userName);
             if (userEntity is null)
             {
                 throw new NotFoundException();
@@ -50,7 +48,7 @@ public class UserProvider(MaterialAdvisorContext _dbContext,
 
         var cacheOptions = new MemoryCacheEntryOptions()
                 .SetSlidingExpiration(TimeSpan.FromMinutes(_cachingOptions.Value.ExpirationTime));
-        var cacheKey = GetKey(userInfo.UserName);
+        var cacheKey = GetKey(userInfo.Name);
         _cache.Set(cacheKey, userInfo, cacheOptions);
 
         return userInfo;

@@ -11,7 +11,6 @@ public class LanguageTextEntity : IEntity
 {
     public Guid Id { get; set; }
 
-    [Required]
     [MaxLength(500)]
     public string Text { get; set; } = null!;
 

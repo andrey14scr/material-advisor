@@ -2,6 +2,7 @@ using MaterialAdvisor.API;
 using MaterialAdvisor.API.Middleware;
 using MaterialAdvisor.API.Options;
 using MaterialAdvisor.API.Services;
+using MaterialAdvisor.Application.AI;
 using MaterialAdvisor.Application.Configuration;
 using MaterialAdvisor.QueueStorage.Configuration;
 using MaterialAdvisor.SignalR;

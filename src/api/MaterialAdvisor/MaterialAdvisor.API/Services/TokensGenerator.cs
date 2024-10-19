@@ -1,7 +1,7 @@
 ﻿using MaterialAdvisor.API.Exceptions;
 using MaterialAdvisor.API.Models;
 using MaterialAdvisor.API.Options;
-using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -59,7 +59,7 @@ public class TokensGenerator(IOptions<AuthOptions> _authOptions,
 
         return 
         [
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Name, user.Name),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
         ];
     }

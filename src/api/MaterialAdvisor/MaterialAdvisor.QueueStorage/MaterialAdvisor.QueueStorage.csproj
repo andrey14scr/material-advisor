@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MaterialAdvisor.Application.Storage\MaterialAdvisor.Application.Storage.csproj" />
+    <ProjectReference Include="..\MaterialAdvisor.Application.AI\MaterialAdvisor.Application.AI.csproj" />
     <ProjectReference Include="..\MaterialAdvisor.Data\MaterialAdvisor.Data.csproj" />
     <ProjectReference Include="..\MaterialAdvisor.SignalR\MaterialAdvisor.SignalR.csproj" />
   </ItemGroup>

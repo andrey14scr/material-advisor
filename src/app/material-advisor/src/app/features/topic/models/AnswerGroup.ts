@@ -1,5 +1,5 @@
 import { LanguageText } from "@shared/models/LanguageText";
-import { AnswerModel } from "./Answer.model";
+import { AnswerModel } from "./Answer";
 
 export interface AnswerGroupModel {
   number: number;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -20,7 +20,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
         var searchLogin = _securityService.Encrypt(login);
         var searchHash = _securityService.GetHash(password);
         var user = await _dbContext.Users
-            .SingleOrDefaultAsync(u => (u.Name == searchLogin || u.Email == searchLogin) && u.Hash == searchHash);
+            .SingleOrDefaultAsync(u => (u.Name == login || u.Email == searchLogin) && u.Hash == searchHash);
         
         if (user is null)
         {
@@ -35,7 +35,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
         var userToCreate = new UserEntity
         {
             Email = _securityService.Encrypt(email),
-            Name = _securityService.Encrypt(userName),
+            Name = userName,
             Hash = _securityService.GetHash(password)
         };
 
@@ -48,13 +48,9 @@ public class UserService(MaterialAdvisorContext _dbContext,
     public async Task UpdateSettings(UserSettings userSettings)
     {
         var user = await _userProvider.GetUser();
-
         await _dbContext.Users
             .Where(u => u.Id == user.Id)
             .ExecuteUpdateAsync(u => u.SetProperty(p => p.CurrentLanguage, userSettings.CurrentLanguage));
-                //.SetProperty(p => p.FirstName, userSettings.FirstName)
-                //.SetProperty(p => p.SecondName, userSettings.SecondName)
-                
     }
 
     public async Task<string?> CetCurrentLanguage()
@@ -62,5 +58,16 @@ public class UserService(MaterialAdvisorContext _dbContext,
         var user = await _userProvider.GetUser();
         var userEntity = await _dbContext.Users.SingleAsync(u => u.Id == user.Id);
         return userEntity.CurrentLanguage;
+    }
+
+    public async Task<IList<TModel>> Search<TModel>(string input)
+    {
+        var entities = await _dbContext.Users
+            .AsNoTracking()
+            .Where(u => u.Name.ToLower().Contains(input.ToLower()))
+            .OrderBy(u => u.Name)
+            .ToListAsync();
+        var entitiesModel = _mapper.Map<IList<TModel>>(entities);
+        return entitiesModel;
     }
 }

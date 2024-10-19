@@ -1,4 +1,4 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
+﻿using MaterialAdvisor.Application.Models.Users;
 
 namespace MaterialAdvisor.Application.Services.Abstraction;
 

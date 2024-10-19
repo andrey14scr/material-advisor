@@ -64,7 +64,7 @@ export class QuestionsInputComponent implements OnInit {
 
   addEmptyForm() {
     const nextNumber = this.questionsFormArray.controls.length + 1;
-    this.addForm(0, nextNumber, QuestionType.SingleSelect,
+    this.addForm(nextNumber, 0, QuestionType.SingleSelect,
     );
   }
 

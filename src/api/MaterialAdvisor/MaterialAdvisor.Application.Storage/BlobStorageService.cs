@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
 using MaterialAdvisor.Application.Storage.Configuration.Options;
@@ -25,10 +24,9 @@ public class BlobStorageService : AbstractStorageService, IStorageService
         var blobContainerClient = await GetOrCreateContainerAsync(_containerName);
         var blobClient = blobContainerClient.GetBlobClient(GetUniqueFileName(file.FileName));
 
-        using (var stream = file.OpenReadStream())
-        {
-            await blobClient.UploadAsync(stream, overwrite: true);
-        }
+        using var stream = file.OpenReadStream();
+        await blobClient.UploadAsync(stream, overwrite: true);
+        
 
         return blobClient.Name;
     }
@@ -42,16 +40,14 @@ public class BlobStorageService : AbstractStorageService, IStorageService
         {
             throw new FileNotFoundException();
         }
-        
-        using (var memoryStream = new MemoryStream())
+
+        using var memoryStream = new MemoryStream();
+        await blobClient.DownloadToAsync(memoryStream);
+        return new FileToDownload
         {
-            await blobClient.DownloadToAsync(memoryStream);
-            return new FileToDownload 
-            { 
-                Data = memoryStream.ToArray(), 
-                OriginalName = GetOriginalFileName(name) 
-            };
-        }
+            Data = memoryStream.ToArray(),
+            OriginalName = GetOriginalFileName(name)
+        };
     }
 
     public async Task DeleteFile(string name)

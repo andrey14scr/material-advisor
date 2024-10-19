@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LanguagesPrompt" xml:space="preserve">
-    <value>Use next languages for all language related fields: {0}.</value>
+    <value>Use next languages for all language related fields in questions: {1}.</value>
   </data>
   <data name="IncreasingComplexityPrompt" xml:space="preserve">
     <value>Complexity of questions should be increased with its order number.</value>
@@ -139,9 +139,21 @@
     <value>Answers count per each question: {0}.</value>
   </data>
   <data name="QuestionsSectionPrompt" xml:space="preserve">
-    <value>{0} questions of {1} type with {2} answer(s)"</value>
+    <value>{0} questions of {1} type with {2} answer(s).</value>
   </data>
   <data name="QuestionsStructurePrompt" xml:space="preserve">
     <value>Use next questions structure: {0}.</value>
+  </data>
+  <data name="TopicNamePrompt" xml:space="preserve">
+    <value>Existing topic name has the next translations: {0}, generate translation of topic name for the next languages: {1}.</value>
+  </data>
+  <data name="NoTopicNamePrompt" xml:space="preserve">
+    <value>Do not generate topic names.</value>
+  </data>
+  <data name="EnumsPrompt" xml:space="preserve">
+    <value>There are next enums for languages: {0}, for question types: {1}.</value>
+  </data>
+  <data name="QuestionEnumDescription" xml:space="preserve">
+    <value>Question type enums description: Select - stands for the only 1 possible right answer for given question, MultiSelect - stands for 1 or more possible right answers for given question, OpenText - stands for answer without prepared options, open question.</value>
   </data>
 </root>

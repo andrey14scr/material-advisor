@@ -9,12 +9,10 @@ public static class SignalRExtentions
         request.EnableBuffering();
         request.Body.Position = 0;
 
-        using (StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, leaveOpen: true))
-        {
-            string body = await reader.ReadToEndAsync();
-            request.Body.Position = 0;
-            return body;
-        }
+        using StreamReader reader = new StreamReader(request.Body, Encoding.UTF8, leaveOpen: true);
+        string body = await reader.ReadToEndAsync();
+        request.Body.Position = 0;
+        return body;
     }
 
     public static string GetCorrelationId(this HttpContext context)

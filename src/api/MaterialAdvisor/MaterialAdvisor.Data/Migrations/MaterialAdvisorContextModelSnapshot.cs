@@ -281,9 +281,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Version")
-                        .HasColumnType("tinyint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TopicId");
@@ -342,7 +339,7 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("File")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OwnerId")

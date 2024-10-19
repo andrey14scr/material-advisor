@@ -24,6 +24,9 @@ import { TopicGenerationService } from './services/topicGeneration.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { LoaderComponent } from "@shared/components/loader/loader.component";
+import { KnowledgeCheckService } from './knowledge-check/services/knowledge-check.service';
+import { KnowledgeCheckComponent } from './knowledge-check/knowledge-check.component';
+import { KnowledgeCheck } from './knowledge-check/models/KnowledgeCheck';
 
 export enum TopicCreationMode {
   Generate,
@@ -61,6 +64,8 @@ export class TopicComponent implements OnInit, OnDestroy {
     name: [],
     questions: []
   };
+  knowledgeCheks: KnowledgeCheck[] = [];
+
   form: FormGroup;
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -74,12 +79,13 @@ export class TopicComponent implements OnInit, OnDestroy {
   isLoading: boolean = true;
 
   constructor(
-    private topicService: TopicService, 
-    private router: Router, 
-    private snackBar: MatSnackBar, 
+    private topicService: TopicService,
+    private router: Router,
+    private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private authService: AuthService,
-    private topicGenerationService: TopicGenerationService
+    private topicGenerationService: TopicGenerationService,
+    private knowledgeCheckService: KnowledgeCheckService,
   ) {
     this.form = this.fb.group({
       name: this.fb.array([]),
@@ -122,13 +128,13 @@ export class TopicComponent implements OnInit, OnDestroy {
 
   onCreateSubmit() {
     let body: any = {
-      version: this.currentTopic.version,
       name: this.form.value.name,
       questions: this.form.value.questions,
     };
 
     if (this.currentTopic?.id) {
       body.id = this.currentTopic.id;
+      body.version = this.currentTopic.version;
     }
 
     this.topicService.postTopic(body).subscribe({
@@ -222,5 +228,24 @@ export class TopicComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  openKnowledgeCheckDialog(id?: number): void {
+    const dialogRef = this.dialog.open(KnowledgeCheckComponent, {
+      width: '900px',
+      data: { id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.knowledgeCheckService.postKnowledgeCheck(result).subscribe((knowledgeCheck) => {
+          this.knowledgeCheks.push(knowledgeCheck);
+        });
+      }
+    });
+  }
+
+  editKnowledgeCheck(item: any): void {
+    this.openKnowledgeCheckDialog(item.id);
   }
 }

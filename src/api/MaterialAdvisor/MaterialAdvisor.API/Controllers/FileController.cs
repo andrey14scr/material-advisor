@@ -14,4 +14,11 @@ public class FileController(IStorageService _storageService) : BaseApiController
         var fileToDownload = await _storageService.GetFile(file);
         return File(fileToDownload.Data, System.Net.Mime.MediaTypeNames.Application.Octet, fileToDownload.OriginalName);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Upload(IFormFile file)
+    {
+        var fileToDownload = await _storageService.SaveFile(file);
+        return Ok();
+    }
 }

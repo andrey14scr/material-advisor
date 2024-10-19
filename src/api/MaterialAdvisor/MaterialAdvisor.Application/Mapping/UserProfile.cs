@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-using MaterialAdvisor.Application.Models.Shared;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data.Entities;
 
@@ -12,10 +12,12 @@ public class UserProfile : Profile
     {
         CreateMap<UserEntity, User>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .AfterMap<DecryptUserInfoAction>();
 
         CreateMap<User, UserEntity>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .AfterMap<EncryptUserInfoAction>();
     }
 
@@ -23,7 +25,6 @@ public class UserProfile : Profile
     {
         public void Process(UserEntity source, User destination, ResolutionContext context)
         {
-            destination.UserName = _securityService.Decrypt(source.Name);
             destination.Email = _securityService.Decrypt(source.Email);
         }
     }
@@ -32,7 +33,6 @@ public class UserProfile : Profile
     {
         public void Process(User source, UserEntity destination, ResolutionContext context)
         {
-            destination.Name = _securityService.Encrypt(source.UserName);
             destination.Email = _securityService.Encrypt(source.Email);
         }
     }

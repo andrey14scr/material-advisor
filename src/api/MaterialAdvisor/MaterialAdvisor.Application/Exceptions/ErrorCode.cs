@@ -8,4 +8,6 @@ public enum ErrorCode
     CannotCreateMoreThanMaxAttempts = 2002,
     CannotAnswerAfterEndDate = 2003,
     TopicVersionIsOutdated = 2004,
+
+    CannotChangeNotOwnedEntity = 3000,
 }

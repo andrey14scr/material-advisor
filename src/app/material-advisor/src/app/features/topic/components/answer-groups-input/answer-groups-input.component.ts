@@ -11,7 +11,7 @@ import { AnswersInputComponent } from "../answers-input/answers-input.component"
 import { MatCardModule } from '@angular/material/card';
 import { AnswerGroupModel } from '@features/topic/models/AnswerGroup';
 import { LanguageText } from '@shared/models/LanguageText';
-import { AnswerModel } from '@features/topic/models/Answer.model';
+import { AnswerModel } from '@features/topic/models/Answer';
 
 @Component({
   selector: 'answer-groups-input',

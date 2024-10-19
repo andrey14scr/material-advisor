@@ -86,7 +86,7 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    File = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PersistentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Version = table.Column<long>(type: "bigint", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -159,7 +159,6 @@ namespace MaterialAdvisor.Data.Migrations
                     TopicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<byte>(type: "tinyint", nullable: false),
                     Points = table.Column<double>(type: "float", nullable: false),
-                    Version = table.Column<byte>(type: "tinyint", nullable: false),
                     Type = table.Column<byte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>

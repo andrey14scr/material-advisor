@@ -70,6 +70,15 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are next enums for languages: {0}, for question types: {1}..
+        /// </summary>
+        internal static string EnumsPrompt {
+            get {
+                return ResourceManager.GetString("EnumsPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Complexity of questions should be approximately equal..
         /// </summary>
         internal static string EqualComplexityPrompt {
@@ -88,7 +97,7 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use next languages for all language related fields: {0}..
+        ///   Looks up a localized string similar to Use next languages for all language related fields in questions: {1}..
         /// </summary>
         internal static string LanguagesPrompt {
             get {
@@ -106,7 +115,25 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions of {1} type with {2} answer(s)&quot;.
+        ///   Looks up a localized string similar to Do not generate topic names..
+        /// </summary>
+        internal static string NoTopicNamePrompt {
+            get {
+                return ResourceManager.GetString("NoTopicNamePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question type enums description: Select - stands for the only 1 possible right answer for given question, MultiSelect - stands for 1 or more possible right answers for given question, OpenText - stands for answer without prepared options, open question..
+        /// </summary>
+        internal static string QuestionEnumDescription {
+            get {
+                return ResourceManager.GetString("QuestionEnumDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} questions of {1} type with {2} answer(s)..
         /// </summary>
         internal static string QuestionsSectionPrompt {
             get {
@@ -120,6 +147,15 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         internal static string QuestionsStructurePrompt {
             get {
                 return ResourceManager.GetString("QuestionsStructurePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing topic name has the next translations: {0}, generate translation of topic name for the next languages: {1}..
+        /// </summary>
+        internal static string TopicNamePrompt {
+            get {
+                return ResourceManager.GetString("TopicNamePrompt", resourceCulture);
             }
         }
         

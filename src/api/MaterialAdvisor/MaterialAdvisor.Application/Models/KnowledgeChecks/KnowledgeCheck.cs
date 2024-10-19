@@ -6,8 +6,6 @@ public class KnowledgeCheck
 
     public Guid TopicId { get; set; }
 
-    public short Number { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;

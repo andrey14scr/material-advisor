@@ -1,8 +1,8 @@
-﻿using MaterialAdvisor.Application.Models.Shared;
+﻿using MaterialAdvisor.Application.Models.Users;
 
 namespace MaterialAdvisor.Application.Services.Abstraction;
 
-public interface IUserService
+public interface IUserService : ISearchService
 {
     Task<User> Get(string login, string password);
 

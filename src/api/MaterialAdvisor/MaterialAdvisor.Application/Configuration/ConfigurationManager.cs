@@ -1,4 +1,6 @@
-﻿using MaterialAdvisor.Application.Configuration.Options;
+﻿using MaterialAdvisor.Application.AI;
+using MaterialAdvisor.Application.AI.Configuration.Options;
+using MaterialAdvisor.Application.Configuration.Options;
 using MaterialAdvisor.Application.Mapping;
 using MaterialAdvisor.Application.Services;
 using MaterialAdvisor.Application.Services.Abstraction;
@@ -24,11 +26,13 @@ public static class ConfigurationManager
         services.AddScoped<IUserProvider, UserProvider>();
         services.AddScoped<ITopicService, TopicService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IGroupService, GroupService>();
         services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         services.AddScoped<ISecurityService, SecurityService>();
         services.AddScoped<IKnowledgeCheckService, KnowledgeCheckService>();
         services.AddScoped<ISubmittedAnswerService, SubmittedAnswerService>();
         services.AddScoped<IAttemptService, AttemptService>();
+        services.AddScoped<IMaterialAdvisorAIAssistant, MaterialAdvisorAIAssistant>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -40,6 +44,7 @@ public static class ConfigurationManager
         services.Configure<SecurityOptions>(configuration.GetSection("Security"));
         services.Configure<StorageOptions>(configuration.GetSection("Storage"));
         services.Configure<AzureOptions>(configuration.GetSection("Azure"));
+        services.Configure<OpenAIAssistantOptions>(configuration.GetSection("OpenAIAssistant"));
 
         // Database registering:
         services.AddDbContext<MaterialAdvisorContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20241006142330_Init")]
+    [Migration("20241019204540_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -284,9 +284,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("tinyint");
 
-                    b.Property<byte>("Version")
-                        .HasColumnType("tinyint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TopicId");
@@ -345,7 +342,7 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FilePath")
+                    b.Property<string>("File")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("OwnerId")
