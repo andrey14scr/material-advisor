@@ -1,14 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { AnswerModel } from '@features/topic/models/Answer';
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { LanguageText } from '@shared/models/LanguageText';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
@@ -16,13 +12,9 @@ import { TranslationService } from '@shared/services/translation.service';
   standalone: true,
   imports: [
     CommonModule, 
-    MatInputModule, 
-    MatButtonModule, 
-    MatFormFieldModule, 
-    MatSelectModule, 
+    MaterialModule, 
     ReactiveFormsModule, 
-    TextsInputComponent, 
-    MatCardModule
+    TextsInputComponent,
   ],
   templateUrl: './answers-input.component.html',
   styleUrl: './answers-input.component.scss'

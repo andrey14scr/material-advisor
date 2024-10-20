@@ -12,7 +12,7 @@ export class GroupService {
 
   constructor(private http: HttpClient) { }
 
-  getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>(this.apiRoot);
+  getGroupsAsOwner(): Observable<Group[]> {
+    return this.http.get<Group[]>(`${this.apiRoot}/owner`);
   }
 }

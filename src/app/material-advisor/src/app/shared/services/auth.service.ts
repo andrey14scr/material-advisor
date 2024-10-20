@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { SecurityService } from './security.service';
 import { environment } from '@environments/environment';
 import { CookieStorageService } from './cookie-storage.service';
-import { UserInfo } from '@shared/models/UserInfo';
+import { User } from '@shared/models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ import { UserInfo } from '@shared/models/UserInfo';
 export class AuthService {
   private accessTokenKey = 'accessToken';
   private refreshTokenKey = 'refreshToken';
-  private currentUser = new BehaviorSubject<UserInfo | null>(null);
+  private currentUser = new BehaviorSubject<User | null>(null);
   private apiRoot = `${environment.apiUrl}/api/auth`;
 
   constructor(private http: HttpClient, 
@@ -67,12 +67,12 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  logout() {
     this.clearTokens();
     this.router.navigate(['/login']);
   }
 
-  private storeTokens(accessToken: string, refreshToken: string): void {
+  private storeTokens(accessToken: string, refreshToken: string) {
     this.cookieStorageService.setItem(this.accessTokenKey, accessToken);
     this.cookieStorageService.setItem(this.refreshTokenKey, refreshToken);
     this.decodeToken();
@@ -86,22 +86,26 @@ export class AuthService {
     return this.cookieStorageService.getItem(this.refreshTokenKey);
   }
 
-  private clearTokens(): void {
+  private clearTokens() {
     this.cookieStorageService.removeItem(this.accessTokenKey);
     this.cookieStorageService.removeItem(this.refreshTokenKey);
     this.currentUser.next(null);
   }
 
-  decodeToken(): void {
+  decodeToken() {
     const token = this.getAccessToken();
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const user = new UserInfo(payload.name, payload.email);
+      const user = {
+        id: '',
+        name: payload.name,
+        email: payload.email
+      };
       this.currentUser.next(user);
     }
   }
 
-  getCurrentUser(): UserInfo | null {
+  getCurrentUser(): User | null {
     return this.currentUser.value;
   }
 

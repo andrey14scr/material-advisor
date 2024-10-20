@@ -2,6 +2,7 @@
 using MaterialAdvisor.API.Models.Requests.Auth;
 using MaterialAdvisor.API.Services;
 using MaterialAdvisor.Application.Exceptions;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ public class AuthController(TokensGenerator _tokensGenerator, IUserService _user
     [HttpPost(Constants.Actions.Register)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var user = await _userService.Create(request.UserName, request.Email, request.Password);
+        var user = await _userService.Create<User>(request.UserName, request.Email, request.Password);
         var tokens = await _tokensGenerator.Generate(user);
         return Ok(tokens);
     }
@@ -26,7 +27,7 @@ public class AuthController(TokensGenerator _tokensGenerator, IUserService _user
     {
         try
         {
-            var userInfo = await _userService.Get(request.Login, request.Password);
+            var userInfo = await _userService.Get<User>(request.Login, request.Password);
             var tokens = await _tokensGenerator.Generate(userInfo);
             return Ok(tokens);
         }

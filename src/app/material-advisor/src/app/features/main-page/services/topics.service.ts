@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TopicListItemModel } from '../models/TopicListItem.model';
+import { TopicListItem } from '../models/TopicListItem';
 import { environment } from '@environments/environment';
-import { GUID } from '@shared/types/GUID';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +12,7 @@ export class TopicsService {
 
   constructor(private http: HttpClient) {}
 
-  getTopics(): Observable<TopicListItemModel[]> {
-    return this.http.get<TopicListItemModel[]>(this.apiRoot);
+  getTopics(): Observable<TopicListItem[]> {
+    return this.http.get<TopicListItem[]>(this.apiRoot);
   }
 }

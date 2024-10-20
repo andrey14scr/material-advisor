@@ -1,27 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Language } from '@shared/types/Language';
 import { TranslationService } from '@shared/services/translation.service';
-import { MatCardModule } from '@angular/material/card';
 import { LanguageText } from '@shared/models/LanguageText';
 import { LanguageEnum } from '@shared/types/LanguageEnum';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
 
 @Component({
   selector: 'texts-input',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatInputModule, 
-    MatButtonModule, 
-    MatFormFieldModule, 
-    MatSelectModule, 
-    MatCardModule, 
+    CommonModule,
+    MaterialModule,
     ReactiveFormsModule
   ],
   templateUrl: './texts-input.component.html',
@@ -36,7 +28,7 @@ export class TextsInputComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) { }
   
-  ngOnInit(): void {
+  ngOnInit() {
     this.translationService.getLanguages().subscribe(lang => {
       this.languages.push(lang);
     });
@@ -53,12 +45,12 @@ export class TextsInputComponent implements OnInit {
     return this.form.get(this.formName) as FormArray;
   }
 
-  addEmptyForm(): void {
+  addEmptyForm() {
     const defaultLanguage = this.translationService.getLanguageId(this.translationService.getCurrentLanguageCode());
     this.addForm(defaultLanguage, '');
   }
 
-  addForm(languageId: LanguageEnum, text: string): void {
+  addForm(languageId: LanguageEnum, text: string) {
     const textGroup = this.fb.group({
       languageId: [languageId, Validators.required],
       text: [text, Validators.required],
@@ -66,7 +58,7 @@ export class TextsInputComponent implements OnInit {
     this.textsFormArray.push(textGroup);
   }
 
-  removeText(index: number): void {
+  removeText(index: number) {
     if (this.textsFormArray.controls.length === 1) {
       return;
     }
@@ -76,6 +68,10 @@ export class TextsInputComponent implements OnInit {
 
   toForm(control: any): FormGroup {
     return control as FormGroup;
+  }
+
+  isLanguageChosen(languageId: LanguageEnum): boolean {
+    return this.textsFormArray.value.filter((x: LanguageText) => x.languageId === languageId).length !== 0;
   }
 
   getLanguageName(langCode: string){

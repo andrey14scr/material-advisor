@@ -3,7 +3,7 @@
     <h2>{{ isRegister ? translate('auth.RegisterHeader') : translate('auth.LoginHeader') }}</h2>
 
     <ng-container *ngIf="isRegister">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>{{translate('auth.Email')}}</mat-label>
         <input
           matInput
@@ -20,7 +20,7 @@
     </ng-container>
 
     <ng-container *ngIf="isRegister">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>{{translate('auth.UserName')}}</mat-label>
         <input
           matInput
@@ -37,7 +37,7 @@
     </ng-container>
 
     <ng-container *ngIf="!isRegister">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>{{translate('auth.Login')}}</mat-label>
         <input
           matInput
@@ -53,7 +53,7 @@
       </mat-form-field>
     </ng-container>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="outline">
       <mat-label>{{translate('auth.Password')}}</mat-label>
       <input
         matInput
@@ -69,7 +69,7 @@
     </mat-form-field>
 
     <ng-container *ngIf="isRegister">
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="outline">
         <mat-label>{{translate('auth.ConfirmPassword')}}</mat-label>
         <input
           matInput

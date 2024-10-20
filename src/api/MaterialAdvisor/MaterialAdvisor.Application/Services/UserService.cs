@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
+using MaterialAdvisor.Application.Models.Shared;
 using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
 using Microsoft.EntityFrameworkCore;
+
 
 namespace MaterialAdvisor.Application.Services;
 
@@ -15,7 +17,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
     IUserProvider _userProvider,
     IMapper _mapper) : IUserService
 {
-    public async Task<User> Get(string login, string password)
+    public async Task<TModel> Get<TModel>(string login, string password)
     {
         var searchLogin = _securityService.Encrypt(login);
         var searchHash = _securityService.GetHash(password);
@@ -27,10 +29,10 @@ public class UserService(MaterialAdvisorContext _dbContext,
             throw new NotFoundException();
         }
 
-        return _mapper.Map<User>(user);
+        return _mapper.Map<TModel>(user);
     }
 
-    public async Task<User> Create(string userName, string email, string password)
+    public async Task<TModel> Create<TModel>(string userName, string email, string password)
     {
         var userToCreate = new UserEntity
         {
@@ -42,7 +44,7 @@ public class UserService(MaterialAdvisorContext _dbContext,
         var user = await _dbContext.Users.AddAsync(userToCreate);
         await _dbContext.SaveChangesAsync();
 
-        return _mapper.Map<User>(user.Entity);
+        return _mapper.Map<TModel>(user.Entity);
     }
 
     public async Task UpdateSettings(UserSettings userSettings)
@@ -63,9 +65,21 @@ public class UserService(MaterialAdvisorContext _dbContext,
     public async Task<IList<TModel>> Search<TModel>(string input)
     {
         var entities = await _dbContext.Users
-            .AsNoTracking()
             .Where(u => u.Name.ToLower().Contains(input.ToLower()))
             .OrderBy(u => u.Name)
+            .AsNoTracking()
+            .ToListAsync();
+        var entitiesModel = _mapper.Map<IList<TModel>>(entities);
+        return entitiesModel;
+    }
+
+    public async Task<IList<TModel>> Get<TModel>(Pagination pagination)
+    {
+        var entities = await _dbContext.Users
+            .OrderBy(u => u.Name)
+            .Skip(pagination.PageSize * (pagination.Page - 1))
+            .Take(pagination.PageSize)
+            .AsNoTracking()
             .ToListAsync();
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
         return entitiesModel;

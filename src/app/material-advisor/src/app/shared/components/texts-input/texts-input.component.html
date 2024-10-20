@@ -7,7 +7,7 @@
             Language
           </mat-label>
           <mat-select formControlName="languageId" required>
-            <mat-option *ngFor="let language of languages" [value]="language.languageId">
+            <mat-option *ngFor="let language of languages" [value]="language.languageId" [disabled]="isLanguageChosen(language.languageId)">
               {{ getLanguageName(language.code) }}
             </mat-option>
           </mat-select>

@@ -1,0 +1,21 @@
+.group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.group-column {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+@media (max-width: 768px) {
+  .group-column {
+    flex: 1 1 100%;
+  }
+}
+
+button {
+  margin-top: auto;
+}

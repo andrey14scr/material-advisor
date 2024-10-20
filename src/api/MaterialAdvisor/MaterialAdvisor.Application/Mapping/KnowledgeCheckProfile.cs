@@ -16,6 +16,6 @@ public class KnowledgeCheckProfile : Profile
             .ForMember(dest => dest.GroupIds, opt => opt.MapFrom(src => src.Groups.Select(g => g.Id).ToList()));
 
         CreateMap<KnowledgeCheckEntity, KnowledgeCheckListItem>()
-            .ForMember(dest => dest.UsedAttempts, opt => opt.MapFrom(src => src.Groups.Select(g => g.Id).ToList()));
+            .ForMember(dest => dest.UsedAttempts, opt => opt.MapFrom(src => src.Attempts.Count));
     }
 }

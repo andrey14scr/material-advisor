@@ -1,32 +1,25 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { TopicModel } from './models/Topic';
-import { MatCardModule } from '@angular/material/card';
 import { TopicService } from './services/topic.service';
 import { TextsInputComponent } from "@shared/components/texts-input/texts-input.component";
 import { QuestionsInputComponent } from './components/questions-input/questions-input.component';
 import * as signalR from '@aspnet/signalr';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatOptionModule } from '@angular/material/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
 import { AuthService } from '@shared/services/auth.service';
 import { LineSeparatorComponent } from "../../shared/components/line-separator/line-separator.component";
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { TopicGenerationService } from './services/topicGeneration.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { TopicGenerationService } from './services/topic-generation.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { LoaderComponent } from "@shared/components/loader/loader.component";
-import { KnowledgeCheckService } from './knowledge-check/services/knowledge-check.service';
-import { KnowledgeCheckComponent } from './knowledge-check/knowledge-check.component';
-import { KnowledgeCheck } from './knowledge-check/models/KnowledgeCheck';
+import { KnowledgeCheckService } from './components/knowledge-check/services/knowledge-check.service';
+import { KnowledgeCheckComponent } from './components/knowledge-check/knowledge-check.component';
+import { KnowledgeCheck } from './components/knowledge-check/models/KnowledgeCheck';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
 export enum TopicCreationMode {
   Generate,
@@ -39,20 +32,12 @@ export enum TopicCreationMode {
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatCardModule,
-    MatOptionModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatButtonToggleModule,
     TextsInputComponent,
     QuestionsInputComponent,
     LineSeparatorComponent,
-    MatDialogModule,
-    MatButtonModule,
-    LoaderComponent
+    LoaderComponent,
+    MaterialModule,
+    KnowledgeCheckComponent
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
@@ -64,7 +49,6 @@ export class TopicComponent implements OnInit, OnDestroy {
     name: [],
     questions: []
   };
-  knowledgeCheks: KnowledgeCheck[] = [];
 
   form: FormGroup;
   private fb = inject(FormBuilder);
@@ -84,8 +68,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private authService: AuthService,
-    private topicGenerationService: TopicGenerationService,
-    private knowledgeCheckService: KnowledgeCheckService,
+    private topicGenerationService: TopicGenerationService
   ) {
     this.form = this.fb.group({
       name: this.fb.array([]),
@@ -201,7 +184,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     });;
   }
 
-  onDeleteSubmit(): void {
+  onDeleteSubmit() {
     if (!this.currentTopic.id) {
       return;
     }
@@ -228,24 +211,5 @@ export class TopicComponent implements OnInit, OnDestroy {
         });
       }
     });
-  }
-
-  openKnowledgeCheckDialog(id?: number): void {
-    const dialogRef = this.dialog.open(KnowledgeCheckComponent, {
-      width: '900px',
-      data: { id },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.knowledgeCheckService.postKnowledgeCheck(result).subscribe((knowledgeCheck) => {
-          this.knowledgeCheks.push(knowledgeCheck);
-        });
-      }
-    });
-  }
-
-  editKnowledgeCheck(item: any): void {
-    this.openKnowledgeCheckDialog(item.id);
   }
 }

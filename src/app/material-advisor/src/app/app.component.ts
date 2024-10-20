@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     return this.translationService.translate(key);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.authService.decodeToken();
   }
 }

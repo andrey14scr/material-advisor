@@ -4,8 +4,6 @@ public class KnowledgeCheckListItem
 {
     public Guid Id { get; set; }
 
-    public short Number { get; set; }
-
     public string Name { get; set; } = null!;
 
     public DateTime StartDate { get; set; }

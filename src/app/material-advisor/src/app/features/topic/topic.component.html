@@ -63,6 +63,4 @@
   </form>
 </mat-card>
 
-<div class="d-flex justify-content-center mt-3">
-  <button mat-raised-button color="primary" (click)="openKnowledgeCheckDialog()">Add knowledge Check</button>
-</div>
+<knowledge-check *ngIf="currentTopic.id" [topicId]="currentTopic.id"/>

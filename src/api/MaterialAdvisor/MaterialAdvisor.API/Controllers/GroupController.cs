@@ -23,14 +23,14 @@ public class GroupController(IGroupService _groupService) : BaseApiController
         return Ok(result);
     }
 
-    [HttpGet("as-owner")]
+    [HttpGet("owner")]
     public async Task<ActionResult<IList<Group>>> GetAsOwner()
     {
         var result = await _groupService.GetAsOwner<Group>();
         return Ok(result);
     }
 
-    [HttpGet("as-member")]
+    [HttpGet("member")]
     public async Task<ActionResult<IList<Group>>> GetAsMember()
     {
         var result = await _groupService.GetAsMember<Group>();

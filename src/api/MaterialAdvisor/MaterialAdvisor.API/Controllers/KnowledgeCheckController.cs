@@ -30,6 +30,13 @@ public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckServ
         return Ok(result);
     }
 
+    [HttpGet("topic/{topicId}")]
+    public async Task<ActionResult<IList<KnowledgeCheck>>> GetByTopicId(Guid topicId)
+    {
+        var result = await _knowledgeCheckService.GetByTopic<KnowledgeCheck>(topicId);
+        return Ok(result);
+    }
+
     [HttpPost()]
     public async Task<ActionResult<KnowledgeCheck>> CreateOrUpdate(KnowledgeCheck knowledgeCheck)
     {

@@ -46,6 +46,13 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
         return entitiesModel;
     }
 
+    public async Task<IList<TModel>> GetByTopic<TModel>(Guid topicId)
+    {
+        var entities = await GetFullEntity().Where(kc => kc.TopicId == topicId).AsNoTracking().ToListAsync();
+        var entitiesModel = _mapper.Map<IList<TModel>>(entities);
+        return entitiesModel;
+    }
+
     public async Task<TModel> Update<TModel>(TModel model)
     {
         var entityToUpdate = await MapToEntity(model);

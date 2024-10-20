@@ -1,0 +1,25 @@
+<h3 mat-dialog-title>Create Group</h3>
+<mat-dialog-content>
+  <form [formGroup]="groupForm">
+    <div class="row">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Group Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Members</mat-label>
+        <mat-select formControlName="members" [multiple]="true" (scroll)="onScroll()">
+          <mat-option *ngFor="let user of users" [value]="user">
+            {{ user.name }} ({{ user.email }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button (click)="onCreate()">Create</button>
+</mat-dialog-actions>

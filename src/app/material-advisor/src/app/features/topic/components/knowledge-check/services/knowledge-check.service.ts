@@ -13,7 +13,7 @@ export class KnowledgeCheckService {
 
   constructor(private http: HttpClient) {}
 
-  getKnowledgeChecks(topicId: GUID): Observable<KnowledgeCheck[]> {
+  getByTopicId(topicId: GUID): Observable<KnowledgeCheck[]> {
     return this.http.get<KnowledgeCheck[]>(`${this.apiRoot}/topic/${topicId}`);
   }
 

@@ -7,7 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class CookieStorageService {
   constructor(private cookieService: CookieService) {}
 
-  setItem(key: string, value: string, days: number = 1): void {
+  setItem(key: string, value: string, days: number = 1) {
     this.cookieService.set(key, value, { expires: days, path: '/' });
   }
 
@@ -15,7 +15,7 @@ export class CookieStorageService {
     return this.cookieService.get(key) || null;
   }
 
-  removeItem(key: string): void {
+  removeItem(key: string) {
     this.cookieService.delete(key, '/');
   }
 }

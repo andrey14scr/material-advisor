@@ -20,10 +20,9 @@ public class GroupService(MaterialAdvisorContext _dbContext, IUserProvider _user
         var entity = _mapper.Map<GroupEntity>(model);
         entity.OwnerId = user.Id;
 
-        var createdEntity = await _dbContext.Groups.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+        var createdEntity = await CreateAndSave(entity);
 
-        var createdModel = _mapper.Map<TModel>(createdEntity.Entity);
+        var createdModel = _mapper.Map<TModel>(createdEntity);
         return createdModel;
     }
 
@@ -64,9 +63,9 @@ public class GroupService(MaterialAdvisorContext _dbContext, IUserProvider _user
     public async Task<IList<TModel>> Search<TModel>(string input)
     {
         var entities = await _dbContext.Groups
-            .AsNoTracking()
             .Where(g => g.Name.ToLower().Contains(input.ToLower()))
             .OrderBy(g => g.Name)
+            .AsNoTracking()
             .ToListAsync();
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
         return entitiesModel;
@@ -74,20 +73,54 @@ public class GroupService(MaterialAdvisorContext _dbContext, IUserProvider _user
 
     public async Task<TModel> Update<TModel>(TModel model)
     {
-        var entity = _mapper.Map<GroupEntity>(model);
-        var existingEntity = await _dbContext.Groups.AsNoTracking().SingleAsync(g => g.Id == entity.Id);
+        var entityToUpdate = _mapper.Map<GroupEntity>(model);
+        var existingEntity = await _dbContext.Groups.Include(g => g.Users).AsNoTracking().SingleAsync(g => g.Id == entityToUpdate.Id);
 
         var user = await _userProvider.GetUser();
         if (existingEntity.OwnerId != user.Id)
         {
             throw new ActionNotAllowedException(ErrorCode.CannotChangeNotOwnedEntity);
         }
-        entity.OwnerId = user.Id;
+        entityToUpdate.OwnerId = user.Id;
 
-        var updatedEntity = _dbContext.Groups.Update(entity);
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
+        {
+            await DeleteAndSave(existingEntity);
+            var createdEntity = await CreateAndSave(entityToUpdate);
+            await transaction.CommitAsync();
+            return _mapper.Map<TModel>(createdEntity);
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    private async Task<int> DeleteAndSave(GroupEntity entity)
+    {
+        _dbContext.Groups.Remove(entity);
+        IgnoreUsers();
+        var deleted = await _dbContext.SaveChangesAsync();
+        return deleted;
+    }
+
+    private async Task<GroupEntity> CreateAndSave(GroupEntity entity)
+    {
+        var createdEntity = await _dbContext.Groups.AddAsync(entity);
+        IgnoreUsers();
         await _dbContext.SaveChangesAsync();
+        return createdEntity.Entity;
+    }
 
-        var updatedModel = _mapper.Map<TModel>(updatedEntity.Entity);
-        return updatedModel;
+    private void IgnoreUsers()
+    {
+        var usersToIgnore = _dbContext.ChangeTracker.Entries<UserEntity>().ToList();
+
+        foreach (var userToIgnore in usersToIgnore)
+        {
+            userToIgnore.State = EntityState.Unchanged;
+        }
     }
 }

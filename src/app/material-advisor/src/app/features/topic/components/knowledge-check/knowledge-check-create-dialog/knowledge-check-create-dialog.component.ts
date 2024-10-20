@@ -1,33 +1,24 @@
 import { Component, Inject } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { KnowledgeCheckService } from './services/knowledge-check.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Group } from './models/Group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GroupService } from './services/group.service';
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { KnowledgeCheckService } from '../services/knowledge-check.service';
 
 @Component({
-  selector: 'app-knowledge-check',
+  selector: 'knowledge-check-create-dialog',
   standalone: true,
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    MaterialModule,
     ReactiveFormsModule,
     FormsModule,
   ],
-  templateUrl: './knowledge-check.component.html',
-  styleUrl: './knowledge-check.component.scss'
+  templateUrl: './knowledge-check-create-dialog.component.html',
+  styleUrl: './knowledge-check-create-dialog.component.scss'
 })
 export class KnowledgeCheckComponent {
   form: FormGroup;
@@ -46,15 +37,15 @@ export class KnowledgeCheckComponent {
       name: ['', Validators.required],
       description: ['', Validators.required],
       startDate: ['', Validators.required],
-      endDate: [''],
+      endDate: [null],
       maxAttempts: [''],
       time: [''],
-      dropdown: [''],
+      groups: [[]],
     });
   }
 
-  ngOnInit(): void {
-    this.groupService.getGroups().subscribe({
+  ngOnInit() {
+    this.groupService.getGroupsAsOwner().subscribe({
       next: (groups) => {
         this.groups = groups;
         this.isLoading = false;
@@ -72,13 +63,13 @@ export class KnowledgeCheckComponent {
     }
   }
 
-  onSave(): void {
+  onSave() {
     if (this.form.valid) {
       this.dialogRef.close(this.form.value);
     }
   }
 
-  onCancel(): void {
+  onCancel() {
     this.dialogRef.close();
   }
 }

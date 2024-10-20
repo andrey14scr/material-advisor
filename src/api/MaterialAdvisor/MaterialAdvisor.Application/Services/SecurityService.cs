@@ -44,8 +44,10 @@ public class SecurityService : ISecurityService
         using var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
         using var msEncrypt = new MemoryStream();
         using var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
-        using var swEncrypt = new StreamWriter(csEncrypt);
-        swEncrypt.Write(input);
+        using (var swEncrypt = new StreamWriter(csEncrypt))
+        {
+            swEncrypt.Write(input);
+        }
 
         var encryptedBytes = msEncrypt.ToArray();
         return Convert.ToBase64String(encryptedBytes);

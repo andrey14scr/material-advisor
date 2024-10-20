@@ -1,29 +1,28 @@
 import { Component } from '@angular/core';
 import { TopicsService as TopicsService } from './services/topics.service';
-import { NgFor, NgIf } from '@angular/common';
-import { TopicListItemModel } from './models/TopicListItem.model';
+import { CommonModule } from '@angular/common';
+import { TopicListItem } from './models/TopicListItem';
 import { TranslationService } from '@shared/services/translation.service';
 import { map } from 'rxjs';
 import { LanguageText } from '@shared/models/LanguageText';
 import { AuthService } from '@shared/services/auth.service';
 import { Router } from '@angular/router';
 import { GUID } from '@shared/types/GUID';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { KnowledgeCheckListItemModel } from './models/KnowledgeCheckListItem.model';
+import { KnowledgeCheckListItem } from './models/KnowledgeCheckListItem';
 import { TopicService } from '@features/topic/services/topic.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
-  imports: [NgFor, NgIf, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MaterialModule],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
-  topics: TopicListItemModel[] = [];
+  topics: TopicListItem[] = [];
   currentTag: string | undefined;
   
   constructor(private translationService: TranslationService, 
@@ -33,14 +32,14 @@ export class MainPageComponent {
     private dialog: MatDialog,
     private router: Router) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.topicsService.getTopics()
       .pipe(
         map(data => 
           data.sort((a, b) => a.number - b.number)
             .map(item => ({
               ...item,
-              knowledgeChecks: item.knowledgeChecks.sort((x, y) => x.number - y.number)
+              knowledgeChecks: item.knowledgeChecks.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
             }))
         )
       )
@@ -49,7 +48,7 @@ export class MainPageComponent {
       );
   }
 
-  setTopics(data: TopicListItemModel[]): void {
+  setTopics(data: TopicListItem[]) {
     this.topics = data;
   }
 
@@ -61,26 +60,26 @@ export class MainPageComponent {
     return this.translationService.translateText(texts);
   }
 
-  isOwner(model: TopicListItemModel): boolean {
+  isOwner(model: TopicListItem): boolean {
     return this.authService.getCurrentUser()?.name === model.owner;
   }
 
-  navigateToTopicDetails(topicId: GUID): void {
+  navigateToTopicDetails(topicId: GUID) {
     this.router.navigate([`/topic/${topicId}`]);
   }
 
-  navigateToKnowledgeCheckDetails(knowledgeCheckId: GUID): void {
+  navigateToKnowledgeCheckDetails(knowledgeCheckId: GUID) {
     this.router.navigate([`/knowledge-check/${knowledgeCheckId}`]);
   }
 
-  isKnowledgeCheckActive(model: KnowledgeCheckListItemModel): boolean {
+  isKnowledgeCheckActive(model: KnowledgeCheckListItem): boolean {
     const now = new Date();
     return model.startDate >= now 
       && (model.endDate == undefined || model.endDate >= now) 
       && (model.maxAttempts == undefined || model.usedAttempts < model.maxAttempts);
   }
 
-  deleteTopic(id: GUID): void {
+  deleteTopic(id: GUID) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '300px',
       data: { message: 'Are you sure you want to proceed?' }

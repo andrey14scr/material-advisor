@@ -12,5 +12,7 @@ public interface IKnowledgeCheckService
 
     Task<IList<TModel>> GetByGroup<TModel>(Guid groupId);
 
+    Task<IList<TModel>> GetByTopic<TModel>(Guid topicId);
+
     Task<TModel> Update<TModel>(TModel model);
 }

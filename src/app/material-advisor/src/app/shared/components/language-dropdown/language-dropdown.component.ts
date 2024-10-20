@@ -19,7 +19,7 @@ export class LanguageDropdownComponent implements OnInit {
 
   constructor (private translationService: TranslationService, private userService: UserService){}
 
-  ngOnInit(): void {
+  ngOnInit() {
     let currentCode = this.translationService.getCurrentLanguageCode();
 
     if (!currentCode) {

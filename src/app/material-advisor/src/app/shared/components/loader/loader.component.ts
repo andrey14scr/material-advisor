@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
 
 @Component({
   selector: 'loader',
   standalone: true,
-  imports: [CommonModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MaterialModule],
   templateUrl: './loader.component.html',
   styleUrl: './loader.component.scss'
 })

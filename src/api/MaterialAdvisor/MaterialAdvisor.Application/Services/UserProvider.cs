@@ -18,8 +18,7 @@ namespace MaterialAdvisor.Application.Services;
 
 public class UserProvider(MaterialAdvisorContext _dbContext, 
     IOptions<CachingOptions> _cachingOptions, 
-    IHttpContextAccessor _httpContextAccessor, 
-    ISecurityService _securityService,
+    IHttpContextAccessor _httpContextAccessor,
     IMemoryCache _cache,
     IMapper _mapper) : IUserProvider
 {

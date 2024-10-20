@@ -2,12 +2,8 @@
 using MaterialAdvisor.API.Models;
 using MaterialAdvisor.Application.Exceptions;
 
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-
 using System.Net.Mime;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MaterialAdvisor.API.Middleware;
 
