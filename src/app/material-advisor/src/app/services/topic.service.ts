@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@environments/environment';
-import { TopicModel } from '../models/Topic';
 import { GUID } from '@shared/types/GUID';
+import { Topic } from '@models/topic/Topic';
+import { TopicListItem } from '@models/topic/TopicListItem';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +14,16 @@ export class TopicService {
 
   constructor(private http: HttpClient) {}
 
-  getTopic(id: GUID): Observable<TopicModel> {
-    return this.http.get<TopicModel>(`${this.apiRoot}/${id}`);
+  getTopic(id: GUID): Observable<Topic> {
+    return this.http.get<Topic>(`${this.apiRoot}/${id}`);
   }
 
-  postTopic(topic: any): Observable<TopicModel> {
-    return this.http.post<TopicModel>(this.apiRoot, topic);
+  getTopics(): Observable<TopicListItem[]> {
+    return this.http.get<TopicListItem[]>(this.apiRoot);
+  }
+
+  postTopic(topic: any): Observable<Topic> {
+    return this.http.post<Topic>(this.apiRoot, topic);
   }
 
   deleteTopic(id: GUID): Observable<boolean> {

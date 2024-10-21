@@ -4,10 +4,10 @@ import { ReactiveFormsModule, FormGroup, FormArray, FormBuilder } from '@angular
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { TranslationService } from '@shared/services/translation.service';
 import { AnswersInputComponent } from "../answers-input/answers-input.component";
-import { AnswerGroupModel } from '@features/topic/models/AnswerGroup';
 import { LanguageText } from '@shared/models/LanguageText';
-import { AnswerModel } from '@features/topic/models/Answer';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { AnswerGroup } from '@models/topic/AnswerGroup';
+import { Answer } from '@models/topic/Answer';
 
 @Component({
   selector: 'answer-groups-input',
@@ -25,7 +25,7 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
 export class AnswerGroupsInputComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() answerGroupsFormArray!: FormArray;
-  @Input() formData!: AnswerGroupModel[];
+  @Input() formData!: AnswerGroup[];
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
@@ -35,7 +35,7 @@ export class AnswerGroupsInputComponent implements OnInit {
     }
   }
 
-  getAnswers(index: number): AnswerModel[] {
+  getAnswers(index: number): Answer[] {
     return this.formData[index]?.answers ?? [];
   }
 

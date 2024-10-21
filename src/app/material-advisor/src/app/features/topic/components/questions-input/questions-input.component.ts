@@ -4,11 +4,11 @@ import { ReactiveFormsModule, FormGroup, FormArray, FormBuilder, Validators } fr
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { TranslationService } from '@shared/services/translation.service';
 import { AnswerGroupsInputComponent } from "../answer-groups-input/answer-groups-input.component";
-import { QuestionModel } from '@features/topic/models/Question';
-import { AnswerGroupModel } from '@features/topic/models/AnswerGroup';
 import { LanguageText } from '@shared/models/LanguageText';
 import { QuestionType } from '@shared/types/QuestionEnum';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { Question } from '@models/topic/Question';
+import { AnswerGroup } from '@models/topic/AnswerGroup';
 
 @Component({
   selector: 'questions-input',
@@ -32,7 +32,7 @@ export class QuestionsInputComponent implements OnInit {
     }));
   @Input() form!: FormGroup;
   @Input() questionsFormArray!: FormArray;
-  @Input() formData!: QuestionModel[];
+  @Input() formData!: Question[];
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
@@ -42,7 +42,7 @@ export class QuestionsInputComponent implements OnInit {
     }
   }
 
-  getAnswerGroups(index: number): AnswerGroupModel[] {
+  getAnswerGroups(index: number): AnswerGroup[] {
     return this.formData[index]?.answerGroups ?? [];
   }
 

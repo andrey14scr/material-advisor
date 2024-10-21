@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
-import { TopicsService as TopicsService } from './services/topics.service';
 import { CommonModule } from '@angular/common';
-import { TopicListItem } from './models/TopicListItem';
 import { TranslationService } from '@shared/services/translation.service';
 import { map } from 'rxjs';
 import { LanguageText } from '@shared/models/LanguageText';
 import { AuthService } from '@shared/services/auth.service';
 import { Router } from '@angular/router';
 import { GUID } from '@shared/types/GUID';
-import { KnowledgeCheckListItem } from './models/KnowledgeCheckListItem';
-import { TopicService } from '@features/topic/services/topic.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { TopicListItem } from '@models/topic/TopicListItem';
+import { TopicService } from '@services/topic.service';
+import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
+import { sortByStartDate } from '@shared/services/sort-utils.service';
+import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
 
 @Component({
   selector: 'app-main-page',
@@ -26,20 +27,21 @@ export class MainPageComponent {
   currentTag: string | undefined;
   
   constructor(private translationService: TranslationService, 
-    private topicsService: TopicsService,
     private topicService: TopicService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private router: Router) {}
+    private router: Router,
+    private knowledgeCheckDialogService: KnowledgeCheckDialogService,
+  ) {}
 
   ngOnInit() {
-    this.topicsService.getTopics()
+    this.topicService.getTopics()
       .pipe(
         map(data => 
           data.sort((a, b) => a.number - b.number)
             .map(item => ({
               ...item,
-              knowledgeChecks: item.knowledgeChecks.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+              knowledgeChecks: sortByStartDate(item.knowledgeChecks)
             }))
         )
       )
@@ -102,5 +104,9 @@ export class MainPageComponent {
         });
       }
     });
+  }
+
+  openKnowledgeCheckDialog(topic: TopicListItem, id?: GUID) {
+    this.knowledgeCheckDialogService.openKnowledgeCheckDialog(topic.id, topic.knowledgeChecks, id);
   }
 }

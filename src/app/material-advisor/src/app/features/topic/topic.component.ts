@@ -2,8 +2,6 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TopicModel } from './models/Topic';
-import { TopicService } from './services/topic.service';
 import { TextsInputComponent } from "@shared/components/texts-input/texts-input.component";
 import { QuestionsInputComponent } from './components/questions-input/questions-input.component';
 import * as signalR from '@aspnet/signalr';
@@ -11,15 +9,15 @@ import { CommonModule } from '@angular/common';
 import { environment } from '@environments/environment';
 import { AuthService } from '@shared/services/auth.service';
 import { LineSeparatorComponent } from "../../shared/components/line-separator/line-separator.component";
-import { TopicGenerationService } from './services/topic-generation.service';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 import { LoaderComponent } from "@shared/components/loader/loader.component";
-import { KnowledgeCheckService } from './components/knowledge-check/services/knowledge-check.service';
-import { KnowledgeCheckComponent } from './components/knowledge-check/knowledge-check.component';
-import { KnowledgeCheck } from './components/knowledge-check/models/KnowledgeCheck';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { KnowledgeChecksComponent } from './components/knowledge-check-list/knowledge-check-list.component';
+import { Topic } from '@models/topic/Topic';
+import { TopicGenerationService } from '@services/topic-generation.service';
+import { TopicService } from '@services/topic.service';
 
 export enum TopicCreationMode {
   Generate,
@@ -37,13 +35,13 @@ export enum TopicCreationMode {
     LineSeparatorComponent,
     LoaderComponent,
     MaterialModule,
-    KnowledgeCheckComponent
+    KnowledgeChecksComponent,
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
 })
 export class TopicComponent implements OnInit, OnDestroy {
-  currentTopic: TopicModel = {
+  currentTopic: Topic = {
     id: null,
     version: 0,
     name: [],

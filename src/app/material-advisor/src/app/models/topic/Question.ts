@@ -1,11 +1,11 @@
 import { LanguageText } from "@shared/models/LanguageText";
 import { QuestionType } from "@shared/types/QuestionEnum";
-import { AnswerGroupModel } from "./AnswerGroup";
+import { AnswerGroup } from "./AnswerGroup";
 
-export interface QuestionModel {
+export interface Question {
   number: number;
   points: number;
   type: QuestionType;
   content: LanguageText[];
-  answerGroups: AnswerGroupModel[];
+  answerGroups: AnswerGroup[];
 }

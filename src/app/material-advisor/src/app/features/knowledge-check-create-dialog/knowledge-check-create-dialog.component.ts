@@ -1,12 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Group } from './models/Group';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GroupService } from './services/group.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
-import { KnowledgeCheckService } from '../services/knowledge-check.service';
+import { LoaderComponent } from "@shared/components/loader/loader.component";
+import { KnowledgeCheckService } from '@services/knowledge-check.service';
+import { GroupService } from '@services/group.service';
+import { Group } from '@models/user/Group';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'knowledge-check-create-dialog',
@@ -16,11 +18,13 @@ import { KnowledgeCheckService } from '../services/knowledge-check.service';
     MaterialModule,
     ReactiveFormsModule,
     FormsModule,
+    LoaderComponent,
   ],
+  providers: [ {provide: DateAdapter, useClass: NativeDateAdapter}, {provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS}, ],
   templateUrl: './knowledge-check-create-dialog.component.html',
   styleUrl: './knowledge-check-create-dialog.component.scss'
 })
-export class KnowledgeCheckComponent {
+export class KnowledgeCheckComponentCreateDialog {
   form: FormGroup;
   groups: Group[] = [];
   isLoading = true;
@@ -30,10 +34,11 @@ export class KnowledgeCheckComponent {
     private knowledgeCheckService: KnowledgeCheckService,
     private groupService: GroupService,
     private snackBar: MatSnackBar,
-    public dialogRef: MatDialogRef<KnowledgeCheckComponent>,
+    public dialogRef: MatDialogRef<KnowledgeCheckComponentCreateDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.form = this.fb.group({
+      id: [null],
       name: ['', Validators.required],
       description: ['', Validators.required],
       startDate: ['', Validators.required],
@@ -48,7 +53,6 @@ export class KnowledgeCheckComponent {
     this.groupService.getGroupsAsOwner().subscribe({
       next: (groups) => {
         this.groups = groups;
-        this.isLoading = false;
       },
       error: (error) => {
         this.snackBar.open('', 'Close', { duration: 2000 });
@@ -59,7 +63,11 @@ export class KnowledgeCheckComponent {
     if (this.data && this.data.id) {
       this.knowledgeCheckService.getKnowledgeCheck(this.data.id).subscribe((item) => {
         this.form.patchValue(item);
+        this.isLoading = false;
       });
+    }
+    else {
+      this.isLoading = false;
     }
   }
 

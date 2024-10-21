@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { GroupService } from '@features/group/services/group.service';
+import { GroupService } from '@services/group.service';
 import { User } from '@shared/models/User';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { UserService } from '@shared/services/user.service';
-import { GUID } from '@shared/types/GUID';
 
 @Component({
   selector: 'create-group',

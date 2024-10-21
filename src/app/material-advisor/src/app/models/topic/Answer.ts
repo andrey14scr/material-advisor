@@ -1,8 +1,7 @@
 import { LanguageText } from "@shared/models/LanguageText";
-import { AnswerModel } from "./Answer";
 
-export interface AnswerGroupModel {
+export interface Answer {
   number: number;
+  points: number;
   content: LanguageText[];
-  answers: AnswerModel[];
 }

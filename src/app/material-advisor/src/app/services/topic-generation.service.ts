@@ -1,18 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
+import { Topic } from "@models/topic/Topic";
 import { Observable } from "rxjs";
-import { Group } from "../models/Group";
+
 
 @Injectable({
   providedIn: 'root',
 })
-export class GroupService {
-  private apiRoot = `${environment.apiUrl}/api/Group`;
+export class TopicGenerationService {
+  private apiRoot = `${environment.apiUrl}/api/TopicGeneration`;
 
   constructor(private http: HttpClient) { }
 
-  getGroupsAsOwner(): Observable<Group[]> {
-    return this.http.get<Group[]>(`${this.apiRoot}/owner`);
+  generateTopic(form: any): Observable<Topic> {
+    return this.http.post<Topic>(this.apiRoot, form);
   }
 }

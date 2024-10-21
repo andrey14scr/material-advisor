@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Group } from './models/Group';
-import { GroupService } from './services/group.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupComponent } from './components/create-group/create-group.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { CommonModule } from '@angular/common';
+import { Group } from '@models/user/Group';
+import { GroupService } from '@services/group.service';
 
 @Component({
   selector: 'group',

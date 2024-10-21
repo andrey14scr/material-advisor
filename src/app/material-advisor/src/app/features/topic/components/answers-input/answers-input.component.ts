@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { AnswerModel } from '@features/topic/models/Answer';
+import { Answer } from '@models/topic/Answer';
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
 import { LanguageText } from '@shared/models/LanguageText';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
@@ -22,7 +22,7 @@ import { TranslationService } from '@shared/services/translation.service';
 export class AnswersInputComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() answersFormArray!: FormArray;
-  @Input() formData!: AnswerModel[];
+  @Input() formData!: Answer[];
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   

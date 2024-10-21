@@ -15,7 +15,7 @@
     <span *ngIf="isOwner(topic)">
       <span>{{ knowledgeCheck.name }}</span>
       <span class="ms-1">
-        <button mat-icon-button (click)="navigateToKnowledgeCheckDetails(knowledgeCheck.id)">
+        <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
           <mat-icon>edit</mat-icon>
         </button>
       </span>

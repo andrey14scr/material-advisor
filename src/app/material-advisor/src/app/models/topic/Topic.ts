@@ -1,10 +1,10 @@
 import { LanguageText } from "@shared/models/LanguageText";
 import { GUID } from "@shared/types/GUID";
-import { QuestionModel } from "./Question";
+import { Question } from "./Question";
 
-export interface TopicModel {
+export interface Topic {
   id: GUID | null;
   version: number;
   name: LanguageText[];
-  questions: QuestionModel[];
+  questions: Question[];
 }
