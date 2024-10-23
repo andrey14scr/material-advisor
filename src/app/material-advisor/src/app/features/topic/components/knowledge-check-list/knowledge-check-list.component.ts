@@ -5,6 +5,8 @@ import { GUID } from '@shared/types/GUID';
 import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
 import { KnowledgeCheckService } from '@services/knowledge-check.service';
 import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'knowledge-check-list',
@@ -21,6 +23,7 @@ export class KnowledgeChecksComponent implements OnInit {
   constructor(
     private knowledgeCheckService: KnowledgeCheckService,
     private knowledgeCheckDialogService: KnowledgeCheckDialogService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +38,7 @@ export class KnowledgeChecksComponent implements OnInit {
   getKnowledgeChecksByTopicId(topicId: string) {
     this.knowledgeCheckService.getByTopicId(topicId).subscribe({
       next: (data) => {
+        console.log('lol', data);
         this.knowledgeChecks = data;
         this.isLoading = false;
       },
@@ -46,5 +50,30 @@ export class KnowledgeChecksComponent implements OnInit {
 
   openKnowledgeCheckDialog(id?: GUID) {
     this.knowledgeCheckDialogService.openKnowledgeCheckDialog(this.topicId, this.knowledgeChecks, id);
+  }
+
+  deleteKnowledgeCheck(id: GUID) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: { message: 'Are you sure you want to proceed?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.knowledgeCheckService.deleteKnowledgeCheck(id).subscribe({
+          next: (response) => {
+            if (response) {
+              this.knowledgeChecks = this.knowledgeChecks.filter(knowledgeCheck => knowledgeCheck.id !== id);
+            }
+            else {
+              console.error('Topic was not deleted');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting topic', error);
+          }
+        });
+      }
+    });
   }
 }

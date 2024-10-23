@@ -18,14 +18,22 @@ export class KnowledgeCheckService {
   getByTopicId(topicId: GUID): Observable<KnowledgeCheckListItem[]> {
     return this.http.get<KnowledgeCheckListItem[]>(`${this.apiRoot}/topic/${topicId}`).pipe(
       map((data: KnowledgeCheckListItem[]) => sortByStartDate(data))
-    );;
+    );
   }
 
   getKnowledgeCheck(id: GUID): Observable<KnowledgeCheck> {
     return this.http.get<KnowledgeCheck>(`${this.apiRoot}/${id}`);
   }
 
-  postKnowledgeCheck(model: KnowledgeCheckListItem): Observable<KnowledgeCheckListItem> {
-    return this.http.post<KnowledgeCheckListItem>(this.apiRoot, model);
+  postKnowledgeCheck(model: KnowledgeCheck): Observable<KnowledgeCheck> {
+    return this.http.post<KnowledgeCheck>(this.apiRoot, model);
+  }
+
+  deleteKnowledgeCheck(id: GUID): Observable<boolean> {
+    return this.http.delete<boolean>(this.apiRoot, {
+      params: {
+        id: id,
+      }
+    });
   }
 }

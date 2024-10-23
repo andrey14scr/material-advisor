@@ -18,11 +18,17 @@
         <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
           <mat-icon>edit</mat-icon>
         </button>
+        <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </span>
     </span>
     <span *ngIf="!isOwner(topic)">
-      <a href="/pass/{{knowledgeCheck.id}}">
-        {{ knowledgeCheck.name }} ({{ translateText(topic.name) }}: {{knowledgeCheck.usedAttempts}}{{knowledgeCheck.maxAttempts == undefined ? "" : ("/" + knowledgeCheck.maxAttempts)}})
+      <span class="inactive-knowledge-check" *ngIf="!isActual(knowledgeCheck)">
+        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}} {{getAttemptsLabel(knowledgeCheck)}}
+      </span>
+      <a *ngIf="isActual(knowledgeCheck)" href="/knowledge-check/{{knowledgeCheck.id}}">
+        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}} {{getAttemptsLabel(knowledgeCheck)}}
       </a>
     </span>
   </div>

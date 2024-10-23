@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TranslationService } from '@shared/services/translation.service';
 import { map } from 'rxjs';
 import { LanguageText } from '@shared/models/LanguageText';
@@ -14,11 +14,13 @@ import { TopicService } from '@services/topic.service';
 import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
+import { KnowledgeCheckService } from '@services/knowledge-check.service';
 
 @Component({
   selector: 'app-main-page',
   standalone: true,
   imports: [CommonModule, MaterialModule],
+  providers: [DatePipe],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
@@ -32,6 +34,8 @@ export class MainPageComponent {
     private dialog: MatDialog,
     private router: Router,
     private knowledgeCheckDialogService: KnowledgeCheckDialogService,
+    private knowledgeCheckService: KnowledgeCheckService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit() {
@@ -77,8 +81,8 @@ export class MainPageComponent {
   isKnowledgeCheckActive(model: KnowledgeCheckListItem): boolean {
     const now = new Date();
     return model.startDate >= now 
-      && (model.endDate == undefined || model.endDate >= now) 
-      && (model.maxAttempts == undefined || model.usedAttempts < model.maxAttempts);
+      && (!model.endDate || model.endDate >= now) 
+      && (!model.maxAttempts || (model.usedAttempts ?? 0) < model.maxAttempts);
   }
 
   deleteTopic(id: GUID) {
@@ -108,5 +112,103 @@ export class MainPageComponent {
 
   openKnowledgeCheckDialog(topic: TopicListItem, id?: GUID) {
     this.knowledgeCheckDialogService.openKnowledgeCheckDialog(topic.id, topic.knowledgeChecks, id);
+  }
+
+  deleteKnowledgeCheck(topic: TopicListItem, id: GUID) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: { message: 'Are you sure you want to proceed?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.knowledgeCheckService.deleteKnowledgeCheck(id).subscribe({
+          next: (response) => {
+            if (response) {
+              topic.knowledgeChecks = topic.knowledgeChecks.filter(knowledgeCheck => knowledgeCheck.id !== id);
+            }
+            else {
+              console.error('Topic was not deleted');
+            }
+          },
+          error: (error) => {
+            console.error('Error deleting topic', error);
+          }
+        });
+      }
+    });
+  }
+
+  isActual(knowledgeCheck: KnowledgeCheckListItem): boolean{
+    const now = new Date();
+    const startDate = new Date(knowledgeCheck.startDate);
+    const endDate = knowledgeCheck.endDate ? new Date(knowledgeCheck.endDate) : null;
+
+    const isActualDate = startDate <= now && (!endDate || endDate >= now);
+
+    const usedAttempts = knowledgeCheck.usedAttempts ?? 0;
+    const maxAttempts = knowledgeCheck.maxAttempts;
+
+    const isActualAttempts = !maxAttempts ? true : usedAttempts < maxAttempts;
+
+    return isActualDate && isActualAttempts;
+  }
+
+  getDateLabel(knowledgeCheck: KnowledgeCheckListItem): string {
+    const now = new Date();
+    const startDate = new Date(knowledgeCheck.startDate);
+    const endDate = knowledgeCheck.endDate ? new Date(knowledgeCheck.endDate) : null;
+
+    const dateTimeFormat = 'dd.MM.yyyy HH:mm';
+
+    if (startDate > now) {
+      return `Starts on: ${this.datePipe.transform(startDate, dateTimeFormat)}.`;
+    }
+    else {
+      if (endDate && endDate >= now) {
+        return `Ends on: ${this.datePipe.transform(endDate, dateTimeFormat)}.`;
+      }
+      else if (endDate) {
+        return `Ended on: ${this.datePipe.transform(endDate, dateTimeFormat)}.`;
+      }
+      else {
+        return '';
+      }
+    }
+  }
+
+  getAttemptsLabel(knowledgeCheck: KnowledgeCheckListItem): string {
+    const usedAttempts = knowledgeCheck.usedAttempts ?? 0;
+    const maxAttempts = knowledgeCheck.maxAttempts;
+
+    const now = new Date();
+    const startDate = new Date(knowledgeCheck.startDate);
+    const endDate = knowledgeCheck.endDate ? new Date(knowledgeCheck.endDate) : null;
+
+    if (endDate && endDate < now) {
+      if (usedAttempts) {
+        return `Used attempts: ${usedAttempts}.`;
+      }
+      else {
+        return 'Not passed.';
+      }
+    }
+
+    if (startDate > now && maxAttempts) {
+      return `Attempts: ${maxAttempts}.`;
+    }
+    
+    if (maxAttempts) {
+      if (maxAttempts === usedAttempts) {
+        return 'No attempts left.';
+      }
+      return `Attempts left: ${maxAttempts - usedAttempts}/${maxAttempts}.`;
+    }
+
+    if (usedAttempts) {
+      return `Used attempts: ${usedAttempts}.`;
+    }
+
+    return 'Not passed yet.';
   }
 }

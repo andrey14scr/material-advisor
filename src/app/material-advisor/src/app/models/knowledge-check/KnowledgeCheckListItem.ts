@@ -5,7 +5,7 @@ export interface KnowledgeCheckListItem {
   name: string;
   time: number;
   startDate: Date;
-  endDate: Date | undefined;
-  usedAttempts: number;
-  maxAttempts: number | undefined;
+  endDate: Date | null;
+  usedAttempts: number | null;
+  maxAttempts: number | null;
 }

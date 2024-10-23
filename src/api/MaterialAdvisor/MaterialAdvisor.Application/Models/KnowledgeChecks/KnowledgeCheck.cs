@@ -18,5 +18,7 @@ public class KnowledgeCheck
 
     public byte? MaxAttempts { get; set; }
 
+    public byte? UsedAttempts { get; set; }
+
     public IEnumerable<Guid> GroupIds { get; set; } = [];
 }
