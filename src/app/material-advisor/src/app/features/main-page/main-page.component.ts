@@ -15,6 +15,7 @@ import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckLi
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
 import { KnowledgeCheckService } from '@services/knowledge-check.service';
+import { KnowledgeCheckConfirmDialogComponent } from './components/knowledge-check-confirm-dialog/knowledge-check-confirm-dialog.component';
 
 @Component({
   selector: 'app-main-page',
@@ -162,17 +163,17 @@ export class MainPageComponent {
     const dateTimeFormat = 'dd.MM.yyyy HH:mm';
 
     if (startDate > now) {
-      return `Starts on: ${this.datePipe.transform(startDate, dateTimeFormat)}.`;
+      return `Starts on: ${this.datePipe.transform(startDate, dateTimeFormat)}`;
     }
     else {
       if (endDate && endDate >= now) {
-        return `Ends on: ${this.datePipe.transform(endDate, dateTimeFormat)}.`;
+        return `Ends on: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
       }
       else if (endDate) {
-        return `Ended on: ${this.datePipe.transform(endDate, dateTimeFormat)}.`;
+        return `Ended on: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
       }
       else {
-        return '';
+        return 'Without date bounds';
       }
     }
   }
@@ -187,28 +188,59 @@ export class MainPageComponent {
 
     if (endDate && endDate < now) {
       if (usedAttempts) {
-        return `Used attempts: ${usedAttempts}.`;
+        return `Used attempts: ${usedAttempts}`;
       }
       else {
-        return 'Not passed.';
+        return 'Not passed';
       }
     }
 
     if (startDate > now && maxAttempts) {
-      return `Attempts: ${maxAttempts}.`;
+      return `Attempts: ${maxAttempts}`;
     }
     
     if (maxAttempts) {
       if (maxAttempts === usedAttempts) {
-        return 'No attempts left.';
+        return 'No attempts left';
       }
-      return `Attempts left: ${maxAttempts - usedAttempts}/${maxAttempts}.`;
+      return `Attempts left: ${maxAttempts - usedAttempts}/${maxAttempts}`;
     }
 
     if (usedAttempts) {
-      return `Used attempts: ${usedAttempts}.`;
+      return `Used attempts: ${usedAttempts}`;
     }
 
-    return 'Not passed yet.';
+    return 'Not passed yet';
+  }
+
+  getTimeLabel(knowledgeCheck: KnowledgeCheckListItem): string {
+    if (knowledgeCheck.time) {
+      let timeLabel = '';
+      if (knowledgeCheck.time < 60) {
+        timeLabel = `${knowledgeCheck.time}s`;
+      }
+      else if (knowledgeCheck.time < 3600) {
+        timeLabel = `${knowledgeCheck.time / 60}m:${knowledgeCheck.time % 60}s`;
+      }
+      else {
+        timeLabel = `${knowledgeCheck.time / 3600}h:${(knowledgeCheck.time % 3600) / 60}m:${knowledgeCheck.time % 60}s`;
+      }
+      return `allotted time: ${timeLabel}`;
+    }
+
+    return 'without time limits';
+  }
+
+  startKnowledgeCheck(topic: TopicListItem, knowledgeCheck: KnowledgeCheckListItem) {
+    const dialogRef = this.dialog.open(KnowledgeCheckConfirmDialogComponent, {
+      width: '500px',
+      data: { topic, knowledgeCheck }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.router.navigate([`knowledge-check/${knowledgeCheck.id}`]);
+      }
+    });
   }
 }

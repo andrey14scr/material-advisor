@@ -5,3 +5,29 @@ span {
 .inactive-knowledge-check {
   color: gray;
 }
+
+@mixin link-style($link-color: #007bff, $hover-color: darken($link-color, 10%)) {
+  color: $link-color;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $hover-color;
+    text-decoration: underline;
+  }
+
+  &:focus,
+  &:active {
+    color: $hover-color;
+    text-decoration: underline;
+    outline: none;
+  }
+
+  &:visited {
+    color: adjust-hue($link-color, 30deg);
+  }
+}
+
+.link-text {
+  @include link-style();
+}

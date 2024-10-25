@@ -30,7 +30,7 @@ import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';
   templateUrl: './knowledge-check-create-dialog.component.html',
   styleUrl: './knowledge-check-create-dialog.component.scss'
 })
-export class KnowledgeCheckComponentCreateDialog {
+export class KnowledgeCheckCreateDialogComponent {
   form: FormGroup;
   groups: Group[] = [];
   isLoading = true;
@@ -40,7 +40,7 @@ export class KnowledgeCheckComponentCreateDialog {
     private knowledgeCheckService: KnowledgeCheckService,
     private groupService: GroupService,
     private snackBar: MatSnackBar,
-    public dialogRef: MatDialogRef<KnowledgeCheckComponentCreateDialog>,
+    public dialogRef: MatDialogRef<KnowledgeCheckCreateDialogComponent>,
     private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {

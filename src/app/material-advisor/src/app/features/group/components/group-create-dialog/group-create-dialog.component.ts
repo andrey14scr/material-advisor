@@ -8,24 +8,24 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { UserService } from '@shared/services/user.service';
 
 @Component({
-  selector: 'create-group',
+  selector: 'group-create-dialog',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
   ],
-  templateUrl: './create-group.component.html',
-  styleUrl: './create-group.component.scss'
+  templateUrl: './group-create-dialog.component.html',
+  styleUrl: './group-create-dialog.component.scss'
 })
-export class CreateGroupComponent implements OnInit {
+export class GroupCreateDialogComponent implements OnInit {
   groupForm: FormGroup;
   users: User[] = [];
   pageNumber = 1;
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CreateGroupComponent>,
+    private dialogRef: MatDialogRef<GroupCreateDialogComponent>,
     private userService: UserService,
     private groupService: GroupService
   ) {

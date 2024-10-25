@@ -1,6 +1,6 @@
 <h1>{{ translate('mainPage.title') }}</h1> 
 
-<div class="mb-4" *ngFor="let topic of topics">
+<!-- <div class="mb-4" *ngFor="let topic of topics">
   <span>{{ translateText(topic.name) }}</span>
   <span *ngIf="isOwner(topic)" class="ms-1">
     <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
@@ -24,12 +24,53 @@
       </span>
     </span>
     <span *ngIf="!isOwner(topic)">
-      <span class="inactive-knowledge-check" *ngIf="!isActual(knowledgeCheck)">
-        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}} {{getAttemptsLabel(knowledgeCheck)}}
+      <span *ngIf="!isActual(knowledgeCheck)" class="inactive-knowledge-check">
+        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
       </span>
-      <a *ngIf="isActual(knowledgeCheck)" href="/knowledge-check/{{knowledgeCheck.id}}">
-        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}} {{getAttemptsLabel(knowledgeCheck)}}
-      </a>
+      <span *ngIf="isActual(knowledgeCheck)" class="link-text" (click)="startKnowledgeCheck(topic, knowledgeCheck)">
+        {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
+      </span>
     </span>
   </div>
-</div>
+</div> -->
+
+<mat-list>
+  <ng-container *ngFor="let topic of topics">
+    <mat-list-item>
+      <span>{{ translateText(topic.name) }}</span>
+      <span *ngIf="isOwner(topic)" class="ms-1">
+        <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteTopic(topic.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </span>
+    </mat-list-item>
+    <mat-list class="ms-3">
+      <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
+        <mat-list-item>
+          <span *ngIf="isOwner(topic)">
+            <span>{{ knowledgeCheck.name }}</span>
+            <span class="ms-1">
+              <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </span>
+          </span>
+          <span *ngIf="!isOwner(topic)">
+            <span *ngIf="!isActual(knowledgeCheck)" class="inactive-knowledge-check">
+              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
+            </span>
+            <span *ngIf="isActual(knowledgeCheck)" class="link-text" (click)="startKnowledgeCheck(topic, knowledgeCheck)">
+              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
+            </span>
+          </span>
+        </mat-list-item>
+      </ng-container>
+    </mat-list>
+  </ng-container>
+</mat-list>

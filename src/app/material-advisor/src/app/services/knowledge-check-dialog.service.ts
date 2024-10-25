@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { KnowledgeCheckService } from './knowledge-check.service';
-import { KnowledgeCheckComponentCreateDialog } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
+import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
 import { removeEmptyField } from '@shared/services/object-utils.service';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { GUID } from '@shared/types/GUID';
@@ -17,7 +17,7 @@ export class KnowledgeCheckDialogService {
   ) { }
 
   openKnowledgeCheckDialog(topicId: GUID, knowledgeChecks: KnowledgeCheckListItem[], id?: GUID) {
-    const dialogRef = this.dialog.open(KnowledgeCheckComponentCreateDialog, {
+    const dialogRef = this.dialog.open(KnowledgeCheckCreateDialogComponent, {
       width: '600px',
       data: { id },
     });
