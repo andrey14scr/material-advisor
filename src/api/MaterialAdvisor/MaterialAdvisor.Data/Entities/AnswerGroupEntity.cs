@@ -9,6 +9,8 @@ public class AnswerGroupEntity : IEntity
 {
     public Guid Id { get; set; }
 
+    public bool IsTechnical { get; set; }
+
     public Guid QuestionId { get; set; }
 
     public virtual QuestionEntity Question { get; set; }

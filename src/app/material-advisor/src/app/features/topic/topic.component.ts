@@ -179,7 +179,7 @@ export class TopicComponent implements OnInit, OnDestroy {
         this.snackBar.open('', 'Close', { duration: 2000 });
         console.error(err);
       }
-    });;
+    });
   }
 
   onDeleteSubmit() {

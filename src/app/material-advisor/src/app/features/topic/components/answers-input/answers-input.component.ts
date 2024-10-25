@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Answer } from '@models/topic/Answer';
 import { TextsInputComponent } from '@shared/components/texts-input/texts-input.component';
@@ -23,12 +23,17 @@ export class AnswersInputComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() answersFormArray!: FormArray;
   @Input() formData!: Answer[];
+  @Input() initFirst: boolean = false;
+  @Output() allAnswersRemoved = new EventEmitter<void>();
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
   ngOnInit() {
     if (this.formData && this.formData.length) {
-      this.formData.forEach(answer => this.addForm(answer.number, answer.points));
+      this.formData.forEach(answer => this.addForm(answer.number, answer.points, answer.isRight));
+    }
+    else if (this.initFirst) {
+      this.addEmptyForm();
     }
   }
 
@@ -42,12 +47,13 @@ export class AnswersInputComponent implements OnInit {
 
   addEmptyForm() {
     const nextNumber = this.answersFormArray.controls.length + 1;
-    this.addForm(nextNumber, 0);
+    this.addForm(nextNumber, 0, false);
   }
 
-  addForm(number: number, points: number) {
+  addForm(number: number, points: number, isRight: boolean) {
     const answerGroup = this.fb.group({
       number: [number],
+      isRight: [isRight],
       points: [points, Validators.required],
       content: this.fb.array([]),
     });
@@ -57,6 +63,10 @@ export class AnswersInputComponent implements OnInit {
   removeAnswer(index: number) {
     this.answersFormArray.removeAt(index);
     this.updateNumbers();
+
+    if (!this.answersFormArray.length) {
+      this.allAnswersRemoved.emit();
+    }
   }
 
   updateNumbers() {

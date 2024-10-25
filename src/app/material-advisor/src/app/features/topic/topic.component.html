@@ -45,9 +45,6 @@
     <!-- Creation section -->
     <div *ngIf="currentTopic.id || selectedMode === TopicCreationMode.Create">
       <div class="questions">
-        <mat-label class="section-label">
-          Questions:
-        </mat-label>
         <questions-input [formData]="currentTopic.questions" [form]="form" [questionsFormArray]="questionsFormArray"/>
       </div>
 

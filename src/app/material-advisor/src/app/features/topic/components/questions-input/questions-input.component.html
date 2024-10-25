@@ -1,3 +1,7 @@
+<mat-label class="section-label">
+  Questions:
+</mat-label>
+
 <div [formGroup]="form">
   <div formArrayName="questions">
     <div *ngFor="let questionGroup of questionsFormArray.controls; let i = index;" [formGroupName]="i" class="text-row">
@@ -24,9 +28,6 @@
           <texts-input [formData]="getContent(i)" [form]="toForm(questionGroup)" formName="content" [isOneRow]="false" />
 
           <div class="answer-groups">
-            <mat-label class="section-label">
-              Answer groups:
-            </mat-label>
             <answer-groups-input [formData]="getAnswerGroups(i)" [form]="toForm(questionGroup)" [answerGroupsFormArray]="getAnswerGroupsFormArray(i)"/>
           </div>
         </div>

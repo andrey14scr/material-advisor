@@ -1,21 +1,30 @@
+<mat-label *ngIf="!isTechnicalForm()" class="section-label">
+  Answer groups:
+</mat-label>
+
 <div [formGroup]="form">
   <div formArrayName="answerGroups">
     <div *ngFor="let answerGroupGroup of answerGroupsFormArray.controls; let i = index;" [formGroup]="toForm(answerGroupGroup)" class="text-row">
-      <mat-card class="answer-group-card all-width">
+      <mat-card *ngIf="!answerGroupGroup.value.isTechnical" class="answer-group-card all-width">
         <div class="all-width">    
           <texts-input [formData]="getContent(i)" [form]="toForm(answerGroupGroup)" formName="content" [isOneRow]="false" />
 
           <div class="answers">
-            <mat-label class="section-label">Answers:</mat-label>
             <answers-input [formData]="getAnswers(i)" [form]="toForm(answerGroupGroup)" [answersFormArray]="getAnswersFormArray(i)"/>
           </div>
         </div>
       </mat-card>
+      <div *ngIf="answerGroupGroup.value.isTechnical" class="all-width">
+        <div class="answers">
+          <answers-input [formData]="getAnswers(i)" [form]="toForm(answerGroupGroup)" [answersFormArray]="getAnswersFormArray(i)" [initFirst]="true" (allAnswersRemoved)="resetAnswerGroups()"/>
+        </div>
+      </div>
       <button mat-raised-button color="warn" (click)="removeAnswerGroup(i)">-</button>
     </div>
   </div>
 
-  <div class="add-button-container">
+  <div *ngIf="!isTechnicalForm()" class="add-button-container">
     <button mat-raised-button color="primary" (click)="addEmptyForm()">+</button>
+    <button *ngIf="!answerGroupsFormArray.controls.length" mat-raised-button color="primary" class="ms-1" (click)="addEmptyTechnicalForm()">Add questions directly</button>
   </div>
 </div>

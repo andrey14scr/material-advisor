@@ -26,6 +26,7 @@ export class AnswerGroupsInputComponent implements OnInit {
   @Input() form!: FormGroup;
   @Input() answerGroupsFormArray!: FormArray;
   @Input() formData!: AnswerGroup[];
+  
 
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
@@ -33,6 +34,14 @@ export class AnswerGroupsInputComponent implements OnInit {
     if (this.formData && this.formData.length) {
       this.formData.forEach(answerGroup => this.addForm(answerGroup.number));
     }
+  }
+
+  isTechnicalForm(): boolean {
+    return this.answerGroupsFormArray.controls.length === 1 && this.answerGroupsFormArray.controls[0].value.isTechnical;
+  }
+
+  resetAnswerGroups () {
+    this.answerGroupsFormArray.clear();
   }
 
   getAnswers(index: number): Answer[] {
@@ -52,9 +61,15 @@ export class AnswerGroupsInputComponent implements OnInit {
     this.addForm(nextNumber);
   }
 
-  addForm(number: number) {
+  addEmptyTechnicalForm() {
+    const nextNumber = this.answerGroupsFormArray.controls.length + 1;
+    this.addForm(nextNumber, true);
+  }
+
+  addForm(number: number, isTechnical: boolean = false) {
     const answerGroupGroup = this.fb.group({
       number: [number],
+      isTechnical: [isTechnical],
       content: this.fb.array([]),
       answers: this.fb.array([]),
     });
