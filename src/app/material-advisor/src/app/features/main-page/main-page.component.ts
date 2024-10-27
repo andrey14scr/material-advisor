@@ -243,4 +243,8 @@ export class MainPageComponent {
       }
     });
   }
+
+  isLoadingTopic(topic: TopicListItem): boolean {
+    return !topic.version;
+  }
 }

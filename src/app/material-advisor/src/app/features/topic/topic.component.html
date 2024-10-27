@@ -10,7 +10,7 @@
     <div *ngIf="!currentTopic.id">
       <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
 
-      <div class="d-flex justify-content-center">
+      <div class="d-flex justify-content-center mb-3">
         <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
           <mat-button-toggle [value]="TopicCreationMode.Generate">
             Generate
@@ -24,11 +24,36 @@
   
     <!-- Generation section -->
     <div *ngIf="!currentTopic.id && selectedMode == TopicCreationMode.Generate">
-      <mat-form-field appearance="outline" class="mt-4" subscriptSizing="dynamic">
+      <div class="mb-2">
+        <mat-checkbox formControlName="doesComplexityIncrease">
+          With complexity increasing
+        </mat-checkbox>
+      </div>
+      
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Max Questions Count</mat-label>
         <input matInput formControlName="maxQuestionsCount" type="number" placeholder="Max Questions Count">
       </mat-form-field>
-    
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Default answers count</mat-label>
+        <input matInput formControlName="defaultAnswersCount" type="number" placeholder="Default answers count">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Additional languages</mat-label>
+        <mat-select formControlName="languages" multiple>
+          <mat-option *ngFor="let language of languages" [value]="language.languageId" [disabled]="isAdditioanlLanguageChosen(language.languageId)">
+            {{ getLanguageName(language.code) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Culture context</mat-label>
+        <input matInput formControlName="cultureContext" type="text" placeholder="Culture context">
+      </mat-form-field>
+
       <input type="file" (change)="onFileChange($event)">
     
       <div *ngIf="isSubmittingGeneration" class="d-flex justify-content-center">

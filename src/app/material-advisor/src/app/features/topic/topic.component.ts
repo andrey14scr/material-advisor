@@ -18,6 +18,10 @@ import { KnowledgeChecksComponent } from './components/knowledge-check-list/know
 import { Topic } from '@models/topic/Topic';
 import { TopicGenerationService } from '@services/topic-generation.service';
 import { TopicService } from '@services/topic.service';
+import { Language } from '@shared/types/Language';
+import { TranslationService } from '@shared/services/translation.service';
+import { LanguageEnum } from '@shared/types/LanguageEnum';
+import { LanguageText } from '@shared/models/LanguageText';
 
 export enum TopicCreationMode {
   Generate,
@@ -52,6 +56,7 @@ export class TopicComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
 
+  languages: Language[] = [];
   isSubmittingGeneration: boolean = false;
   hubConnection!: signalR.HubConnection;
 
@@ -66,17 +71,26 @@ export class TopicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private authService: AuthService,
-    private topicGenerationService: TopicGenerationService
+    private topicGenerationService: TopicGenerationService,
+    private translationService: TranslationService,
   ) {
     this.form = this.fb.group({
       name: this.fb.array([]),
       questions: this.fb.array([]),
       maxQuestionsCount: [null],
+      defaultAnswersCount: [null],
+      doesComplexityIncrease: [false],
+      cultureContext: [null],
+      languages: [[]],
       file: [null]
     });
   }
 
   ngOnInit() {
+    this.translationService.getLanguages().subscribe(lang => {
+      this.languages.push(lang);
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.getTopicById(id);
@@ -158,15 +172,29 @@ export class TopicComponent implements OnInit, OnDestroy {
     this.isSubmittingGeneration = true;
 
     const formData = new FormData();
+    
     if (this.form.value.maxQuestionsCount) {
       formData.append('MaxQuestionsCount', this.form.value.maxQuestionsCount);
     }
+    if (this.form.value.defaultAnswersCount) {
+      formData.append('DefaultAnswersCount', this.form.value.defaultAnswersCount);
+    }
+    if (this.form.value.cultureContext) {
+      formData.append('CultureContext', this.form.value.cultureContext);
+    }
+
+    formData.append('DoesComplexityIncrease', this.form.value.doesComplexityIncrease);
     formData.append('File', this.form.value.file);
 
-    const topicNames = this.form.get('name')?.value;
+    const topicNames = this.form.value.name;
     topicNames.forEach((item: any, index: number) => {
-      formData.append(`TopicName[${index}].LanguageId`, item.languageId.toString());
+      formData.append(`TopicName[${index}].LanguageId`, item.languageId);
       formData.append(`TopicName[${index}].Text`, item.text);
+    });
+
+    const languages = this.form.value.languages;
+    languages.forEach((item: any, index: number) => {
+      formData.append(`Languages[${index}]`, item);
     });
 
     this.topicGenerationService.generateTopic(formData).subscribe({
@@ -209,5 +237,13 @@ export class TopicComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  getLanguageName(langCode: string): string {
+    return this.translationService.translate(`languages.${langCode}`);
+  }
+
+  isAdditioanlLanguageChosen(languageId: LanguageEnum): boolean {
+    return (this.form.value.name as LanguageText[]).filter((x: LanguageText) => x.languageId === languageId).length !== 0;
   }
 }

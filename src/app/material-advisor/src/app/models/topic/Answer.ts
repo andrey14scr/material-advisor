@@ -2,7 +2,7 @@ import { LanguageText } from "@shared/models/LanguageText";
 
 export interface Answer {
   number: number;
-  isRight: boolean;
+  isCorrect: boolean;
   points: number;
   content: LanguageText[];
 }

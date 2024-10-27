@@ -4,6 +4,7 @@ import { GUID } from "@shared/types/GUID";
 
 export interface TopicListItem {
   id: GUID;
+  version: number;
   number: number;
   owner: string;
   name: LanguageText[];

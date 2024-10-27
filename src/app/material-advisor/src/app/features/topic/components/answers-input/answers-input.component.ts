@@ -30,7 +30,7 @@ export class AnswersInputComponent implements OnInit {
   
   ngOnInit() {
     if (this.formData && this.formData.length) {
-      this.formData.forEach(answer => this.addForm(answer.number, answer.points, answer.isRight));
+      this.formData.forEach(answer => this.addForm(answer.number, answer.points, answer.isCorrect));
     }
     else if (this.initFirst) {
       this.addEmptyForm();
@@ -50,10 +50,10 @@ export class AnswersInputComponent implements OnInit {
     this.addForm(nextNumber, 0, false);
   }
 
-  addForm(number: number, points: number, isRight: boolean) {
+  addForm(number: number, points: number, isCorrect: boolean) {
     const answerGroup = this.fb.group({
       number: [number],
-      isRight: [isRight],
+      isCorrect: [isCorrect],
       points: [points, Validators.required],
       content: this.fb.array([]),
     });
