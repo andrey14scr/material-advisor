@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
 using MaterialAdvisor.API;
 using MaterialAdvisor.API.Middleware;
 using MaterialAdvisor.API.Options;
@@ -36,6 +39,8 @@ builder.Services.AddCors(options => options.AddPolicy(ApiCorsPolicy, builder =>
 }));
 
 builder.Services.AddControllers();
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

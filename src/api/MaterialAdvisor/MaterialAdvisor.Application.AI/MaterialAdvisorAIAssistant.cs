@@ -34,7 +34,7 @@ public class MaterialAdvisorAIAssistant : IMaterialAdvisorAIAssistant
 
     public async Task<string> GenerateQuestions(string filename, string prompt)
     {
-        var responseJson = "{}";
+        var responseJson = string.Empty;
 
         _logger.LogInformation("[AI Assistant]: Get assistant client...");
         var assistantClient = _openAIClient.GetAssistantClient();
@@ -76,7 +76,7 @@ public class MaterialAdvisorAIAssistant : IMaterialAdvisorAIAssistant
                     _logger.LogInformation($"[AI Assistant]: Streaming - response received: {contentUpdate?.Text})");
                     if (contentUpdate?.Text is not null)
                     {
-                        responseJson = contentUpdate.Text;
+                        responseJson += contentUpdate.Text;
                     }
                 }
             }

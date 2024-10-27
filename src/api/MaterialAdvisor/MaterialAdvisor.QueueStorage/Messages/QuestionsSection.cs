@@ -4,7 +4,7 @@ namespace MaterialAdvisor.QueueStorage.Messages;
 
 public class QuestionsSection
 {
-    public int Count { get; set; }
+    public byte Count { get; set; }
 
     public QuestionType QuestionType { get; set; }
 

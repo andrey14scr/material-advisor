@@ -132,7 +132,6 @@ namespace MaterialAdvisor.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TopicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<short>(type: "smallint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -229,6 +228,7 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsTechnical = table.Column<bool>(type: "bit", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<byte>(type: "tinyint", nullable: false)
                 },
@@ -276,7 +276,7 @@ namespace MaterialAdvisor.Data.Migrations
                     AnswerGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Number = table.Column<byte>(type: "tinyint", nullable: false),
                     Points = table.Column<double>(type: "float", nullable: false),
-                    IsRight = table.Column<bool>(type: "bit", nullable: false)
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

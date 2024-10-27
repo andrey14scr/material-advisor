@@ -61,7 +61,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<Guid>("AnswerGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsRight")
+                    b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.Property<byte>("Number")
@@ -82,6 +82,9 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsTechnical")
+                        .HasColumnType("bit");
 
                     b.Property<byte>("Number")
                         .HasColumnType("tinyint");
@@ -168,9 +171,6 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<short>("Number")
-                        .HasColumnType("smallint");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");

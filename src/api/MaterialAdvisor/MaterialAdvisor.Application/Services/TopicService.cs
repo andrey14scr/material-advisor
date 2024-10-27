@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
+using MaterialAdvisor.Application.Models.Topics;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;

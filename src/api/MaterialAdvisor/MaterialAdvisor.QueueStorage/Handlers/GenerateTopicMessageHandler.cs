@@ -1,5 +1,4 @@
 ﻿using MaterialAdvisor.Application.AI;
-using MaterialAdvisor.Application.Storage;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 using MaterialAdvisor.Data.Enums;
@@ -13,9 +12,7 @@ using MaterialAdvisor.SignalR.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
-using System;
 using System.Text;
 using System.Text.Json;
 
@@ -30,39 +27,13 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
     {
         try
         {
-            var topic = await _dbContext.Topics.Include(t => t.Name).SingleAsync(t => t.Id == message.TopicId);
+            var topic = await _dbContext.Topics.Include(t => t.Name).AsNoTracking().SingleAsync(t => t.Id == message.TopicId);
+            ValidateTopic(topic);
 
-            if (topic.Version != 0)
-            {
-                throw new ArgumentException(nameof(topic), $"Topic {topic.Id} was not of initialized(0) version");
-            }
+            var json = await Generate(topic, message);
+            var topicQuestions = await ParseTopicQuestions(json);
 
-            if (topic.File is null)
-            {
-                throw new ArgumentNullException(nameof(topic.File), $"File path of topic {topic.Id} was null");
-            }
-
-            var additionalInfoPrompt = GetEnumsPrompt();
-            var languagesPrompt = GetLanguagesPrompt(topic);
-            var questionsStructurePrompt = GetQuestionsStructurePrompt(message);
-
-            var prompt = string.Join(" ", languagesPrompt, questionsStructurePrompt, additionalInfoPrompt);
-            _logger.LogError($"Prompt: {prompt}");
-
-            var json = await _materialAdvisorAIAssistant.GenerateQuestions(topic.File, prompt);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
-            var topicQuestions = await JsonSerializer.DeserializeAsync<TopicQuestions>(stream);
-
-            if (topicQuestions is null)
-            {
-                throw new ArgumentNullException(nameof(topicQuestions), "Generated questions were null");
-            }
-
-            topic.Version = 1;
-            topic.Questions = topicQuestions.Questions;
-            topic.Name = topicQuestions.Name;
-            _dbContext.Topics.Update(topic);
-            await _dbContext.SaveChangesAsync();
+            await UpdateTopic(topic, topicQuestions);
 
             await _topicGenerationHubContext.Clients
                 .User(message.UserName)
@@ -82,22 +53,76 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
         }
     }
 
-    private static string GetLanguagesPrompt(TopicEntity topic)
+    private void ValidateTopic(TopicEntity topic)
     {
-        var questionsLanguages = topic.Name.Select(n => n.LanguageId.ToString()).ToList();
-        var languagesPrompt = GetPrompt(Resources.LanguagesPrompt, string.Join(", ", questionsLanguages));
-
-        var topicLanguages = topic.Name.Where(n => n.Text.IsNullOrEmpty()).Select(n => n.LanguageId.ToString()).ToList();
-        var topicNamePrompt = "";
-        if (topicLanguages.Any())
+        if (topic.Version != 0)
         {
-            var existingTopicLanguages = topic.Name
-                .Where(n => !n.Text.IsNullOrEmpty())
-                .Select(n => $"{n.LanguageId.ToString()} - {n.Text}")
-                .ToList();
+            throw new ArgumentException(nameof(topic), $"Topic {topic.Id} was not of initialized(0) version");
+        }
+
+        if (topic.File is null)
+        {
+            throw new ArgumentNullException(nameof(topic.File), $"File path of topic {topic.Id} was null");
+        }
+    }
+
+    private async Task<string> Generate(TopicEntity topic, GenerateTopicMessage message)
+    {
+        var additionalInfoPrompt = GetEnumsPrompt();
+        var languagesPrompt = GetLanguagesPrompt(topic, message.Languages);
+        var culturePrompt = GetPrompt(Resources.CultureContextPrompt, message.CultureContext);
+        var questionsStructurePrompt = GetQuestionsStructurePrompt(message);
+
+        var prompt = string.Join(" ", additionalInfoPrompt, languagesPrompt, culturePrompt, questionsStructurePrompt);
+        _logger.LogError($"Prompt: {prompt}");
+
+        var json = await _materialAdvisorAIAssistant.GenerateQuestions(topic.File!, prompt);
+        return json;
+    }
+
+    private async Task<TopicQuestions> ParseTopicQuestions(string json)
+    {
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
+        var topicQuestions = await JsonSerializer.DeserializeAsync<TopicQuestions>(stream);
+
+        if (topicQuestions is null)
+        {
+            throw new ArgumentNullException(nameof(topicQuestions), "Generated questions were null");
+        }
+
+        return topicQuestions;
+    }
+
+    private async Task UpdateTopic(TopicEntity topic, TopicQuestions topicQuestions)
+    {
+        topic.Version = 1;
+        topic.Questions = topicQuestions.Questions;
+
+        foreach (var name in topicQuestions.TopicName)
+        {
+            name.TopicId = topic.Id;
+        }
+
+        await _dbContext.LanguageTexts.AddRangeAsync(topicQuestions.TopicName);
+        _dbContext.Topics.Update(topic);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private static string GetLanguagesPrompt(TopicEntity topic, IList<Language> languages)
+    {
+        var allLanguages = topic.Name.Select(n => n.LanguageId).Concat(languages).Distinct().Select(l => l.ToString()).ToList();
+
+        var languagesPrompt = GetPrompt(Resources.LanguagesPrompt, string.Join(", ", allLanguages));
+
+        var topicNamePrompt = string.Empty;
+        if (languages.Any())
+        {
+            var topicLanguages = topic.Name.Select(n => $"\"{n.Text}\" in {n.LanguageId.ToString()}").ToList();
+            var questionsLanguages = languages.Select(l => l.ToString()).ToList();
+
             topicNamePrompt = GetPrompt(Resources.TopicNamePrompt, 
-                string.Join(", ", existingTopicLanguages), 
-                string.Join(", ", topicLanguages));
+                string.Join(", ", topicLanguages), 
+                string.Join(", ", questionsLanguages));
         }
         else
         {
@@ -115,9 +140,7 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
         var questionTypesDictionary = EnumConverter.ToDictionary<QuestionType>().Select(x => $"{x.Key} - {x.Value.ToString()}");
         var questionTypes = string.Join(", ", questionTypesDictionary);
 
-        return string.Join(" ",
-            GetPrompt(Resources.EnumsPrompt, languagesDictionary, questionTypes),
-            GetPrompt(Resources.QuestionEnumDescription));
+        return GetPrompt(Resources.EnumsPrompt, languages, questionTypes);
     }
 
     private static string GetQuestionsStructurePrompt(GenerateTopicMessage message)
@@ -132,15 +155,15 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
                 ? GetPrompt(Resources.MaxQuestionsCountPrompt, message.MaxQuestionsCount)
                 : GetPrompt(Resources.UseOptimalQuestionsCountPrompt);
 
-            var answersCountPrompt = message.AnswersCount is not null
-                ? GetPrompt(Resources.AnswersCountPrompt, message.AnswersCount)
+            var answersCountPrompt = message.DefaultAnswersCount is not null
+                ? GetPrompt(Resources.AnswersCountPrompt, message.DefaultAnswersCount)
                 : GetPrompt(Resources.UseOptimalAnswersCountPrompt);
 
             return string.Join(" ", complexityPrompt, maxQuestionsCountPrompt, answersCountPrompt);
         }
         else
         {
-            var defaultAnswersCount = message.AnswersCount.HasValue ? message.AnswersCount.Value.ToString() : "optimal count";
+            var defaultAnswersCount = message.DefaultAnswersCount.HasValue ? message.DefaultAnswersCount.Value.ToString() : "optimal count";
             string GetAnswersCount(QuestionsSection qs)
             {
                 return qs.AnswersCount.HasValue ? qs.AnswersCount.Value.ToString() : defaultAnswersCount;

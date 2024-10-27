@@ -70,6 +70,15 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use next culture for context generation in case of need: {0}..
+        /// </summary>
+        internal static string CultureContextPrompt {
+            get {
+                return ResourceManager.GetString("CultureContextPrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are next enums for languages: {0}, for question types: {1}..
         /// </summary>
         internal static string EnumsPrompt {
@@ -97,7 +106,7 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use next languages for all language related fields in questions: {1}..
+        ///   Looks up a localized string similar to Use next languages for all language related fields: {0}..
         /// </summary>
         internal static string LanguagesPrompt {
             get {
@@ -120,15 +129,6 @@ namespace MaterialAdvisor.QueueStorage.Properties {
         internal static string NoTopicNamePrompt {
             get {
                 return ResourceManager.GetString("NoTopicNamePrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question type enums description: Select - stands for the only 1 possible right answer for given question, MultiSelect - stands for 1 or more possible right answers for given question, OpenText - stands for answer without prepared options, open question..
-        /// </summary>
-        internal static string QuestionEnumDescription {
-            get {
-                return ResourceManager.GetString("QuestionEnumDescription", resourceCulture);
             }
         }
         

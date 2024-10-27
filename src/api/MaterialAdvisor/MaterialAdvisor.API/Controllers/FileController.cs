@@ -18,7 +18,7 @@ public class FileController(IStorageService _storageService) : BaseApiController
     [HttpPost]
     public async Task<IActionResult> Upload(IFormFile file)
     {
-        var fileToDownload = await _storageService.SaveFile(file);
-        return Ok();
+        var savedFile = await _storageService.SaveFile(file);
+        return Ok(savedFile);
     }
 }
