@@ -8,8 +8,6 @@ public class TopicListItem
 
     public string Owner { get; set; }
 
-    public ushort Number { get; set; }
-
     public uint Version { get; set; }
 
     public IEnumerable<LanguageText> Name { get; set; } = [];

@@ -3,18 +3,23 @@
 <mat-list>
   <ng-container *ngFor="let topic of topics">
     <mat-list-item>
-      <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
-      <span *ngIf="isLoadingTopic(topic)" class="gray-text"> (Loading...)</span>
-      <span *ngIf="isOwner(topic) && !isLoadingTopic(topic)" class="ms-1">
-        <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button (click)="deleteTopic(topic.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </span>
+      <div class="d-flex align-items-center">
+        <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
+        <span *ngIf="isLoadingTopic(topic)" class="gray-text ms-2">is loading...</span>
+        <div *ngIf="isLoadingTopic(topic)" class="d-flex">
+          <mat-progress-spinner [diameter]="18" mode="indeterminate"/>
+        </div>
+        <span *ngIf="isOwner(topic) && !isLoadingTopic(topic)" class="ms-1">
+          <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteTopic(topic.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </span>
+      </div>
     </mat-list-item>
-    <mat-list class="ms-3">
+    <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
       <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
         <mat-list-item>
           <span *ngIf="isOwner(topic)">

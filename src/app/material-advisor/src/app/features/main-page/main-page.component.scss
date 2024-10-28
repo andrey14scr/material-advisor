@@ -6,6 +6,11 @@ span {
   color: gray;
 }
 
+.mdc-list
+{
+    padding:0 !important;
+}
+
 @mixin link-style($link-color: #007bff, $hover-color: darken($link-color, 10%)) {
   color: $link-color;
   text-decoration: underline;

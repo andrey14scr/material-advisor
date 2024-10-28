@@ -22,6 +22,7 @@ import { Language } from '@shared/types/Language';
 import { TranslationService } from '@shared/services/translation.service';
 import { LanguageEnum } from '@shared/types/LanguageEnum';
 import { LanguageText } from '@shared/models/LanguageText';
+import { QuestionsTemplateInputComponent } from "./components/questions-template-input/questions-template-input.component";
 
 export enum TopicCreationMode {
   Generate,
@@ -40,6 +41,7 @@ export enum TopicCreationMode {
     LoaderComponent,
     MaterialModule,
     KnowledgeChecksComponent,
+    QuestionsTemplateInputComponent
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
@@ -77,7 +79,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       name: this.fb.array([]),
       questions: this.fb.array([]),
-      maxQuestionsCount: [null],
+      questionsTemplates: this.fb.array([]),
       defaultAnswersCount: [null],
       doesComplexityIncrease: [false],
       cultureContext: [null],
@@ -153,9 +155,14 @@ export class TopicComponent implements OnInit, OnDestroy {
       .build();
 
     this.hubConnection.on('TopicGenerated', (topicId: string, status: any) => {
-      console.log('TopicGenerated fired')
       this.isSubmittingGeneration = false;
-      this.snackBar.open('', 'Close', { duration: 2000 });
+      if (status === 'TopicGenerated') {
+        this.router.navigate([`/topic/${topicId}`]);
+        this.snackBar.open('', 'Close', { duration: 2000 });
+      }
+      else {
+        this.snackBar.open('', 'Close', { duration: 2000 });
+      }
     });
 
     this.hubConnection.start()
@@ -173,9 +180,6 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     
-    if (this.form.value.maxQuestionsCount) {
-      formData.append('MaxQuestionsCount', this.form.value.maxQuestionsCount);
-    }
     if (this.form.value.defaultAnswersCount) {
       formData.append('DefaultAnswersCount', this.form.value.defaultAnswersCount);
     }
@@ -192,6 +196,13 @@ export class TopicComponent implements OnInit, OnDestroy {
       formData.append(`TopicName[${index}].Text`, item.text);
     });
 
+    const questionsTempaltes = this.form.value.name;
+    questionsTempaltes.forEach((item: any, index: number) => {
+      formData.append(`QuestionsStructure[${index}].Count`, item.count);
+      formData.append(`QuestionsStructure[${index}].QuestionType`, item.type);
+      formData.append(`QuestionsStructure[${index}].AnswersCount`, item.answersCount);
+    });
+
     const languages = this.form.value.languages;
     languages.forEach((item: any, index: number) => {
       formData.append(`Languages[${index}]`, item);
@@ -199,8 +210,8 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     this.topicGenerationService.generateTopic(formData).subscribe({
       next: (response) => {
+        this.router.navigate([`/main-page`]);
         this.snackBar.open('', 'Close', { duration: 2000 });
-        this.router.navigate([`/topic/${response.id}`]);
       },
       error: (err) => {
         this.isSubmittingGeneration = false;

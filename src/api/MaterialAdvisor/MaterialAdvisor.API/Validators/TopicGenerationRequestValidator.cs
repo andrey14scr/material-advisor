@@ -17,12 +17,8 @@ public class TopicGenerationRequestValidator : AbstractValidator<TopicGeneration
             .WithMessage("Languages should not contain language ids from topic name");
 
         RuleFor(x => x.QuestionsStructure)
-            .Empty()
-            .When(x => x.MaxQuestionsCount.HasValue)
-            .WithMessage("Questions structure cannot be used with max questions count limitation")
             .NotEmpty()
-            .When(x => !x.MaxQuestionsCount.HasValue)
-            .WithMessage("Questions structure or max questions count limitation should be defined");
+            .WithMessage("Questions structure acnnot be empty");
 
         RuleForEach(x => x.QuestionsStructure).ChildRules(tn =>
         {
@@ -30,18 +26,6 @@ public class TopicGenerationRequestValidator : AbstractValidator<TopicGeneration
                 .LessThanOrEqualTo((byte)100)
                 .WithMessage("Questions count should be less than 100");
         });
-
-        RuleFor(x => x.MaxQuestionsCount)
-            .LessThanOrEqualTo((byte)100)
-            .WithMessage("Max questions count cannot be more than 100");
-
-        RuleFor(x => x.MaxQuestionsCount)
-            .Empty()
-            .When(x => x.QuestionsStructure is not null)
-            .WithMessage("Max questions count limitation cannot be used with questions structure")
-            .NotEmpty()
-            .When(x => x.QuestionsStructure is null)
-            .WithMessage("Max questions count limitation or questions structure should be defined");
 
         RuleFor(x => x.DefaultAnswersCount)
             .LessThanOrEqualTo((byte)8)

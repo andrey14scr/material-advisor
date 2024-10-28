@@ -37,7 +37,6 @@ public class TopicGenerationController(ITopicService _topicService,
         {
             TopicId = createdTopic.Id,
             UserName = user.Name,
-            MaxQuestionsCount = request.MaxQuestionsCount,
             DoesComplexityIncrease = request.DoesComplexityIncrease,
             CultureContext = request.CultureContext,
             DefaultAnswersCount = request.DefaultAnswersCount,

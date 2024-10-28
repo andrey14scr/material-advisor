@@ -12,9 +12,7 @@ public class TopicGenerationRequest
 
     public string CultureContext { get; set; } = null!;
 
-    public List<QuestionsSection>? QuestionsStructure { get; set; }
-
-    public byte? MaxQuestionsCount { get; set; }
+    public List<QuestionsSection> QuestionsStructure { get; set; } = [];
 
     public bool DoesComplexityIncrease { get; set; }
 

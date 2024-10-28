@@ -1,7 +1,7 @@
-<loader [isLoading]="isLoading"/>
+<loader [isLoading]="isLoading || isSubmittingGeneration"/>
 
-<mat-card *ngIf="!isLoading" class="topic-card">
-  <mat-label class="section-label">
+<mat-card *ngIf="!isLoading" class="topic-card p-1">
+  <mat-label class="mb-1">
     Topic
   </mat-label>
   <form [formGroup]="form" enctype="multipart/form-data">
@@ -23,24 +23,23 @@
     </div>
   
     <!-- Generation section -->
-    <div *ngIf="!currentTopic.id && selectedMode == TopicCreationMode.Generate">
-      <div class="mb-2">
+    <div *ngIf="!currentTopic.id && selectedMode == TopicCreationMode.Generate" class="mt-3">
+      <div>
         <mat-checkbox formControlName="doesComplexityIncrease">
           With complexity increasing
         </mat-checkbox>
       </div>
       
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Max Questions Count</mat-label>
-        <input matInput formControlName="maxQuestionsCount" type="number" placeholder="Max Questions Count">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
         <mat-label>Default answers count</mat-label>
-        <input matInput formControlName="defaultAnswersCount" type="number" placeholder="Default answers count">
+        <input matInput formControlName="defaultAnswersCount" type="number" placeholder="Max Questions Count">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <div class="mt-3">
+        <questions-template-input [form]="form" formName="questionsTemplates"/>
+      </div>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
         <mat-label>Additional languages</mat-label>
         <mat-select formControlName="languages" multiple>
           <mat-option *ngFor="let language of languages" [value]="language.languageId" [disabled]="isAdditioanlLanguageChosen(language.languageId)">
@@ -49,18 +48,14 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
         <mat-label>Culture context</mat-label>
         <input matInput formControlName="cultureContext" type="text" placeholder="Culture context">
       </mat-form-field>
 
-      <input type="file" (change)="onFileChange($event)">
+      <input type="file" (change)="onFileChange($event)" class="mt-3">
     
-      <div *ngIf="isSubmittingGeneration" class="d-flex justify-content-center">
-        <mat-progress-spinner [diameter]="32" mode="indeterminate"/>
-      </div>
-    
-      <div class="submit-button-container">
+      <div class="d-flex justify-content-center mt-2">
         <button mat-raised-button color="primary" type="submit" [disabled]="isSubmittingGeneration" (click)="onGenerateSubmit()">
           Generate
         </button>
@@ -73,7 +68,7 @@
         <questions-input [formData]="currentTopic.questions" [form]="form" [questionsFormArray]="questionsFormArray"/>
       </div>
 
-      <div class="submit-button-container">
+      <div class="d-flex justify-content-center mt-2">
         <button mat-raised-button color="primary" type="submit" (click)="onCreateSubmit()">
           {{ this.currentTopic.id ? 'Update' : 'Create' }}
         </button>

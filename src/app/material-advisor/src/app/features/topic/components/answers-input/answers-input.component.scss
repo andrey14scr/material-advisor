@@ -1,46 +1,7 @@
-.all-width{
-  width: 100%;
-}
-
-button {
-  min-width: 40px;
-}
-
-.texts-input {
-  width: 100%;
-}
-
-.add-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
 mat-form-field {
   width: 100%;
-  margin-bottom: 10px;
 }
 
-.answer-card {
-  padding: 10px 4px 4px 4px;
+.card-color {
   background-color: rgb(213, 231, 215);
-}
-
-.section-label {
-  margin-top: 15px;
-  margin-bottom: 5px;
-  display: block;
-  font-size: 1.2em;
-  //color: rgba(0, 0, 0, 0.87);
-}
-
-.single-line-checkbox .mat-checkbox-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-}
-
-.single-line-checkbox {
-  max-width: 100%;
 }

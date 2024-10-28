@@ -16,6 +16,9 @@ import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
 import { KnowledgeCheckService } from '@services/knowledge-check.service';
 import { KnowledgeCheckConfirmDialogComponent } from './components/knowledge-check-confirm-dialog/knowledge-check-confirm-dialog.component';
+import * as signalR from '@aspnet/signalr';
+import { environment } from '@environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-main-page',
@@ -28,6 +31,7 @@ import { KnowledgeCheckConfirmDialogComponent } from './components/knowledge-che
 export class MainPageComponent {
   topics: TopicListItem[] = [];
   currentTag: string | undefined;
+  hubConnection!: signalR.HubConnection;
   
   constructor(private translationService: TranslationService, 
     private topicService: TopicService,
@@ -37,22 +41,58 @@ export class MainPageComponent {
     private knowledgeCheckDialogService: KnowledgeCheckDialogService,
     private knowledgeCheckService: KnowledgeCheckService,
     private datePipe: DatePipe,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
+    this.initializeSignalRConnection();
+    this.getTopicsList();
+  }
+
+  getTopicsList() {
     this.topicService.getTopics()
       .pipe(
         map(data => 
-          data.sort((a, b) => a.number - b.number)
-            .map(item => ({
-              ...item,
-              knowledgeChecks: sortByStartDate(item.knowledgeChecks)
-            }))
+          data.map(item => ({
+            ...item,
+            knowledgeChecks: sortByStartDate(item.knowledgeChecks)
+          }))
         )
       )
       .subscribe(
         data => this.setTopics(data)
       );
+  }
+
+  initializeSignalRConnection() {
+    const accessToken = this.authService.getAccessToken() ?? '';
+
+    this.hubConnection = new signalR.HubConnectionBuilder()
+      .withUrl(`${environment.apiUrl}/topic-generation-hub`, {
+        accessTokenFactory: () => accessToken
+      })
+      .build();
+
+    this.hubConnection.on('TopicGenerated', (topicId: string, status: any) => {
+      this.updateTopic(topicId);
+      this.snackBar.open('', 'Close', { duration: 2000 });
+    });
+
+    this.hubConnection.start()
+      .then(() => console.log('SignalR connection started'))
+      .catch(err => console.log('Error establishing SignalR connection:', err));
+  }
+
+  updateTopic(id: GUID) {
+    this.topicService.getTopicListItem(id).subscribe(
+      data => {
+        const topicToUpdate = this.topics.find(t => t.id === id);
+        if (topicToUpdate) {
+          topicToUpdate.name = data.name;
+          topicToUpdate.version = data.version;
+        }
+      }
+    );
   }
 
   setTopics(data: TopicListItem[]) {

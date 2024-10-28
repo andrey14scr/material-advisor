@@ -29,7 +29,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
 
     public async Task<TModel> Get<TModel>(Guid id)
     {
-        var entity = await GetFullEntity().AsNoTracking().SingleAsync(t => t.Id == id);
+        var entity = await GetFullEntity().Include(t => t.Owner).AsNoTracking().SingleAsync(t => t.Id == id);
         var model = MapToModel<TModel>(entity);
         return model;
     }

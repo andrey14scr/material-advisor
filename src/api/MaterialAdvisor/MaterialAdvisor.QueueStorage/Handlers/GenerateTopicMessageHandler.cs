@@ -30,8 +30,9 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
             var topic = await _dbContext.Topics.Include(t => t.Name).AsNoTracking().SingleAsync(t => t.Id == message.TopicId);
             ValidateTopic(topic);
 
-            var json = await Generate(topic, message);
-            var topicQuestions = await ParseTopicQuestions(json);
+            await Task.Delay(5000);
+            //var json = await Generate(topic, message);
+            var topicQuestions = new TopicQuestions(); //await ParseTopicQuestions(json);
 
             await UpdateTopic(topic, topicQuestions);
 

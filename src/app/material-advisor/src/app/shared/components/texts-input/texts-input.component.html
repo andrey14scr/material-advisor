@@ -1,8 +1,8 @@
-<mat-card class="texts-card">
-  <div [formGroup]="form">
+<mat-card class="texts-card p-1">
+  <div [formGroup]="form" class="mt-2">
     <div [formArrayName]="formName">
-      <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroupName]="i" class="text-row">
-        <mat-form-field appearance="outline" class="language-select" subscriptSizing="dynamic">
+      <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroupName]="i" class="d-flex align-items-center mb-3">
+        <mat-form-field appearance="outline" class="w-25" subscriptSizing="dynamic">
           <mat-label>
             Language
           </mat-label>
@@ -13,17 +13,19 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="text-input" subscriptSizing="dynamic">
+        <mat-form-field appearance="outline" class="flex-1 ms-2" subscriptSizing="dynamic">
           <mat-label>Text</mat-label>
           <input *ngIf="isOneRow" matInput formControlName="text" required/>
           <textarea *ngIf="!isOneRow" matInput formControlName="text" required></textarea>
         </mat-form-field>
 
-        <button mat-raised-button color="warn" (click)="removeText(i)" [disabled]="i === 0">-</button>
+        <button mat-icon-button color="warn" (click)="removeText(i)" [disabled]="i === 0">
+          <mat-icon>remove_circle</mat-icon>
+        </button>
       </div>
     </div>
 
-    <div class="add-button-container">
+    <div class="d-flex justify-content-center mt-n2">
       <button mat-raised-button color="primary" (click)="addEmptyForm()" [disabled]="languages.length == textsFormArray.controls.length">+</button>
     </div>
   </div>

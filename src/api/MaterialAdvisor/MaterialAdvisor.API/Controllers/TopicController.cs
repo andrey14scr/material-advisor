@@ -22,6 +22,13 @@ public class TopicController(ITopicService _topicService) : BaseApiController
         return Ok(result);
     }
 
+    [HttpGet("list-item/{id}")]
+    public async Task<ActionResult<Topic>> GetListItemById(Guid id)
+    {
+        var result = await _topicService.Get<TopicListItem>(id);
+        return Ok(result);
+    }
+
     [HttpPost()]
     public async Task<ActionResult<Topic>> CreateOrUpdate(Topic topic)
     {

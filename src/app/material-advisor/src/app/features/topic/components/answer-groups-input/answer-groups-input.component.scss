@@ -1,50 +1,7 @@
-.text-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.all-width{
-  width: 100%;
-}
-
-button {
-  min-width: 40px;
-}
-
-.type-select {
-  //width: 20%;
-}
-
-.texts-input {
-  width: 100%;
-}
-
-.points-select {
-  //width: 20%;
-}
-
-.add-button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 6px;
-}
-
 mat-form-field {
   width: 100%;
-  margin-bottom: 10px;
 }
 
-.answer-group-card {
-  padding: 10px 4px 4px 4px;
+.card-color {
   background-color: rgb(209, 209, 245);
-}
-
-.section-label {
-  margin-top: 15px;
-  margin-bottom: 5px;
-  display: block;
-  font-size: 1.2em;
-  //color: rgba(0, 0, 0, 0.87);
 }

@@ -18,6 +18,10 @@ export class TopicService {
     return this.http.get<Topic>(`${this.apiRoot}/${id}`);
   }
 
+  getTopicListItem(id: GUID): Observable<TopicListItem> {
+    return this.http.get<TopicListItem>(`${this.apiRoot}/list-item/${id}`);
+  }
+
   getTopics(): Observable<TopicListItem[]> {
     return this.http.get<TopicListItem[]>(this.apiRoot);
   }

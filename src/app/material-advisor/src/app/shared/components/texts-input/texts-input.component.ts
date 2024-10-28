@@ -11,11 +11,7 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
 @Component({
   selector: 'texts-input',
   standalone: true,
-  imports: [
-    CommonModule,
-    MaterialModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
   templateUrl: './texts-input.component.html',
   styleUrl: './texts-input.component.scss'
 })
@@ -64,10 +60,6 @@ export class TextsInputComponent implements OnInit {
     }
 
     this.textsFormArray.removeAt(index);
-  }
-
-  toForm(control: any): FormGroup {
-    return control as FormGroup;
   }
 
   isLanguageChosen(languageId: LanguageEnum): boolean {
