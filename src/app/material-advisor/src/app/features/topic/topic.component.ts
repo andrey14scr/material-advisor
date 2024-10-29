@@ -23,6 +23,7 @@ import { TranslationService } from '@shared/services/translation.service';
 import { LanguageEnum } from '@shared/types/LanguageEnum';
 import { LanguageText } from '@shared/models/LanguageText';
 import { QuestionsTemplateInputComponent } from "./components/questions-template-input/questions-template-input.component";
+import { FileInputComponent } from "../../shared/components/file-input/file-input.component";
 
 export enum TopicCreationMode {
   Generate,
@@ -41,7 +42,8 @@ export enum TopicCreationMode {
     LoaderComponent,
     MaterialModule,
     KnowledgeChecksComponent,
-    QuestionsTemplateInputComponent
+    QuestionsTemplateInputComponent,
+    FileInputComponent
 ],
   templateUrl: './topic.component.html',
   styleUrls: ['./topic.component.scss']
@@ -171,8 +173,10 @@ export class TopicComponent implements OnInit, OnDestroy {
   }
 
   onFileChange(event: any) {
+    console.log('before', this.form);
     const file = (event.target as HTMLInputElement).files?.[0];
     this.form.patchValue({ file: file });
+    console.log('after', this.form);
   }
 
   onGenerateSubmit() {

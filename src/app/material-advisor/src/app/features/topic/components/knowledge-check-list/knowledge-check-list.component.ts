@@ -38,7 +38,6 @@ export class KnowledgeChecksComponent implements OnInit {
   getKnowledgeChecksByTopicId(topicId: string) {
     this.knowledgeCheckService.getByTopicId(topicId).subscribe({
       next: (data) => {
-        console.log('lol', data);
         this.knowledgeChecks = data;
         this.isLoading = false;
       },

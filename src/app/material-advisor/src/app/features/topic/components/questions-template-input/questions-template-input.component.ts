@@ -31,7 +31,6 @@ export class QuestionsTemplateInputComponent {
   }
 
   get questionsTemplatesFormArray(): FormArray {
-    console.log("lol", this.form);
     return this.form.get(this.formName) as FormArray;
   }
 
