@@ -14,5 +14,19 @@ public class KnowledgeCheckListItem
 
     public byte? MaxAttempts { get; set; }
 
+    public double? Score { get; set; }
+
+    public double PassScore { get; set; }
+
+    public double MaxScore { get; set; }
+
     public byte? UsedAttempts { get; set; }
+
+    public bool IsSubmitted { get; set; }
+
+    public bool IsVerified { get; set; }
+
+    public bool IsAttemptOverrided { get; set; }
+
+    public bool IsManualOnlyVerification { get; set; }
 }

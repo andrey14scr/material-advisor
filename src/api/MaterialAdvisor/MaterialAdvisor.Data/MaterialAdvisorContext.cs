@@ -17,6 +17,7 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<GroupEntity> Groups { get; set; }
     public DbSet<KnowledgeCheckEntity> KnowledgeChecks { get; set; }
     public DbSet<SubmittedAnswerEntity> SubmittedAnswers { get; set; }
+    public DbSet<VerifiedAnswerEntity> VerifiedAnswers { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<AttemptEntity> Attempts { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Models.Topics;
+using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -29,17 +29,20 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
 
     public async Task<TModel> Get<TModel>(Guid id)
     {
-        var entity = await GetFullEntity().Include(t => t.Owner).AsNoTracking().SingleAsync(t => t.Id == id);
+        var user = await _userService.GetUser();
+        var entity = await GetFullEntity()
+            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
+            .AsNoTracking().SingleAsync(t => t.Id == id);
         var model = MapToModel<TModel>(entity);
         return model;
     }
 
-    public async Task<IList<TModel>> Get<TModel>()
+    public async Task<IList<TModel>> Get<TModel>(bool isOwner)
     {
         var user = await _userService.GetUser();
         var entities = await _dbContext.Topics
-            .Where(t => t.OwnerId == user.Id || t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id))))
-            .Include(t => t.Owner)
+            .Where(t => (isOwner && t.OwnerId == user.Id) || 
+                (!isOwner && t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id)))))
             .Include(t => t.Name)
             .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
             .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Groups).ThenInclude(kc => kc.Users)

@@ -1,16 +1,12 @@
-﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
+﻿namespace MaterialAdvisor.Application.Models.Topics;
 
-namespace MaterialAdvisor.Application.Models.Topics;
-
-public class TopicListItem
+public class TopicListItem<TKnowledgeChecks>
 {
     public Guid Id { get; set; }
-
-    public string Owner { get; set; }
 
     public uint Version { get; set; }
 
     public IEnumerable<LanguageText> Name { get; set; } = [];
 
-    public IEnumerable<KnowledgeCheckListItem> KnowledgeChecks { get; set; } = [];
+    public IEnumerable<TKnowledgeChecks> KnowledgeChecks { get; set; } = [];
 }

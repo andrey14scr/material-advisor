@@ -30,6 +30,7 @@ public class ErrorHandlingMiddleware(RequestDelegate _next)
         {
             //RefreshTokenExpiredException => StatusCodes.Status401Unauthorized,
             //KeyNotFoundException => StatusCodes.Status404NotFound,
+            NotFoundException => (StatusCodes.Status404NotFound, []),
             ActionNotSupportedException => (StatusCodes.Status400BadRequest, (exception as ActionNotSupportedException)!.ErrorCodes),
             _ => (StatusCodes.Status500InternalServerError, [])
         };

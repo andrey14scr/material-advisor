@@ -2,8 +2,10 @@
 
 namespace MaterialAdvisor.Application.Models.Topics;
 
-public class Question
+public class KnowledgeCheckQuestion
 {
+    public Guid Id { get; set; }
+
     public byte Number { get; set; }
 
     public double Points { get; set; }
@@ -12,5 +14,5 @@ public class Question
 
     public IEnumerable<LanguageText> Content { get; set; } = null!;
 
-    public IEnumerable<AnswerGroup> AnswerGroups { get; set; } = [];
+    public IEnumerable<KnowledgeCheckAnswerGroup> AnswerGroups { get; set; } = [];
 }

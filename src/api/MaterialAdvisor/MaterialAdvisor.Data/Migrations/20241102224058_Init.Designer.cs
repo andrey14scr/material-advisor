@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20241027152841_Init")]
+    [Migration("20241102224058_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -114,9 +114,6 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<Guid>("KnowledgeCheckId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -167,6 +164,12 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsAttemptOverrided")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsManualOnlyVerification")
+                        .HasColumnType("bit");
+
                     b.Property<byte?>("MaxAttempts")
                         .HasColumnType("tinyint");
 
@@ -174,6 +177,9 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<double>("PassScore")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -320,7 +326,7 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
                 {
-                    b.Property<Guid>("QuestionId")
+                    b.Property<Guid>("AnswerGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AttemptId")
@@ -329,7 +335,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("QuestionId", "AttemptId");
+                    b.HasKey("AnswerGroupId", "AttemptId");
 
                     b.HasIndex("AttemptId");
 
@@ -394,6 +400,31 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.VerifiedAnswerEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AnswerGroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AttemptId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsManual")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnswerGroupId", "AttemptId");
+
+                    b.ToTable("VerifiedAnswers");
                 });
 
             modelBuilder.Entity("GroupEntityKnowledgeCheckEntity", b =>
@@ -548,21 +579,21 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
                 {
+                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
+                        .WithMany()
+                        .HasForeignKey("AnswerGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MaterialAdvisor.Data.Entities.AttemptEntity", "Attempt")
                         .WithMany("SubmittedAnswers")
                         .HasForeignKey("AttemptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("AnswerGroup");
 
                     b.Navigation("Attempt");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>
@@ -574,6 +605,17 @@ namespace MaterialAdvisor.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.VerifiedAnswerEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", "SubmittedAnswer")
+                        .WithMany("VerifiedAnswers")
+                        .HasForeignKey("AnswerGroupId", "AttemptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubmittedAnswer");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AnswerEntity", b =>
@@ -603,6 +645,11 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("AnswerGroups");
 
                     b.Navigation("Content");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", b =>
+                {
+                    b.Navigation("VerifiedAnswers");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.TopicEntity", b =>

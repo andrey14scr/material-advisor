@@ -3,6 +3,7 @@
 using MaterialAdvisor.Application.Exceptions;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
+using MaterialAdvisor.Data.Extensions;
 using MaterialAdvisor.Data.Entities;
 
 using Microsoft.EntityFrameworkCore;
@@ -15,38 +16,84 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
     {
         var user = await _tenantService.GetUser();
         var entity = MapToEntity(model);
-        var existingAttempt = await _dbContext.Attempts
-            .Include(a => a.SubmittedAnswers)
-            .Where(a => a.Id == entity.AttemptId && a.SubmittedAnswers.Any(sa => sa.QuestionId == entity.QuestionId))
-            .AsNoTracking()
-            .SingleOrDefaultAsync();
 
-        if (existingAttempt?.IsSubmitted == true)
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            throw new ActionNotSupportedException(ErrorCode.CannotChangeSubmittedAttempt);
-        }
+            var existingAttempt = await _dbContext.Attempts
+                .Include(a => a.KnowledgeCheck)
+                .AsNoTracking()
+                .SingleAsync(a => a.Id == entity.AttemptId);
 
-        if (existingAttempt?.UserId != user.Id)
-        {
-            throw new ActionNotAllowedException(ErrorCode.CannotAnswerForAnotherUser);
-        }
+            if (existingAttempt?.IsFinished() == true)
+            {
+                throw new ActionNotSupportedException(ErrorCode.CannotChangeSubmittedAttempt);
+            }
 
-        if (!existingAttempt.SubmittedAnswers.Any())
-        {
-            await _dbContext.SubmittedAnswers.AddAsync(entity);
-        }
-        else
-        {
-            _dbContext.SubmittedAnswers.Update(entity);
-        }
-        await _dbContext.SaveChangesAsync();
+            if (existingAttempt?.UserId != user.Id)
+            {
+                throw new ActionNotAllowedException(ErrorCode.CannotAnswerForAnotherUser);
+            }
 
-        return model;
+            var existingSubmittedAnswer = await _dbContext.SubmittedAnswers
+                .AsNoTracking()
+                .SingleOrDefaultAsync(sa => sa.AnswerGroupId == entity.AnswerGroupId && sa.AttemptId == entity.AttemptId);
+
+            if (existingSubmittedAnswer is null)
+            {
+                await _dbContext.SubmittedAnswers.AddAsync(entity);
+            }
+            else
+            {
+                _dbContext.SubmittedAnswers.Update(entity);
+            }
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return model;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+
+    public async Task<IList<TModel>> GetUnverifiedAnswers<TModel>(Guid knowledgeCheckId)
+    {
+        var entities = await _dbContext.SubmittedAnswers
+            .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Answers).ThenInclude(ag => ag.Content)
+            .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Question).ThenInclude(q => q.Topic).ThenInclude(t => t.Name)
+            .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Question).ThenInclude(ag => ag.Content)
+            .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Content)
+            .Include(sa => sa.Attempt).ThenInclude(a => a.User)
+            .Include(sa => sa.Attempt).ThenInclude(a => a.KnowledgeCheck)
+            .Where(sa => sa.AnswerGroup.Question.Type == Data.Enums.QuestionType.OpenText &&
+                sa.Attempt.KnowledgeCheckId == knowledgeCheckId &&
+                sa.Value != null && sa.Value.Length != 0 &&
+                !sa.VerifiedAnswers.Any(va => va.IsManual))
+            .OrderBy(sa => sa.Attempt.KnowledgeCheck.StartDate)
+            .ThenBy(sa => sa.Attempt.StartDate)
+            .ToListAsync();
+
+        var models = _mapper.Map<IList<TModel>>(entities);
+        return models;
+    }
+
+    public async Task<bool> VerifyAnswer<TModel>(TModel verifiedAnswer)
+    {
+        var entity = _mapper.Map<VerifiedAnswerEntity>(verifiedAnswer);
+        entity.IsManual = true;
+
+        await _dbContext.VerifiedAnswers.AddAsync(entity);
+        var created = await _dbContext.SaveChangesAsync();
+
+        return created != 0;
     }
 
     private SubmittedAnswerEntity MapToEntity<TModel>(TModel model)
     {
-        var topicEntity = _mapper.Map<SubmittedAnswerEntity>(model);
-        return topicEntity;
+        var entity = _mapper.Map<SubmittedAnswerEntity>(model);
+        return entity;
     }
 }

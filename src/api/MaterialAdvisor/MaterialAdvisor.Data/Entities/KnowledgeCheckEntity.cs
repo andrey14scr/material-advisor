@@ -31,6 +31,12 @@ public class KnowledgeCheckEntity : IEntity
     [Range(1, 250)]
     public byte? MaxAttempts { get; set; }
 
+    public double PassScore { get; set; }
+
+    public bool IsAttemptOverrided { get; set; }
+
+    public bool IsManualOnlyVerification { get; set; }
+
     public virtual ICollection<GroupEntity> Groups { get; set; } = [];
 
     public virtual ICollection<AttemptEntity> Attempts { get; set; } = [];

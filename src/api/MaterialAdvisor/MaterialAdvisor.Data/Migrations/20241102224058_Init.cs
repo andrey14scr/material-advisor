@@ -137,7 +137,10 @@ namespace MaterialAdvisor.Data.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Time = table.Column<int>(type: "int", nullable: true),
-                    MaxAttempts = table.Column<byte>(type: "tinyint", nullable: true)
+                    MaxAttempts = table.Column<byte>(type: "tinyint", nullable: true),
+                    PassScore = table.Column<double>(type: "float", nullable: false),
+                    IsAttemptOverrided = table.Column<bool>(type: "bit", nullable: false),
+                    IsManualOnlyVerification = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,7 +179,6 @@ namespace MaterialAdvisor.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     KnowledgeCheckId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -244,31 +246,6 @@ namespace MaterialAdvisor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubmittedAnswers",
-                columns: table => new
-                {
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AttemptId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubmittedAnswers", x => new { x.QuestionId, x.AttemptId });
-                    table.ForeignKey(
-                        name: "FK_SubmittedAnswers_Attempts_AttemptId",
-                        column: x => x.AttemptId,
-                        principalTable: "Attempts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SubmittedAnswers_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
@@ -285,6 +262,31 @@ namespace MaterialAdvisor.Data.Migrations
                         name: "FK_Answers_AnswerGroups_AnswerGroupId",
                         column: x => x.AnswerGroupId,
                         principalTable: "AnswerGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubmittedAnswers",
+                columns: table => new
+                {
+                    AnswerGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AttemptId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubmittedAnswers", x => new { x.AnswerGroupId, x.AttemptId });
+                    table.ForeignKey(
+                        name: "FK_SubmittedAnswers_AnswerGroups_AnswerGroupId",
+                        column: x => x.AnswerGroupId,
+                        principalTable: "AnswerGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SubmittedAnswers_Attempts_AttemptId",
+                        column: x => x.AttemptId,
+                        principalTable: "Attempts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -330,6 +332,27 @@ namespace MaterialAdvisor.Data.Migrations
                         column: x => x.TopicId,
                         principalTable: "Topics",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VerifiedAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AnswerGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AttemptId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Score = table.Column<double>(type: "float", nullable: false),
+                    IsManual = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VerifiedAnswers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VerifiedAnswers_SubmittedAnswers_AnswerGroupId_AttemptId",
+                        columns: x => new { x.AnswerGroupId, x.AttemptId },
+                        principalTable: "SubmittedAnswers",
+                        principalColumns: new[] { "AnswerGroupId", "AttemptId" },
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -437,6 +460,11 @@ namespace MaterialAdvisor.Data.Migrations
                 table: "Users",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerifiedAnswers_AnswerGroupId_AttemptId",
+                table: "VerifiedAnswers",
+                columns: new[] { "AnswerGroupId", "AttemptId" });
         }
 
         /// <inheritdoc />
@@ -455,7 +483,7 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "SubmittedAnswers");
+                name: "VerifiedAnswers");
 
             migrationBuilder.DropTable(
                 name: "Groups");
@@ -467,16 +495,19 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Attempts");
+                name: "SubmittedAnswers");
 
             migrationBuilder.DropTable(
                 name: "AnswerGroups");
 
             migrationBuilder.DropTable(
-                name: "KnowledgeChecks");
+                name: "Attempts");
 
             migrationBuilder.DropTable(
                 name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "KnowledgeChecks");
 
             migrationBuilder.DropTable(
                 name: "Topics");

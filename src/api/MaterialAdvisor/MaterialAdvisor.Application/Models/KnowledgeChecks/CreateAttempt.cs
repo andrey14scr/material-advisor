@@ -1,10 +1,6 @@
 ﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
-public class Attempt
+public class CreateAttempt
 {
-    public Guid Id { get; set; }
-
-    public DateTime StartDate { get; set; }
-
     public Guid KnowledgeCheckId { get; set; }
 }

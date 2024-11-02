@@ -1,3 +1,4 @@
+using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.Models.Topics;
 using MaterialAdvisor.Application.Services.Abstraction;
 using Microsoft.AspNetCore.Authorization;
@@ -8,10 +9,17 @@ namespace MaterialAdvisor.API.Controllers;
 [Authorize]
 public class TopicController(ITopicService _topicService) : BaseApiController
 {
-    [HttpGet()]
-    public async Task<ActionResult<IList<TopicListItem>>> Get()
+    [HttpGet("owner")]
+    public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckTopicListItem>>>> GetAsOwner()
     {
-        var result = await _topicService.Get<TopicListItem>();
+        var result = await _topicService.Get<TopicListItem<KnowledgeCheckTopicListItem>>(true);
+        return Ok(result);
+    }
+
+    [HttpGet("member")]
+    public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckListItem>>>> GetAsMember()
+    {
+        var result = await _topicService.Get<TopicListItem<KnowledgeCheckListItem>>(false);
         return Ok(result);
     }
 
@@ -25,7 +33,14 @@ public class TopicController(ITopicService _topicService) : BaseApiController
     [HttpGet("list-item/{id}")]
     public async Task<ActionResult<Topic>> GetListItemById(Guid id)
     {
-        var result = await _topicService.Get<TopicListItem>(id);
+        var result = await _topicService.Get<TopicListItem<KnowledgeCheckListItem>>(id);
+        return Ok(result);
+    }
+
+    [HttpGet("{id}/knowledge-check-topic")]
+    public async Task<ActionResult<Attempt>> GetKnowledgeCheckTopic(Guid id)
+    {
+        var result = await _topicService.Get<KnowledgeCheckTopic>(id);
         return Ok(result);
     }
 

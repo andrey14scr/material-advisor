@@ -20,5 +20,11 @@ public class KnowledgeCheck
 
     public byte? UsedAttempts { get; set; }
 
+    public double PassScore { get; set; }
+
+    public bool IsAttemptOverrided { get; set; }
+
+    public bool IsManualOnlyVerification { get; set; }
+
     public IEnumerable<Guid> GroupIds { get; set; } = [];
 }
