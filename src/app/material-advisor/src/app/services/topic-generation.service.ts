@@ -4,7 +4,6 @@ import { environment } from "@environments/environment";
 import { Topic } from "@models/topic/Topic";
 import { Observable } from "rxjs";
 
-
 @Injectable({
   providedIn: 'root',
 })

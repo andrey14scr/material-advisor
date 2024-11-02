@@ -5,13 +5,14 @@ import { RouterModule } from '@angular/router';
 import { TranslationService } from './shared/services/translation.service';
 import { LanguageDropdownComponent } from './shared/components/language-dropdown/language-dropdown.component';
 import { AuthService } from '@shared/services/auth.service';
+import { MaterialModule } from '@shared/modules/matetial/material.module';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    imports: [RouterOutlet, CommonModule, RouterModule, LanguageDropdownComponent]
+    imports: [RouterOutlet, CommonModule, RouterModule, LanguageDropdownComponent, MaterialModule]
 })
 export class AppComponent implements OnInit {
   constructor(public translationService: TranslationService, private authService: AuthService) {}
@@ -23,5 +24,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authService.decodeToken();
+  }
+
+  onLogout() {
+    this.authService.logout();
   }
 }

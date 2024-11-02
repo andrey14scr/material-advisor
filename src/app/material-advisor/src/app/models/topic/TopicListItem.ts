@@ -1,11 +1,10 @@
-import { KnowledgeCheckListItem } from "@models/knowledge-check/KnowledgeCheckListItem";
 import { LanguageText } from "@shared/models/LanguageText";
 import { GUID } from "@shared/types/GUID";
 
-export interface TopicListItem {
+export interface TopicListItem<TKnowledgeCheck> {
   id: GUID;
   version: number;
   owner: string;
   name: LanguageText[];
-  knowledgeChecks: KnowledgeCheckListItem[];
+  knowledgeChecks: TKnowledgeCheck[];
 }

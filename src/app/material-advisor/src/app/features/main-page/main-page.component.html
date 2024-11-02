@@ -1,7 +1,9 @@
 <h1>{{ translate('mainPage.title') }}</h1> 
 
-<mat-list>
-  <ng-container *ngFor="let topic of topics">
+<mat-label *ngIf="ownedTopics && ownedTopics.length">Owned topics:</mat-label>
+
+<mat-list *ngIf="ownedTopics && ownedTopics.length">
+  <ng-container *ngFor="let topic of ownedTopics">
     <mat-list-item>
       <div class="d-flex align-items-center">
         <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
@@ -9,7 +11,7 @@
         <div *ngIf="isLoadingTopic(topic)" class="d-flex">
           <mat-progress-spinner [diameter]="18" mode="indeterminate"/>
         </div>
-        <span *ngIf="isOwner(topic) && !isLoadingTopic(topic)" class="ms-1">
+        <span *ngIf="!isLoadingTopic(topic)" class="ms-1">
           <button mat-icon-button (click)="navigateToTopicDetails(topic.id)">
             <mat-icon>edit</mat-icon>
           </button>
@@ -22,25 +24,52 @@
     <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
       <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
         <mat-list-item>
-          <span *ngIf="isOwner(topic)">
+          <span>
             <span>{{ knowledgeCheck.name }}</span>
             <span class="ms-1">
               <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
                 <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="openKnowledgeCheckVerifyPage(knowledgeCheck.id)">
+                <mat-icon>library_books</mat-icon>
               </button>
               <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
                 <mat-icon>delete</mat-icon>
               </button>
             </span>
           </span>
-          <span *ngIf="!isOwner(topic)">
+        </mat-list-item>
+      </ng-container>
+    </mat-list>
+  </ng-container>
+</mat-list>
+
+<hr *ngIf="ownedTopics && ownedTopics.length"/>
+
+<mat-label *ngIf="topics && topics.length">Topics to pass:</mat-label>
+<mat-label *ngIf="!topics || !topics.length">No topics to pass</mat-label>
+
+<mat-list *ngIf="topics && topics.length">
+  <ng-container *ngFor="let topic of topics">
+    <mat-list-item>
+      <div class="d-flex align-items-center">
+        <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
+      </div>
+    </mat-list-item>
+    <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
+      <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
+        <mat-list-item>
+          <div class="d-flex flex-row">
+            <div *ngIf="knowledgeCheck.isSubmitted" class="d-flex align-items-center justify-content-center text-success me-1">
+              <mat-icon>task_alt</mat-icon>
+            </div>
             <span *ngIf="!isActual(knowledgeCheck)" class="gray-text">
-              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
+              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck.time)}})
             </span>
             <span *ngIf="isActual(knowledgeCheck)" class="link-text" (click)="startKnowledgeCheck(topic, knowledgeCheck)">
-              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck)}})
+              {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck.time)}})
             </span>
-          </span>
+          </div>
         </mat-list-item>
       </ng-container>
     </mat-list>

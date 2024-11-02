@@ -47,5 +47,10 @@
     "mainPage": {
         "title": "Lista tematów",
         "usedAttempts": "Używane próby"
+    },
+    "knowledgeText":{
+        "answerIsSaved": "Odpowiedź została zapisana",
+        "answerIsSaving": "Odpowiedź w trakcie zapisana...",
+        "notAllAnswered": "Nie na wszystkie pytania jest odpowiedź"
     }
 }

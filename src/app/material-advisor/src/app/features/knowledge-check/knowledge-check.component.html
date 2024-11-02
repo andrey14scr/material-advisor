@@ -1,1 +1,41 @@
-<p>knowledge-check works!</p>
+<loader [isLoading]="isLoading"/>
+
+<div class="knowledge-check-container">
+  <mat-toolbar *ngIf="knowledgeCheck && topic" color="primary">
+    <span>{{ translateText(topic.name) }}. {{ knowledgeCheck.name }}</span>
+    <span class="spacer"></span>
+    <div *ngIf="remainingTime" [ngClass]="{'text-danger': remainingTime < 30, 'text-warning': remainingTime < 60 && remainingTime >= 30}" class="timer">
+      Time left: {{ getTimeLabel(remainingTime) }}
+    </div>
+  </mat-toolbar>
+
+  <div *ngIf="topic && attempt" class="question-list">
+    <ng-container *ngFor="let question of topic.questions">
+      <ng-container [ngSwitch]="question.type">
+        <question-single-select 
+          *ngSwitchCase="questionTypeRef.SingleSelect" 
+          [question]="question" 
+          [attemptId]="attempt.id"
+          [attemptAnswers]="getAttemptAnswers(question)"
+          (answered)="onAnswer($event)"/>
+        <question-multiple-select 
+          *ngSwitchCase="questionTypeRef.MultiSelect" 
+          [question]="question" 
+          [attemptId]="attempt.id" 
+          [attemptAnswers]="getAttemptAnswers(question)"
+          (answered)="onAnswer($event)"/>
+        <question-open 
+          *ngSwitchCase="questionTypeRef.OpenText" 
+          [question]="question" 
+          [attemptId]="attempt.id" 
+          [attemptAnswers]="getAttemptAnswers(question)"
+          (answered)="onAnswer($event)"/>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div *ngIf="attempt" class="d-flex justify-content-center align-items-center flex-column">
+    <span *ngIf="!areAllAnswered()" class="text-danger">{{ translate('knowledgeText.notAllAnswered') }}</span>
+    <button mat-raised-button color="primary" (click)="submitAll()">Submit</button>
+  </div>
+</div>

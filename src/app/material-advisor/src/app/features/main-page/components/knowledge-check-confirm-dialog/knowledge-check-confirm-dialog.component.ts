@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
+import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 import { TopicListItem } from '@models/topic/TopicListItem';
 import { LanguageText } from '@shared/models/LanguageText';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
@@ -17,9 +18,9 @@ export class KnowledgeCheckConfirmDialogComponent {
   constructor(
     private translationService: TranslationService,
     public dialogRef: MatDialogRef<KnowledgeCheckConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { topic: TopicListItem, knowledgeCheck: KnowledgeCheckListItem }
+    @Inject(MAT_DIALOG_DATA) public data: { topic: TopicListItem<KnowledgeCheckListItem>, knowledgeCheck: KnowledgeCheckListItem }
   ) {
-    console.log(data);
+    
   }
 
   translateText(texts: LanguageText[]): string {

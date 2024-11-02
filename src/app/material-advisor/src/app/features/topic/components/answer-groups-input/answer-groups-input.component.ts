@@ -27,12 +27,11 @@ export class AnswerGroupsInputComponent implements OnInit {
   @Input() answerGroupsFormArray!: FormArray;
   @Input() formData!: AnswerGroup[];
   
-
   constructor(private fb: FormBuilder, private translationService: TranslationService) {}
   
   ngOnInit() {
     if (this.formData && this.formData.length) {
-      this.formData.forEach(answerGroup => this.addForm(answerGroup.number));
+      this.formData.forEach(answerGroup => this.addForm(answerGroup.number, answerGroup.isTechnical));
     }
   }
 

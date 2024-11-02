@@ -5,7 +5,12 @@ export interface KnowledgeCheckListItem {
   name: string;
   time: number;
   startDate: Date;
-  endDate: Date | null;
-  usedAttempts: number | null;
-  maxAttempts: number | null;
+  endDate?: Date;
+  usedAttempts?: number;
+  maxAttempts?: number;
+  isSubmitted: boolean;
+  isVerified: boolean;
+  passScore: number;
+  maxScore: number;
+  score?: number;
 }

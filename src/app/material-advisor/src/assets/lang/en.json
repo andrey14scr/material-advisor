@@ -47,5 +47,10 @@
     "mainPage": {
         "title": "Topics list",
         "usedAttempts": "Used attempts"
+    },
+    "knowledgeText":{
+        "answerIsSaved": "Answer is saved",
+        "answerIsSaving": "Answer is saving...",
+        "notAllAnswered": "Not all questions are answered"
     }
 }

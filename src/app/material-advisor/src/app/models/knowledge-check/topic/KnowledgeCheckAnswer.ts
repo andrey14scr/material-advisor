@@ -1,8 +1,8 @@
 import { LanguageText } from "@shared/models/LanguageText";
+import { GUID } from "@shared/types/GUID";
 
-export interface Answer {
+export interface KnowledgeCheckAnswer {
+  id: GUID;
   number: number;
-  isCorrect: boolean;
-  points: number;
   content: LanguageText[];
 }

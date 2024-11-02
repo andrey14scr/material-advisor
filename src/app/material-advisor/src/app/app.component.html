@@ -21,7 +21,10 @@
         <app-language-dropdown></app-language-dropdown>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/account" routerLinkActive="active">{{ translate('navigation.account') }}</a>
+        <a mat-button [matMenuTriggerFor]="menu" class="nav-link" routerLink="/account" routerLinkActive="active">{{ translate('navigation.account') }}</a>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onLogout()">Logout</button>
+        </mat-menu>
       </li>
     </ul>
   </div>

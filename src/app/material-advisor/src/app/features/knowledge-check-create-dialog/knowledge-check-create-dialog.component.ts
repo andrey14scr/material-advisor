@@ -48,13 +48,16 @@ export class KnowledgeCheckCreateDialogComponent {
       id: [null],
       name: ['', Validators.required],
       description: ['', Validators.required],
-      startDate: ['', Validators.required],
-      startTime: ['', Validators.required],
+      startDate: [new Date(), Validators.required],
+      startTime: ['00:00', Validators.required],
       endDate: [null],
       endTime: [null],
       maxAttempts: [''],
       time: [''],
       groupIds: [[]],
+      passScore: [''],
+      isAttemptOverrided: [''],
+      isManualOnlyVerification: [''],
     });
   }
 
@@ -87,17 +90,38 @@ export class KnowledgeCheckCreateDialogComponent {
   onSave() {
     if (this.form.valid) {
       const [startTimeHours, startTimeMinutes] = this.form.value.startTime.split(':').map(Number);
-      this.form.value.startDate.setHours(startTimeHours, startTimeMinutes);
+      
+      const startDate = new Date(this.form.value.startDate);
+      startDate.setHours(startTimeHours, startTimeMinutes);
+      
+      let endDate: Date | null = null;
       
       if (this.form.value.endDate && this.form.value.endTime) {
         const [endTimeHours, endTimeMinutes] = this.form.value.endTime.split(':').map(Number);
-        this.form.value.endDate.setHours(endTimeHours, endTimeMinutes);
+        endDate = new Date(this.form.value.endDate);
+        endDate.setHours(endTimeHours, endTimeMinutes);
       }
 
-      delete this.form.value.startTime;
-      delete this.form.value.endTime;
-      
-      this.dialogRef.close(this.form.value);
+      const form = {
+        name: this.form.value.name,
+        description: this.form.value.description,
+        startDate: startDate,
+        endDate: endDate,
+        maxAttempts: this.form.value.maxAttempts,
+        time: this.form.value.time,
+        groupIds: this.form.value.groupIds,
+        passScore: this.form.value.passScore,
+        isAttemptOverrided: this.form.value.isAttemptOverrided,
+        isManualOnlyVerification: this.form.value.isManualOnlyVerification,
+      };
+
+      if (this.data.id) {
+        const formWithId = {...form, id: this.data.id};
+        this.dialogRef.close(formWithId);
+      }
+      else {
+        this.dialogRef.close(form);
+      }
     }
   }
 

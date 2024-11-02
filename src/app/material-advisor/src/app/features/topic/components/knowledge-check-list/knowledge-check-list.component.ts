@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
 import { GUID } from '@shared/types/GUID';
-import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
 import { KnowledgeCheckService } from '@services/knowledge-check.service';
-import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
+import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
+import { sortByStartDate } from '@shared/services/sort-utils.service';
+import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
+import { removeEmptyField } from '@shared/services/object-utils.service';
 
 @Component({
   selector: 'knowledge-check-list',
@@ -18,11 +20,10 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 export class KnowledgeChecksComponent implements OnInit {
   @Input() topicId!: GUID;
   isLoading: boolean = true;
-  knowledgeChecks: KnowledgeCheckListItem[] = [];
+  knowledgeChecks: KnowledgeCheckTopicListItem[] = [];
 
   constructor(
     private knowledgeCheckService: KnowledgeCheckService,
-    private knowledgeCheckDialogService: KnowledgeCheckDialogService,
     private dialog: MatDialog,
   ) { }
 
@@ -48,7 +49,26 @@ export class KnowledgeChecksComponent implements OnInit {
   }
 
   openKnowledgeCheckDialog(id?: GUID) {
-    this.knowledgeCheckDialogService.openKnowledgeCheckDialog(this.topicId, this.knowledgeChecks, id);
+    const dialogRef = this.dialog.open(KnowledgeCheckCreateDialogComponent, {
+      width: '600px',
+      data: { id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        result.topicId = this.topicId;
+        this.knowledgeCheckService.postKnowledgeCheck(result).subscribe((knowledgeCheck) => {
+          if (id) {
+            const index = this.knowledgeChecks.findIndex(item => item.id === id);
+            this.knowledgeChecks[index] = knowledgeCheck;
+          }
+          else {
+            this.knowledgeChecks.push(knowledgeCheck);
+          }
+          this.knowledgeChecks = sortByStartDate(this.knowledgeChecks);
+        });
+      }
+    });
   }
 
   deleteKnowledgeCheck(id: GUID) {

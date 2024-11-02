@@ -1,6 +1,8 @@
-<mat-label *ngIf="!isTechnicalForm()" class="mb-1 mt-2">
-  Answer groups:
-</mat-label>
+<div class="mb-1 mt-2">
+  <mat-label *ngIf="!isTechnicalForm()">
+    Answer groups:
+  </mat-label>
+</div>
 
 <div [formGroup]="form">
   <div formArrayName="answerGroups">

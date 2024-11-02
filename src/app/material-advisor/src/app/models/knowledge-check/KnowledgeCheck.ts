@@ -6,9 +6,10 @@ export interface KnowledgeCheck {
   name: string;
   description: string;
   startDate: Date;
-  endDate: Date | null;
+  endDate?: Date;
   time: number;
-  maxAttempts: number | null;
+  maxAttempts?: number;
   usedAttempts: number;
   groupIds: GUID[];
+  passScore: number;
 }

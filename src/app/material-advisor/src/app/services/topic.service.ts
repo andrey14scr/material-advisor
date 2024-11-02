@@ -5,6 +5,9 @@ import { environment } from '@environments/environment';
 import { GUID } from '@shared/types/GUID';
 import { Topic } from '@models/topic/Topic';
 import { TopicListItem } from '@models/topic/TopicListItem';
+import { KnowledgeCheckTopic } from '@models/knowledge-check/topic/KnowledgeCheckTopic';
+import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
+import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 
 @Injectable({
   providedIn: 'root',
@@ -18,12 +21,20 @@ export class TopicService {
     return this.http.get<Topic>(`${this.apiRoot}/${id}`);
   }
 
-  getTopicListItem(id: GUID): Observable<TopicListItem> {
-    return this.http.get<TopicListItem>(`${this.apiRoot}/list-item/${id}`);
+  getTopicListItem(id: GUID): Observable<TopicListItem<KnowledgeCheckListItem>> {
+    return this.http.get<TopicListItem<KnowledgeCheckListItem>>(`${this.apiRoot}/list-item/${id}`);
   }
 
-  getTopics(): Observable<TopicListItem[]> {
-    return this.http.get<TopicListItem[]>(this.apiRoot);
+  getKnowledgeCheckTopic(id: GUID): Observable<KnowledgeCheckTopic> {
+    return this.http.get<KnowledgeCheckTopic>(`${this.apiRoot}/${id}/knowledge-check-topic`);
+  }
+
+  getTopicsAsOwner(): Observable<TopicListItem<KnowledgeCheckTopicListItem>[]> {
+    return this.http.get<TopicListItem<KnowledgeCheckTopicListItem>[]>(`${this.apiRoot}/owner`);
+  }
+
+  getTopicsAsMember(): Observable<TopicListItem<KnowledgeCheckListItem>[]> {
+    return this.http.get<TopicListItem<KnowledgeCheckListItem>[]>(`${this.apiRoot}/member`);
   }
 
   postTopic(topic: any): Observable<Topic> {

@@ -55,12 +55,25 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Pass Score</mat-label>
+        <input matInput type="number" formControlName="passScore" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
         <mat-label>Time</mat-label>
         <input matInput type="number" formControlName="time" />
       </mat-form-field>
 
+      <mat-checkbox formControlName="isAttemptOverrided">
+        New attempt overrides the last one
+      </mat-checkbox>
+
+      <mat-checkbox formControlName="isManualOnlyVerification">
+        Apply manual only verification
+      </mat-checkbox>
+
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Dropdown</mat-label>
+        <mat-label>Groups</mat-label>
         <mat-select formControlName="groupIds" multiple>
           <mat-option *ngIf="isLoading" disabled>Loading...</mat-option>
           <mat-option *ngFor="let group of groups" [value]="group.id">

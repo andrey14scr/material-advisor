@@ -1,24 +1,21 @@
-<mat-card class="mt-2">
-  <h3>Knowledge checks:</h3>
-  <div *ngIf="topicId && !isLoading">
-    <span *ngIf="!knowledgeChecks.length">No knowledge checks yet</span>
-    <mat-list>
-      <mat-list-item *ngFor="let knowledgeCheck of knowledgeChecks">
-        <span>
-          <span>{{ knowledgeCheck.name }}</span>
-          <span class="ms-1">
-            <button mat-icon-button (click)="openKnowledgeCheckDialog(knowledgeCheck.id)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button (click)="deleteKnowledgeCheck(knowledgeCheck.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </span>
+<div *ngIf="topicId && !isLoading">
+  <span *ngIf="!knowledgeChecks.length">No knowledge checks yet</span>
+  <mat-list>
+    <mat-list-item *ngFor="let knowledgeCheck of knowledgeChecks">
+      <span>
+        <span>{{ knowledgeCheck.name }}</span>
+        <span class="ms-1">
+          <button mat-icon-button (click)="openKnowledgeCheckDialog(knowledgeCheck.id)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteKnowledgeCheck(knowledgeCheck.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </span>
-      </mat-list-item>
-    </mat-list>
-    <div class="d-flex justify-content-center mt-3">
-      <button mat-raised-button color="primary" (click)="openKnowledgeCheckDialog()">Add knowledge Check</button>
-    </div>
+      </span>
+    </mat-list-item>
+  </mat-list>
+  <div class="d-flex justify-content-center mt-3">
+    <button mat-raised-button color="primary" (click)="openKnowledgeCheckDialog()">Add knowledge Check</button>
   </div>
-</mat-card>
+</div>

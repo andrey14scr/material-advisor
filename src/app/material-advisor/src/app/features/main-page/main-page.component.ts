@@ -13,12 +13,15 @@ import { TopicListItem } from '@models/topic/TopicListItem';
 import { TopicService } from '@services/topic.service';
 import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
-import { KnowledgeCheckDialogService } from '@services/knowledge-check-dialog.service';
 import { KnowledgeCheckService } from '@services/knowledge-check.service';
 import { KnowledgeCheckConfirmDialogComponent } from './components/knowledge-check-confirm-dialog/knowledge-check-confirm-dialog.component';
 import * as signalR from '@aspnet/signalr';
 import { environment } from '@environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
+import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
+import { removeEmptyField } from '@shared/services/object-utils.service';
+import { toFullTimeFormat } from '@shared/services/format-utils.service';
 
 @Component({
   selector: 'app-main-page',
@@ -29,7 +32,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
-  topics: TopicListItem[] = [];
+  topics: TopicListItem<KnowledgeCheckListItem>[] = [];
+  ownedTopics: TopicListItem<KnowledgeCheckTopicListItem>[] = [];
   currentTag: string | undefined;
   hubConnection!: signalR.HubConnection;
   
@@ -38,7 +42,6 @@ export class MainPageComponent {
     private authService: AuthService,
     private dialog: MatDialog,
     private router: Router,
-    private knowledgeCheckDialogService: KnowledgeCheckDialogService,
     private knowledgeCheckService: KnowledgeCheckService,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
@@ -50,7 +53,7 @@ export class MainPageComponent {
   }
 
   getTopicsList() {
-    this.topicService.getTopics()
+    this.topicService.getTopicsAsOwner()
       .pipe(
         map(data => 
           data.map(item => ({
@@ -60,7 +63,24 @@ export class MainPageComponent {
         )
       )
       .subscribe(
-        data => this.setTopics(data)
+        topics => {
+          this.ownedTopics = topics;
+        }
+      );
+
+    this.topicService.getTopicsAsMember()
+      .pipe(
+        map(data => 
+          data.map(item => ({
+            ...item,
+            knowledgeChecks: sortByStartDate(item.knowledgeChecks)
+          }))
+        )
+      )
+      .subscribe(
+        topics => {
+          this.topics = topics;
+        }
       );
   }
 
@@ -80,7 +100,7 @@ export class MainPageComponent {
 
     this.hubConnection.start()
       .then(() => console.log('SignalR connection started'))
-      .catch(err => console.log('Error establishing SignalR connection:', err));
+      .catch(err => console.error('Error establishing SignalR connection:', err));
   }
 
   updateTopic(id: GUID) {
@@ -95,20 +115,12 @@ export class MainPageComponent {
     );
   }
 
-  setTopics(data: TopicListItem[]) {
-    this.topics = data;
-  }
-
   translate(key: string){
     return this.translationService.translate(key);
   }
 
   translateText(texts: LanguageText[]): string {
     return this.translationService.translateText(texts);
-  }
-
-  isOwner(model: TopicListItem): boolean {
-    return this.authService.getCurrentUser()?.name === model.owner;
   }
 
   navigateToTopicDetails(topicId: GUID) {
@@ -151,11 +163,25 @@ export class MainPageComponent {
     });
   }
 
-  openKnowledgeCheckDialog(topic: TopicListItem, id?: GUID) {
-    this.knowledgeCheckDialogService.openKnowledgeCheckDialog(topic.id, topic.knowledgeChecks, id);
+  openKnowledgeCheckDialog(topic: TopicListItem<KnowledgeCheckTopicListItem>, id: GUID) {
+    const dialogRef = this.dialog.open(KnowledgeCheckCreateDialogComponent, {
+      width: '600px',
+      data: { id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        result.topicId = topic.id;
+        this.knowledgeCheckService.postKnowledgeCheck(result).subscribe((knowledgeCheck) => {
+          if (knowledgeCheck) {
+            this.getTopicsList();
+          }
+        });
+      }
+    });
   }
 
-  deleteKnowledgeCheck(topic: TopicListItem, id: GUID) {
+  deleteKnowledgeCheck(topic: TopicListItem<KnowledgeCheckTopicListItem>, id: GUID) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '300px',
       data: { message: 'Are you sure you want to proceed?' }
@@ -253,25 +279,16 @@ export class MainPageComponent {
     return 'Not passed yet';
   }
 
-  getTimeLabel(knowledgeCheck: KnowledgeCheckListItem): string {
-    if (knowledgeCheck.time) {
-      let timeLabel = '';
-      if (knowledgeCheck.time < 60) {
-        timeLabel = `${knowledgeCheck.time}s`;
-      }
-      else if (knowledgeCheck.time < 3600) {
-        timeLabel = `${knowledgeCheck.time / 60}m:${knowledgeCheck.time % 60}s`;
-      }
-      else {
-        timeLabel = `${knowledgeCheck.time / 3600}h:${(knowledgeCheck.time % 3600) / 60}m:${knowledgeCheck.time % 60}s`;
-      }
-      return `allotted time: ${timeLabel}`;
+  getTimeLabel(time: number): string {
+    const formattedTime = toFullTimeFormat(time);
+    if (formattedTime) {
+      return `allotted time: ${formattedTime}`;
     }
 
     return 'without time limits';
   }
 
-  startKnowledgeCheck(topic: TopicListItem, knowledgeCheck: KnowledgeCheckListItem) {
+  startKnowledgeCheck(topic: TopicListItem<KnowledgeCheckListItem>, knowledgeCheck: KnowledgeCheckListItem) {
     const dialogRef = this.dialog.open(KnowledgeCheckConfirmDialogComponent, {
       width: '500px',
       data: { topic, knowledgeCheck }
@@ -284,7 +301,11 @@ export class MainPageComponent {
     });
   }
 
-  isLoadingTopic(topic: TopicListItem): boolean {
+  isLoadingTopic(topic: TopicListItem<KnowledgeCheckTopicListItem>): boolean {
     return !topic.version;
+  }
+
+  openKnowledgeCheckVerifyPage(knowledgeCheckId: GUID) {
+    this.router.navigate([`answer-verification/${knowledgeCheckId}`]);
   }
 }

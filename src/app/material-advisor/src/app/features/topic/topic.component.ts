@@ -169,14 +169,12 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     this.hubConnection.start()
       .then(() => console.log('SignalR connection started'))
-      .catch(err => console.log('Error establishing SignalR connection:', err));
+      .catch(err => console.error('Error establishing SignalR connection:', err));
   }
 
   onFileChange(event: any) {
-    console.log('before', this.form);
     const file = (event.target as HTMLInputElement).files?.[0];
     this.form.patchValue({ file: file });
-    console.log('after', this.form);
   }
 
   onGenerateSubmit() {

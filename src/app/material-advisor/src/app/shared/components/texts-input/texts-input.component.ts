@@ -42,7 +42,7 @@ export class TextsInputComponent implements OnInit {
   }
 
   addEmptyForm() {
-    const defaultLanguage = this.translationService.getLanguageId(this.translationService.getCurrentLanguageCode());
+    const defaultLanguage = this.languages.find(l => !this.isLanguageChosen(l.languageId))?.languageId!;
     this.addForm(defaultLanguage, '');
   }
 
