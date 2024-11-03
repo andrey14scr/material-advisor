@@ -1,1 +1,61 @@
-<p>answers-verification works!</p>
+<div *ngFor="let item of items; let i = index" class="mt-3">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ translateText(item.unverifiedAnswer.topic.name) }}. {{ item.unverifiedAnswer.knowledgeCheck.name }}</mat-card-title>
+      <mat-card-subtitle>Completed by {{ item.unverifiedAnswer.user.name }} ({{ item.unverifiedAnswer.user.email }})</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-2">
+      <div class="container">
+        <div class="row">
+          <div class="col d-flex align-items-center justify-content-center">
+            <mat-label >
+              User's answer:
+            </mat-label>
+          </div>
+          <div class="col d-flex align-items-center justify-content-center">
+            <mat-label>
+              Example of right answer:
+            </mat-label>
+          </div>
+        </div>
+      </div>
+      <div class="container mt-2">
+        <div class="row">
+          <div class="col d-flex align-items-center">
+            <mat-card class="w-100 rounded-3 p-2 user-card-color">
+              <span *ngIf="item.unverifiedAnswer.topic.questions[0].type === questionTypeRef.OpenText">
+                {{item.unverifiedAnswer.values[0]}}
+              </span>
+            </mat-card>
+          </div>
+          <div class="col d-flex align-items-center">
+            <mat-card class="w-100 rounded-3 p-2 answer-card-color">
+              <span *ngIf="item.unverifiedAnswer.topic.questions[0].type === questionTypeRef.OpenText">
+                {{translateText(item.unverifiedAnswer.topic.questions[0].answerGroups[0].answers[0].content)}}
+              </span>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <div class="d-flex justify-content-center mt-2">
+      <mat-card-actions>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <mat-label>Score</mat-label>
+          <input matInput type="number" [(ngModel)]="item.score" [max]="item.unverifiedAnswer.topic.questions[0].points" />
+        </mat-form-field>
+        <mat-label class="ms-2">(of max {{item.unverifiedAnswer.topic.questions[0].points}})</mat-label>
+        <button mat-raised-button color="primary" (click)="onSubmit(item)" class="ms-2">Submit</button>
+      </mat-card-actions>
+    </div>
+  </mat-card>
+</div>
+
+<div *ngIf="items.length === 0" class="d-flex justify-content-center">
+  <div class="mt-4">
+    <mat-label>No answers to verify</mat-label>
+    <div><a href="/main-page" class="mt-2">Return to main page</a></div>
+  </div>
+</div>

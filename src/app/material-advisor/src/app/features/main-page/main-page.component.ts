@@ -20,7 +20,6 @@ import { environment } from '@environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
-import { removeEmptyField } from '@shared/services/object-utils.service';
 import { toFullTimeFormat } from '@shared/services/format-utils.service';
 
 @Component({
@@ -34,7 +33,7 @@ import { toFullTimeFormat } from '@shared/services/format-utils.service';
 export class MainPageComponent {
   topics: TopicListItem<KnowledgeCheckListItem>[] = [];
   ownedTopics: TopicListItem<KnowledgeCheckTopicListItem>[] = [];
-  currentTag: string | undefined;
+  currentTag?: string;
   hubConnection!: signalR.HubConnection;
   
   constructor(private translationService: TranslationService, 

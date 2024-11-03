@@ -1,7 +1,6 @@
 import { GUID } from "@shared/types/GUID";
+import { AttemptAnswer } from "./AttemptAnswer";
 
-export interface SubmittedAnswer {
+export interface SubmittedAnswer extends AttemptAnswer {
   attemptId: GUID;
-  answerGroupId: GUID;
-  value?: string;
 }

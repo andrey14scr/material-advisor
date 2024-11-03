@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -44,8 +43,24 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
             .Where(t => (isOwner && t.OwnerId == user.Id) || 
                 (!isOwner && t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id)))))
             .Include(t => t.Name)
-            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
-            .Include(t => t.KnowledgeChecks).ThenInclude(kc => kc.Groups).ThenInclude(kc => kc.Users)
+            .Include(t => t.Questions)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(a => a.VerifiedAnswers)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(sa => sa.AnswerGroup)
+                .ThenInclude(sa => sa.Question)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(sa => sa.AnswerGroup)
+                .ThenInclude(sa => sa.Answers)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Groups)
+                .ThenInclude(kc => kc.Users)
             .AsNoTracking()
             .ToListAsync();
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
@@ -134,10 +149,10 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     private IQueryable<TopicEntity> GetFullEntity()
     {
         return _dbContext.Topics
-                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(ag => ag.Answers).ThenInclude(a => a.Content)
-                    .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(a => a.Content)
-                    .Include(t => t.Questions).ThenInclude(a => a.Content)
-                    .Include(a => a.Name);
+            .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(ag => ag.Answers).ThenInclude(a => a.Content)
+            .Include(t => t.Questions).ThenInclude(q => q.AnswerGroups).ThenInclude(a => a.Content)
+            .Include(t => t.Questions).ThenInclude(a => a.Content)
+            .Include(a => a.Name);
     }
 
     private void RemoveUnusedLanguageTexts()

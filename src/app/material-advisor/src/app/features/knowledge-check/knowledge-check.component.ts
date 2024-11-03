@@ -33,7 +33,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './knowledge-check.component.html',
   styleUrl: './knowledge-check.component.scss'
 })
-export class KnowledgeCheckComponent implements OnInit {
+export class KnowledgeCheckComponent implements OnInit, OnDestroy {
   questionTypeRef = QuestionType;
   
   isLoading = true;
@@ -41,6 +41,8 @@ export class KnowledgeCheckComponent implements OnInit {
   knowledgeCheck!: KnowledgeCheck;
   topic!: KnowledgeCheckTopic;
   remainingTime!: number;
+
+  MIN_TIME_TO_FINISH = 60;
 
   constructor(private route: ActivatedRoute, 
     private dialog: MatDialog,
@@ -52,6 +54,12 @@ export class KnowledgeCheckComponent implements OnInit {
     private snackBar: MatSnackBar,
     private authService: AuthService,
   ) { }
+
+  ngOnDestroy(): void {
+    if (this.remainingTime < this.MIN_TIME_TO_FINISH) {
+      this.submitAttempt();
+    }
+  }
 
   ngOnInit() {
     this.initializeKnowledgeCheck();
@@ -117,8 +125,7 @@ export class KnowledgeCheckComponent implements OnInit {
         this.remainingTime--;
       }
       else {
-        this.snackBar.open('', 'Close', { duration: 2000 });
-        this.router.navigate([`/main-page`]);
+        this.submitAttempt();
       }
     });
   }
@@ -131,20 +138,30 @@ export class KnowledgeCheckComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.attemptService.submitAttempt(this.attempt.id).subscribe({          next: (response) => {
-            if (response) {
-              this.router.navigate([`/main-page`]);
-            }
-            else {
-              console.error('Attempt was not submitted');
-            }
-          },
-          error: (error) => {
-            console.error('Error submitting attempt', error);
-          }
-        });
+        this.submitAttempt();
       }
     });
+  }
+
+  submitAttempt() {
+    this.attemptService.submitAttempt(this.attempt.id).subscribe({          
+      next: (response) => {
+        if (response) {
+          this.closeAttempt();
+        }
+        else {
+          console.error('Attempt was not submitted');
+        }
+      },
+      error: (error) => {
+        console.error('Error submitting attempt', error);
+      }
+    });
+  }
+
+  closeAttempt() {
+    this.snackBar.open('', 'Close', { duration: 2000 });
+    this.router.navigate([`/main-page`]);
   }
 
   translateText(texts: LanguageText[]): string {
@@ -163,7 +180,7 @@ export class KnowledgeCheckComponent implements OnInit {
     const submittedAnswer = this.attempt.submittedAnswers.find(sa => sa.answerGroupId === event.answerGroupId);
 
     if (submittedAnswer) {
-      submittedAnswer.value = event.value;
+      submittedAnswer.values = event.values;
     }
     else {
       this.attempt.submittedAnswers.push(event);
@@ -171,6 +188,6 @@ export class KnowledgeCheckComponent implements OnInit {
   }
 
   areAllAnswered(): boolean {
-    return this.attempt.submittedAnswers.filter(sa => sa.value).length === this.topic.questions.length;
+    return this.attempt.submittedAnswers.filter(sa => sa.values.length > 0).length === this.topic.questions.flatMap(q => q.answerGroups).length;
   }
 }

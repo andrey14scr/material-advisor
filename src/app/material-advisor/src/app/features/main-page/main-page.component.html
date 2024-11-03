@@ -1,5 +1,3 @@
-<h1>{{ translate('mainPage.title') }}</h1> 
-
 <mat-label *ngIf="ownedTopics && ownedTopics.length">Owned topics:</mat-label>
 
 <mat-list *ngIf="ownedTopics && ownedTopics.length">
@@ -53,21 +51,40 @@
   <ng-container *ngFor="let topic of topics">
     <mat-list-item>
       <div class="d-flex align-items-center">
-        <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
+        <span [class.text-secondary]="isLoadingTopic(topic)">{{ translateText(topic.name) }}</span>
       </div>
     </mat-list-item>
     <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
       <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
         <mat-list-item>
           <div class="d-flex flex-row">
-            <div *ngIf="knowledgeCheck.isSubmitted" class="d-flex align-items-center justify-content-center text-success me-1">
-              <mat-icon>task_alt</mat-icon>
+            <div *ngIf="knowledgeCheck.usedAttempts > 0" 
+                class="d-flex align-items-center justify-content-center me-1" 
+                [class.text-success]="knowledgeCheck.isVerified" 
+                [class.text-secondary]="!knowledgeCheck.isVerified" 
+                [class.text-danger]="knowledgeCheck.isVerified && knowledgeCheck.score != null && knowledgeCheck.score < knowledgeCheck.passScore">
+              <mat-icon *ngIf="knowledgeCheck.isSubmitted && knowledgeCheck.score == null || knowledgeCheck.isSubmitted && knowledgeCheck.score != null && knowledgeCheck.score >= knowledgeCheck.passScore">
+                task_alt
+              </mat-icon>
+              <mat-icon *ngIf="!knowledgeCheck.isSubmitted" class="material-symbols-outlined">
+                error
+              </mat-icon>
+              <mat-icon *ngIf="knowledgeCheck.isSubmitted && knowledgeCheck.score != null && knowledgeCheck.score < knowledgeCheck.passScore" 
+                class="material-symbols-outlined">
+                cancel
+              </mat-icon>
             </div>
-            <span *ngIf="!isActual(knowledgeCheck)" class="gray-text">
+            <span *ngIf="!isActual(knowledgeCheck)" class="text-secondary">
               {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck.time)}})
             </span>
             <span *ngIf="isActual(knowledgeCheck)" class="link-text" (click)="startKnowledgeCheck(topic, knowledgeCheck)">
               {{ knowledgeCheck.name }}. {{getDateLabel(knowledgeCheck)}}. {{getAttemptsLabel(knowledgeCheck)}}. ({{getTimeLabel(knowledgeCheck.time)}})
+            </span>
+            <span *ngIf="knowledgeCheck.isSubmitted && knowledgeCheck.isVerified && knowledgeCheck.score != null" 
+                class="ms-2"
+                [class.text-success]="knowledgeCheck.score >= knowledgeCheck.passScore"
+                [class.text-danger]="knowledgeCheck.score < knowledgeCheck.passScore">
+              Score: {{ knowledgeCheck.score }} / {{ knowledgeCheck.maxScore }} (Pass score: {{ knowledgeCheck.passScore }})
             </span>
           </div>
         </mat-list-item>

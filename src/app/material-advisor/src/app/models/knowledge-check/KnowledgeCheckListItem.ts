@@ -6,7 +6,7 @@ export interface KnowledgeCheckListItem {
   time: number;
   startDate: Date;
   endDate?: Date;
-  usedAttempts?: number;
+  usedAttempts: number;
   maxAttempts?: number;
   isSubmitted: boolean;
   isVerified: boolean;

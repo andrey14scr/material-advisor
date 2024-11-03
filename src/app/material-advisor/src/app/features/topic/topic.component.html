@@ -86,9 +86,9 @@
   
 </mat-expansion-panel>
 
-<mat-expansion-panel hideToggle [expanded]="true" class="mt-2">
+<mat-expansion-panel *ngIf="currentTopic.id" hideToggle [expanded]="true" class="mt-2">
   <mat-expansion-panel-header>
     <mat-panel-title> Knowledge checks: </mat-panel-title>
   </mat-expansion-panel-header>
-  <knowledge-check-list *ngIf="currentTopic.id" [topicId]="currentTopic.id"/>
+  <knowledge-check-list [topicId]="currentTopic.id"/>
 </mat-expansion-panel>

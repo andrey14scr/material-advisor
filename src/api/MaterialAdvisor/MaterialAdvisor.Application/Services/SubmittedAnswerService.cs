@@ -7,6 +7,7 @@ using MaterialAdvisor.Data.Extensions;
 using MaterialAdvisor.Data.Entities;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MaterialAdvisor.Application.Services;
 
@@ -50,7 +51,7 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
             await _dbContext.SaveChangesAsync();
             await transaction.CommitAsync();
 
-            return model;
+            return MapToModel<TModel>(entity);
         }
         catch
         {
@@ -95,5 +96,11 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
     {
         var entity = _mapper.Map<SubmittedAnswerEntity>(model);
         return entity;
+    }
+
+    private TModel MapToModel<TModel>(SubmittedAnswerEntity entity)
+    {
+        var model = _mapper.Map<TModel>(entity);
+        return model;
     }
 }

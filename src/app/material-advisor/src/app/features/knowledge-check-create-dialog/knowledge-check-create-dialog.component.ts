@@ -56,8 +56,8 @@ export class KnowledgeCheckCreateDialogComponent {
       time: [''],
       groupIds: [[]],
       passScore: [''],
-      isAttemptOverrided: [''],
-      isManualOnlyVerification: [''],
+      isAttemptOverrided: [false],
+      isManualOnlyVerification: [false],
     });
   }
 

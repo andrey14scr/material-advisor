@@ -22,13 +22,10 @@ export class QuestionSingleSelectComponent implements OnInit {
   @Input() attemptId!: GUID;
   @Input() attemptAnswers: AttemptAnswer[] = [];
   @Output() answered = new EventEmitter<AttemptAnswer>();
-  
-  items: any[] = [];
-  isModified = false;
-  isSaved = false;
-  selectedOption = '';
 
-  private inputSubject = new Subject<{value: string, answerGroupId: GUID}>();
+  private inputSubject = new Subject<{values: string[], answerGroupId: GUID}>();
+  private modifying: GUID[] = [];
+  private saved: GUID[] = [];
 
   constructor(
     private translationService: TranslationService, 
@@ -36,31 +33,23 @@ export class QuestionSingleSelectComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.items = this.question.answerGroups[0].answers.map(item => ({ ...item, checked: this.attemptAnswer?.value === item.id }));
-    this.selectedOption = this.items.find(i => i.checked)?.id;
-
-    if (this.attemptAnswer) {
-      this.isSaved = true;
-    }
+    this.saved = this.attemptAnswers.filter(a => a.values.length > 0).map(a => a.answerGroupId);
 
     this.inputSubject.pipe(debounceTime(500)).subscribe(x => {
       this.attemptService.submitAnswer({
-        value: x.value, 
-        questionId: x.answerGroupId,
+        values: x.values, 
+        answerGroupId: x.answerGroupId,
         attemptId: this.attemptId,
       }).subscribe(submittedAnswer => {
-        if (submittedAnswer && submittedAnswer.value) {
-          this.isSaved = true;
-        }
-        else {
-          this.isSaved = false;
+        this.modifying = this.modifying.filter(x => x !== submittedAnswer.answerGroupId);
+        if (submittedAnswer.values.length > 0) {
+          this.saved.push(submittedAnswer.answerGroupId);
         }
 
         this.answered.emit({
-          answerGroupId: x.answerGroupId, 
-          value: submittedAnswer.value
+          answerGroupId: submittedAnswer.answerGroupId, 
+          values: submittedAnswer.values
         });
-        this.isModified = false;
       });
     });
   }
@@ -73,11 +62,24 @@ export class QuestionSingleSelectComponent implements OnInit {
     return this.translationService.translate(key);
   }
 
-  onChange(answerGroupId: GUID, event: any) {
-    this.isSaved = false;
-    this.isModified = true;
+  isChecked(answerGroupId: GUID, answerId: GUID): boolean {
+    return this.attemptAnswers.find(a => a.answerGroupId === answerGroupId && a.values.includes(answerId)) != null;
+  }
+
+  isSaved(answerGroupId: GUID): boolean {
+    return this.saved.find(x => x === answerGroupId) != null;
+  }
+
+  isModified(answerGroupId: GUID): boolean {
+    return this.modifying.find(x => x === answerGroupId) != null;
+  }
+
+  onChange(answerGroupId: GUID, answerId: GUID) {
+    this.saved = this.saved.filter(x => x !== answerGroupId);
+    this.modifying.push(answerGroupId);
+
     this.inputSubject.next({
-      value: event.value,
+      values: [answerId],
       answerGroupId: answerGroupId
     });
   }

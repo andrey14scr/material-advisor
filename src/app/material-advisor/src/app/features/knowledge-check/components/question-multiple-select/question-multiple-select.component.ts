@@ -22,13 +22,11 @@ export class QuestionMultipleSelectComponent implements OnInit {
   @Input() attemptId!: GUID;
   @Input() attemptAnswers: AttemptAnswer[] = [];
   @Output() answered = new EventEmitter<AttemptAnswer>();
-  
-  isModified = false;
-  isSaved = false;
-  items: any[] = [];
-  DELIMETER: string = ';';
 
-  private inputSubject = new Subject<{value: string, answerGroupId: GUID}>();
+  private inputSubject = new Subject<{values: string[], answerGroupId: GUID}>();
+  private modifying: GUID[] = [];
+  private saved: GUID[] = [];
+  private inputs: {values: string[], answerGroupId: GUID}[] = [];
 
   constructor(
     private translationService: TranslationService, 
@@ -36,31 +34,27 @@ export class QuestionMultipleSelectComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const ids = this.attemptAnswer?.value?.split(this.DELIMETER) ?? [];
-    this.items = this.question.answerGroups[0].answers.map(item => ({ ...item, checked: ids.filter(id => id === item.id).length !== 0 }));
-
-    if (this.attemptAnswer) {
-      this.isSaved = true;
-    }
+    this.saved = this.attemptAnswers.filter(a => a.values.length > 0).map(a => a.answerGroupId);
+    this.inputs = this.attemptAnswers.filter(a => a.values.length > 0).map(a => ({
+      answerGroupId: a.answerGroupId, 
+      values: a.values
+    }));
 
     this.inputSubject.pipe(debounceTime(1000)).subscribe(x => {
       this.attemptService.submitAnswer({
-        value: x.value, 
-        questionId: x.answerGroupId,
+        values: x.values, 
+        answerGroupId: x.answerGroupId,
         attemptId: this.attemptId,
       }).subscribe(submittedAnswer => {
-        if (submittedAnswer && submittedAnswer.value) {
-          this.isSaved = true;
-        }
-        else {
-          this.isSaved = false;
+        this.modifying = this.modifying.filter(x => x !== submittedAnswer.answerGroupId);
+        if (submittedAnswer.values.length > 0) {
+          this.saved.push(submittedAnswer.answerGroupId);
         }
 
         this.answered.emit({
-          answerGroupId: x.answerGroupId, 
-          value: submittedAnswer.value
+          answerGroupId: submittedAnswer.answerGroupId, 
+          values: submittedAnswer.values
         });
-        this.isModified = false;
       });
     });
   }
@@ -73,12 +67,41 @@ export class QuestionMultipleSelectComponent implements OnInit {
     return this.translationService.translate(key);
   }
 
-  onChange(answerGroupId: GUID, event: any) {
-    this.isSaved = false;
-    this.isModified = true;
-    const selectedItems = this.items.filter(item => item.checked).map(x => x.id).join(this.DELIMETER);
+  isChecked(answerGroupId: GUID, answerId: GUID): boolean {
+    return this.attemptAnswers.find(a => a.answerGroupId === answerGroupId && a.values.includes(answerId)) != null;
+  }
+
+  isSaved(answerGroupId: GUID): boolean {
+    return this.saved.find(x => x === answerGroupId) != null;
+  }
+
+  isModified(answerGroupId: GUID): boolean {
+    return this.modifying.find(x => x === answerGroupId) != null;
+  }
+
+  onChange(answerGroupId: GUID, answerId: GUID, event: any) {
+    this.saved = this.saved.filter(x => x !== answerGroupId);
+    this.modifying.push(answerGroupId);
+
+    let input = this.inputs.find(x => x.answerGroupId === answerGroupId);
+
+    if (!input) {
+      input = {
+        answerGroupId: answerGroupId, 
+        values: [],
+      }
+      this.inputs.push(input);
+    }
+
+    if (event.checked) {
+      input.values.push(answerId);
+    }
+    else {
+      input.values = input.values.filter(x => x !== answerId);
+    }
+
     this.inputSubject.next({
-      value: selectedItems,
+      values: input.values,
       answerGroupId: answerGroupId
     });
   }

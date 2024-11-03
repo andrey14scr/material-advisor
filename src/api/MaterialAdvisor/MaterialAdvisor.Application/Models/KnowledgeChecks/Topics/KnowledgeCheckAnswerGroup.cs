@@ -2,6 +2,8 @@
 
 public class KnowledgeCheckAnswerGroup
 {
+    public Guid Id { get; set; }
+
     public byte Number { get; set; }
 
     public bool IsTechnical { get; set; }

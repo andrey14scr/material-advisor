@@ -10,14 +10,14 @@ namespace MaterialAdvisor.API.Controllers;
 public class VerifyController(ISubmittedAnswerService _submittedAnswerService) : BaseApiController
 {
     [HttpGet]
-    public async Task<ActionResult<Attempt?>> GetAnswersToVerify(Guid knowledgeCheckId)
+    public async Task<ActionResult<IList<UnverifiedAnswer>>> GetAnswersToVerify(Guid knowledgeCheckId)
     {
         var result = await _submittedAnswerService.GetUnverifiedAnswers<UnverifiedAnswer>(knowledgeCheckId);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<Attempt?>> VerifyAnswer(VerifiedAnswer verifiedAnswer)
+    public async Task<ActionResult<bool>> VerifyAnswer(VerifiedAnswer verifiedAnswer)
     {
         var result = await _submittedAnswerService.VerifyAnswer(verifiedAnswer);
         return Ok(result);

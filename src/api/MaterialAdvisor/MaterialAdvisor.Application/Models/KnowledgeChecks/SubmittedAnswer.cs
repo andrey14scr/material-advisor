@@ -6,5 +6,5 @@ public class SubmittedAnswer
 
     public Guid AttemptId { get; set; }
 
-    public string? Value { get; set; }
+    public IEnumerable<string> Values { get; set; } = [];
 }
