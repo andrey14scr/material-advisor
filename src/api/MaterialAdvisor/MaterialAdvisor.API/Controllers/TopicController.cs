@@ -9,17 +9,10 @@ namespace MaterialAdvisor.API.Controllers;
 [Authorize]
 public class TopicController(ITopicService _topicService) : BaseApiController
 {
-    [HttpGet("owner")]
-    public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckTopicListItem>>>> GetAsOwner()
+    [HttpGet]
+    public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckTopicListItem>>>> Get()
     {
-        var result = await _topicService.Get<TopicListItem<KnowledgeCheckTopicListItem>>(true);
-        return Ok(result);
-    }
-
-    [HttpGet("member")]
-    public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckListItem>>>> GetAsMember()
-    {
-        var result = await _topicService.Get<TopicListItem<KnowledgeCheckListItem>>(false);
+        var result = await _topicService.Get<TopicListItem<KnowledgeCheckTopicListItem>>();
         return Ok(result);
     }
 

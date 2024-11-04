@@ -52,7 +52,7 @@ export class MainPageComponent {
   }
 
   getTopicsList() {
-    this.topicService.getTopicsAsOwner()
+    this.topicService.getTopics()
       .pipe(
         map(data => 
           data.map(item => ({
@@ -67,7 +67,7 @@ export class MainPageComponent {
         }
       );
 
-    this.topicService.getTopicsAsMember()
+    this.knowledgeCheckService.getKnowledgeChecks()
       .pipe(
         map(data => 
           data.map(item => ({

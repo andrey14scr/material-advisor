@@ -2,9 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MaterialAdvisor.Data.Entities.Anstraction;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("Groups")]
+[Index(nameof(Name))]
 public class GroupEntity : IEntity
 {
     public Guid Id { get; set; }

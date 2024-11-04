@@ -29,12 +29,8 @@ export class TopicService {
     return this.http.get<KnowledgeCheckTopic>(`${this.apiRoot}/${id}/knowledge-check-topic`);
   }
 
-  getTopicsAsOwner(): Observable<TopicListItem<KnowledgeCheckTopicListItem>[]> {
-    return this.http.get<TopicListItem<KnowledgeCheckTopicListItem>[]>(`${this.apiRoot}/owner`);
-  }
-
-  getTopicsAsMember(): Observable<TopicListItem<KnowledgeCheckListItem>[]> {
-    return this.http.get<TopicListItem<KnowledgeCheckListItem>[]>(`${this.apiRoot}/member`);
+  getTopics(): Observable<TopicListItem<KnowledgeCheckTopicListItem>[]> {
+    return this.http.get<TopicListItem<KnowledgeCheckTopicListItem>[]>(this.apiRoot);
   }
 
   postTopic(topic: any): Observable<Topic> {

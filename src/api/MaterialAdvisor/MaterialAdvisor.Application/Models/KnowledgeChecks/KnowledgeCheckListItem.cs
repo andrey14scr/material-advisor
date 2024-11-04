@@ -29,4 +29,6 @@ public class KnowledgeCheckListItem
     public bool IsAttemptOverrided { get; set; }
 
     public bool IsManualOnlyVerification { get; set; }
+
+    public bool HasAnswersToVerify { get; set; }
 }

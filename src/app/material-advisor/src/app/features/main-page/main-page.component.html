@@ -28,7 +28,7 @@
               <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button (click)="openKnowledgeCheckVerifyPage(knowledgeCheck.id)">
+              <button mat-icon-button [disabled]="!knowledgeCheck.hasAnswersToVerify" (click)="openKnowledgeCheckVerifyPage(knowledgeCheck.id)">
                 <mat-icon>library_books</mat-icon>
               </button>
               <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
@@ -49,11 +49,6 @@
 
 <mat-list *ngIf="topics && topics.length">
   <ng-container *ngFor="let topic of topics">
-    <mat-list-item>
-      <div class="d-flex align-items-center">
-        <span [class.text-secondary]="isLoadingTopic(topic)">{{ translateText(topic.name) }}</span>
-      </div>
-    </mat-list-item>
     <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
       <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
         <mat-list-item>

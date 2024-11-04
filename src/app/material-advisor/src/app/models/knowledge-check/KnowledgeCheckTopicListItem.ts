@@ -5,4 +5,5 @@ export interface KnowledgeCheckTopicListItem {
   name: string;
   startDate: Date;
   endDate?: Date;
+  hasAnswersToVerify: boolean;
 }

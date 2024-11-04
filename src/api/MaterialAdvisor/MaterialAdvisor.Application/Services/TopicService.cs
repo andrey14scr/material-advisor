@@ -36,33 +36,23 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
         return model;
     }
 
-    public async Task<IList<TModel>> Get<TModel>(bool isOwner)
+    public async Task<IList<TModel>> Get<TModel>()
     {
         var user = await _userService.GetUser();
+
+        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+
         var entities = await _dbContext.Topics
-            .Where(t => (isOwner && t.OwnerId == user.Id) || 
-                (!isOwner && t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id)))))
+            .Where(t => t.OwnerId == user.Id)
             .Include(t => t.Name)
-            .Include(t => t.Questions)
             .Include(t => t.KnowledgeChecks)
-                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
-                .ThenInclude(a => a.SubmittedAnswers)
-                .ThenInclude(a => a.VerifiedAnswers)
-            .Include(t => t.KnowledgeChecks)
-                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
-                .ThenInclude(a => a.SubmittedAnswers)
-                .ThenInclude(sa => sa.AnswerGroup)
-                .ThenInclude(sa => sa.Question)
-            .Include(t => t.KnowledgeChecks)
-                .ThenInclude(kc => kc.Attempts.Where(a => a.UserId == user.Id))
-                .ThenInclude(a => a.SubmittedAnswers)
-                .ThenInclude(sa => sa.AnswerGroup)
-                .ThenInclude(sa => sa.Answers)
-            .Include(t => t.KnowledgeChecks)
-                .ThenInclude(kc => kc.Groups)
-                .ThenInclude(kc => kc.Users)
+                .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.SubmittedAnswers
+                    .Any(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type) && !sa.VerifiedAnswers.Any(va => va.IsManual))))
+                .ThenInclude(kc => kc.SubmittedAnswers)
+                .ThenInclude(kc => kc.VerifiedAnswers)
             .AsNoTracking()
             .ToListAsync();
+
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
         return entitiesModel;
     }

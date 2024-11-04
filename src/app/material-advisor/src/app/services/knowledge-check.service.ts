@@ -6,6 +6,7 @@ import { GUID } from '@shared/types/GUID';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckListItem } from '@models/knowledge-check/KnowledgeCheckListItem';
 import { KnowledgeCheck } from '@models/knowledge-check/KnowledgeCheck';
+import { TopicListItem } from '@models/topic/TopicListItem';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,10 @@ export class KnowledgeCheckService {
     return this.http.get<KnowledgeCheckListItem[]>(`${this.apiRoot}/topic/${topicId}`).pipe(
       map((data: KnowledgeCheckListItem[]) => sortByStartDate(data))
     );
+  }
+
+  getKnowledgeChecks(): Observable<TopicListItem<KnowledgeCheckListItem>[]> {
+    return this.http.get<TopicListItem<KnowledgeCheckListItem>[]>(this.apiRoot);
   }
 
   getKnowledgeCheck(id: GUID): Observable<KnowledgeCheck> {

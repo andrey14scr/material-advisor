@@ -1,4 +1,6 @@
 ﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
+using MaterialAdvisor.Application.Models.Topics;
+using MaterialAdvisor.Application.Services;
 using MaterialAdvisor.Application.Services.Abstraction;
 
 using Microsoft.AspNetCore.Authorization;
@@ -16,10 +18,10 @@ public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckServ
         return Ok(result);
     }
 
-    [HttpGet()]
+    [HttpGet]
     public async Task<ActionResult<IList<KnowledgeCheck>>> Get()
     {
-        var result = await _knowledgeCheckService.Get<KnowledgeCheck>();
+        var result = await _knowledgeCheckService.Get<TopicListItem<KnowledgeCheckListItem>>();
         return Ok(result);
     }
 

@@ -2,9 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MaterialAdvisor.Data.Entities.Anstraction;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace MaterialAdvisor.Data.Entities;
 
 [Table("KnowledgeChecks")]
+[Index(nameof(Name))]
 public class KnowledgeCheckEntity : IEntity
 {
     public Guid Id { get; set; }

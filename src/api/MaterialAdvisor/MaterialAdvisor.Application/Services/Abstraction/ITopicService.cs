@@ -8,7 +8,7 @@ public interface ITopicService
 
     Task<TModel> Get<TModel>(Guid id);
 
-    Task<IList<TModel>> Get<TModel>(bool isOwner);
+    Task<IList<TModel>> Get<TModel>();
 
     Task<TModel> Update<TModel>(TModel model);
 }

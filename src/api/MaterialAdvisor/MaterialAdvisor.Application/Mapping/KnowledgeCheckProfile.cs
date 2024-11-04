@@ -15,6 +15,7 @@ public class KnowledgeCheckProfile : Profile
 
         CreateMap<KnowledgeCheckEntity, KnowledgeCheckTopicListItem>()
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.SpecifyKind(src.StartDate, DateTimeKind.Utc)))
+            .ForMember(dest => dest.HasAnswersToVerify, opt => opt.MapFrom(src => src.Attempts.Any()))
             .ForMember(dest => dest.EndDate,
                 opt =>
                 {
@@ -38,6 +39,9 @@ public class KnowledgeCheckProfile : Profile
                     opt.PreCondition(src => src.Attempts.Any());
                     opt.MapFrom(src => src.Attempts.OrderByDescending(a => a.StartDate).First().IsFinished());
                 })
+            .ForMember(dest => dest.HasAnswersToVerify,
+                opt => opt.MapFrom(src => src.Attempts
+                    .Any(a => a.SubmittedAnswers.Any(sa => !sa.VerifiedAnswers.Any(va => va.IsManual)))))
             .ForMember(dest => dest.IsVerified,
                 opt =>
                 {
@@ -72,12 +76,14 @@ public class KnowledgeCheckProfile : Profile
             return null;
         }
 
+        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+
         var openQuestionsSum = lastAttempt.SubmittedAnswers
-            .Where(sa => !string.IsNullOrEmpty(sa.Value) && sa.AnswerGroup.Question.Type == Data.Enums.QuestionType.OpenText)
+            .Where(sa => !string.IsNullOrEmpty(sa.Value) && typesToVerify.Contains(sa.AnswerGroup.Question.Type))
             .Sum(sa => sa.VerifiedAnswers.Where(va => va.IsManual).Sum(va => va.Score));
 
         var closedQuestionsSum = lastAttempt.SubmittedAnswers
-            .Where(sa => !string.IsNullOrEmpty(sa.Value) && sa.AnswerGroup.Question.Type != Data.Enums.QuestionType.OpenText)
+            .Where(sa => !string.IsNullOrEmpty(sa.Value) && typesToVerify.Contains(sa.AnswerGroup.Question.Type))
             .Sum(sa => sa.AnswerGroup.Answers
                 .Where(a => SplitValue(sa.Value!).Contains(a.Id.ToString()))
                 .Sum(a => a.Points));
@@ -93,9 +99,10 @@ public class KnowledgeCheckProfile : Profile
     private static bool IsVerified(KnowledgeCheckEntity src)
     {
         var lastAttempt = src.Attempts.OrderByDescending(a => a.StartDate).First();
+        var typesToVerify = Constants.QuestionTypesRequiredVerification;
 
         return lastAttempt.IsFinished() && lastAttempt.SubmittedAnswers
-            .Where(sa => sa.AnswerGroup.Question.Type == Data.Enums.QuestionType.OpenText)
+            .Where(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type))
             .All(sa => sa.VerifiedAnswers.Any(va => va.IsManual));
     }
 }

@@ -8,7 +8,6 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
-import { removeEmptyField } from '@shared/services/object-utils.service';
 
 @Component({
   selector: 'knowledge-check-list',
@@ -58,13 +57,7 @@ export class KnowledgeChecksComponent implements OnInit {
       if (result) {
         result.topicId = this.topicId;
         this.knowledgeCheckService.postKnowledgeCheck(result).subscribe((knowledgeCheck) => {
-          if (id) {
-            const index = this.knowledgeChecks.findIndex(item => item.id === id);
-            this.knowledgeChecks[index] = knowledgeCheck;
-          }
-          else {
-            this.knowledgeChecks.push(knowledgeCheck);
-          }
+          this.getKnowledgeChecksByTopicId(this.topicId);
           this.knowledgeChecks = sortByStartDate(this.knowledgeChecks);
         });
       }

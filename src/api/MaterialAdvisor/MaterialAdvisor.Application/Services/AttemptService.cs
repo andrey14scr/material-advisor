@@ -61,8 +61,16 @@ public class AttemptService(MaterialAdvisorContext _dbContext, IUserProvider _te
                 UserId = user.Id,
             };
 
+            if (knowledgeCheck.IsAttemptOverrided)
+            {
+                await _dbContext.Attempts
+                    .Where(a => a.KnowledgeCheckId == knowledgeCheck.Id && a.UserId == user.Id)
+                    .ExecuteUpdateAsync(a => a.SetProperty(p => p.IsCanceled, true));
+            }
+
             var createdEntity = await _dbContext.Attempts.AddAsync(entityToCreate);
             await _dbContext.SaveChangesAsync();
+
             await transaction.CommitAsync();
 
             return MapToModel<TModel>(createdEntity.Entity);

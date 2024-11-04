@@ -20,5 +20,7 @@ public class AttemptEntity : IEntity
 
     public bool IsSubmitted { get; set; }
 
+    public bool IsCanceled { get; set; }
+
     public ICollection<SubmittedAnswerEntity> SubmittedAnswers { get; set; } = [];
 }

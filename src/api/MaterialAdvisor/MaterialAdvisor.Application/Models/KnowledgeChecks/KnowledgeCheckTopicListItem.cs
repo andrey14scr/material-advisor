@@ -9,4 +9,6 @@ public class KnowledgeCheckTopicListItem
     public DateTime StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
+
+    public bool HasAnswersToVerify { get; set; }
 }

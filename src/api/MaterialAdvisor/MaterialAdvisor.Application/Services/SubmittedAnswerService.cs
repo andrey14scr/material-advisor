@@ -62,6 +62,8 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
 
     public async Task<IList<TModel>> GetUnverifiedAnswers<TModel>(Guid knowledgeCheckId)
     {
+        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+
         var entities = await _dbContext.SubmittedAnswers
             .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Answers).ThenInclude(ag => ag.Content)
             .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Question).ThenInclude(q => q.Topic).ThenInclude(t => t.Name)
@@ -69,12 +71,12 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
             .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Content)
             .Include(sa => sa.Attempt).ThenInclude(a => a.User)
             .Include(sa => sa.Attempt).ThenInclude(a => a.KnowledgeCheck)
-            .Where(sa => sa.AnswerGroup.Question.Type == Data.Enums.QuestionType.OpenText &&
+            .Where(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type) &&
                 sa.Attempt.KnowledgeCheckId == knowledgeCheckId &&
+                !sa.Attempt.IsCanceled &&
                 sa.Value != null && sa.Value.Length != 0 &&
                 !sa.VerifiedAnswers.Any(va => va.IsManual))
-            .OrderBy(sa => sa.Attempt.KnowledgeCheck.StartDate)
-            .ThenBy(sa => sa.Attempt.StartDate)
+            .OrderByDescending(sa => sa.Attempt.StartDate)
             .ToListAsync();
 
         var models = _mapper.Map<IList<TModel>>(entities);

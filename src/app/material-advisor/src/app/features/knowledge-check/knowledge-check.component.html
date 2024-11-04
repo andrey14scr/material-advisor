@@ -37,7 +37,7 @@
   </div>
 
   <div *ngIf="attempt" class="d-flex justify-content-center align-items-center flex-column mt-3">
-    <span *ngIf="!areAllAnswered()" class="text-danger">{{ translate('knowledgeText.notAllAnswered') }}</span>
     <button mat-raised-button color="primary" (click)="submitAll()">Submit</button>
+    <span *ngIf="!areAllAnswered()" class="text-danger">{{ translate('knowledgeText.notAllAnswered') }}</span>
   </div>
 </div>

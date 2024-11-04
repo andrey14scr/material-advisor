@@ -34,7 +34,32 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
 
     public async Task<IList<TModel>> Get<TModel>()
     {
-        var entities = await GetFullEntity().AsNoTracking().ToListAsync();
+        var user = await _userProvider.GetUser();
+
+        var entities = await _dbContext.Topics
+            .Where(t => t.KnowledgeChecks.Any(kc => kc.Groups.Any(g => g.Users.Any(u => u.Id == user.Id))))
+            .Include(t => t.Name)
+            .Include(t => t.Questions)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(a => a.VerifiedAnswers)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(sa => sa.AnswerGroup)
+                .ThenInclude(sa => sa.Question)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.UserId == user.Id))
+                .ThenInclude(a => a.SubmittedAnswers)
+                .ThenInclude(sa => sa.AnswerGroup)
+                .ThenInclude(sa => sa.Answers)
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.Groups)
+                .ThenInclude(kc => kc.Users)
+            .AsNoTracking()
+            .ToListAsync();
+
         var entitiesModel = _mapper.Map<IList<TModel>>(entities);
         return entitiesModel;
     }
