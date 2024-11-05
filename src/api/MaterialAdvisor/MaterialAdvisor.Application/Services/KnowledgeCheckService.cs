@@ -78,6 +78,16 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
         return entitiesModel;
     }
 
+    public async Task<IDictionary<Guid, int>> GetAttemptsCount(IEnumerable<Guid> topicIds)
+    {
+        var entities = await _dbContext.KnowledgeChecks
+            .Where(kc => topicIds.Contains(kc.TopicId))
+            .Include(kc => kc.Attempts)
+            .ToDictionaryAsync(ks => ks.Id, es => es.Attempts.Count);
+
+        return entities;
+    }
+
     public async Task<TModel> Update<TModel>(TModel model)
     {
         var entityToUpdate = await MapToEntity(model);

@@ -1,3 +1,4 @@
+using MaterialAdvisor.Application.Mapping;
 using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.Models.Topics;
 using MaterialAdvisor.Application.Services.Abstraction;
@@ -7,12 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 namespace MaterialAdvisor.API.Controllers;
 
 [Authorize]
-public class TopicController(ITopicService _topicService) : BaseApiController
+public class TopicController(ITopicService _topicService, IKnowledgeCheckService _knowledgeCheckService) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IList<TopicListItem<KnowledgeCheckTopicListItem>>>> Get()
     {
         var result = await _topicService.Get<TopicListItem<KnowledgeCheckTopicListItem>>();
+        var dictionary = await _knowledgeCheckService.GetAttemptsCount(result.Select(t => t.Id).ToList());
+        result.EnrichAttemptsCount(dictionary);
+
         return Ok(result);
     }
 

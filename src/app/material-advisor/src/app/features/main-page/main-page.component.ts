@@ -307,4 +307,8 @@ export class MainPageComponent {
   openKnowledgeCheckVerifyPage(knowledgeCheckId: GUID) {
     this.router.navigate([`answer-verification/${knowledgeCheckId}`]);
   }
+
+  downloadReport(knowledgeCheckId: GUID) {
+    
+  }
 }

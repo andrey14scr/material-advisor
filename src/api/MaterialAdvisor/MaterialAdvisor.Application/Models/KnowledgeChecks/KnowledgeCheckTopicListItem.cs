@@ -11,4 +11,6 @@ public class KnowledgeCheckTopicListItem
     public DateTime? EndDate { get; set; }
 
     public bool HasAnswersToVerify { get; set; }
+
+    public int DataCount { get; set; }
 }

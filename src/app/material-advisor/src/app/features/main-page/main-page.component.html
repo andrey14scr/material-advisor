@@ -22,9 +22,9 @@
     <mat-list *ngIf="topic.knowledgeChecks.length" class="ms-4">
       <ng-container *ngFor="let knowledgeCheck of topic.knowledgeChecks">
         <mat-list-item>
-          <span>
+          <div class="d-flex flex-row align-items-center">
             <span>{{ knowledgeCheck.name }}</span>
-            <span class="ms-1">
+            <div class="ms-1">
               <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
                 <mat-icon>edit</mat-icon>
               </button>
@@ -34,8 +34,12 @@
               <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
                 <mat-icon>delete</mat-icon>
               </button>
-            </span>
-          </span>
+              <button mat-icon-button (click)="downloadReport(knowledgeCheck.id)">
+                <mat-icon>download</mat-icon>
+              </button>              
+              <span *ngIf="knowledgeCheck.dataCount" [class.px-1]="knowledgeCheck.dataCount < 10" class="rounded-pill bg-primary badge-count text-white">{{knowledgeCheck.dataCount}}</span>
+            </div>
+          </div>
         </mat-list-item>
       </ng-container>
     </mat-list>

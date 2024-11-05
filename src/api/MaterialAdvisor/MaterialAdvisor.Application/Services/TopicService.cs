@@ -48,8 +48,6 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
             .Include(t => t.KnowledgeChecks)
                 .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.SubmittedAnswers
                     .Any(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type) && !sa.VerifiedAnswers.Any(va => va.IsManual))))
-                .ThenInclude(kc => kc.SubmittedAnswers)
-                .ThenInclude(kc => kc.VerifiedAnswers)
             .AsNoTracking()
             .ToListAsync();
 

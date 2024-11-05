@@ -18,6 +18,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [],
@@ -42,6 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatExpansionModule,
     MatTooltipModule,
+    MatBadgeModule,
   ],
   exports:[
     MatButtonModule,
@@ -65,6 +67,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatExpansionModule,
     MatTooltipModule,
+    MatBadgeModule,
   ]
 })
 export class MaterialModule { }
