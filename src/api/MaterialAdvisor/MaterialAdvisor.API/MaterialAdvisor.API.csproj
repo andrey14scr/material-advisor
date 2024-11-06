@@ -19,8 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MaterialAdvisor.AI\MaterialAdvisor.AI.csproj" />
+    <ProjectReference Include="..\MaterialAdvisor.Application.Quartz\MaterialAdvisor.Application.Quartz.csproj" />
+    <ProjectReference Include="..\MaterialAdvisor.Application.QueueStorage\MaterialAdvisor.Application.QueueStorage.csproj" />
     <ProjectReference Include="..\MaterialAdvisor.Application\MaterialAdvisor.Application.csproj" />
-    <ProjectReference Include="..\MaterialAdvisor.QueueStorage\MaterialAdvisor.QueueStorage.csproj" />
     <ProjectReference Include="..\MaterialAdvisor.SignalR\MaterialAdvisor.SignalR.csproj" />
   </ItemGroup>
 

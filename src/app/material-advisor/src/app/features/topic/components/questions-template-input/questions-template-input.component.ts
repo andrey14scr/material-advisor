@@ -30,7 +30,7 @@ export class QuestionsTemplateInputComponent {
     this.addEmptyForm();
   }
 
-  get questionsTemplatesFormArray(): FormArray {
+  get questionsStructureFormArray(): FormArray {
     return this.form.get(this.formName) as FormArray;
   }
 
@@ -44,15 +44,15 @@ export class QuestionsTemplateInputComponent {
       type: [type, Validators.required],
       answersCount: [answersCount],
     });
-    this.questionsTemplatesFormArray.push(questionsTemplate);
+    this.questionsStructureFormArray.push(questionsTemplate);
   }
 
   removeForm(index: number) {
-    if (this.questionsTemplatesFormArray.controls.length === 1) {
+    if (this.questionsStructureFormArray.controls.length === 1) {
       return;
     }
 
-    this.questionsTemplatesFormArray.removeAt(index);
+    this.questionsStructureFormArray.removeAt(index);
   }
 
   translateQuestionType(questionType: string | QuestionType){

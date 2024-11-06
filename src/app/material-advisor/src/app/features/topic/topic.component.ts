@@ -81,7 +81,7 @@ export class TopicComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       name: this.fb.array([]),
       questions: this.fb.array([]),
-      questionsTemplates: this.fb.array([]),
+      questionsStructure: this.fb.array([]),
       defaultAnswersCount: [null],
       doesComplexityIncrease: [false],
       cultureContext: [null],
@@ -179,6 +179,7 @@ export class TopicComponent implements OnInit, OnDestroy {
 
   onGenerateSubmit() {
     this.isSubmittingGeneration = true;
+    console.log('lol', this.form.value);
 
     const formData = new FormData();
     
@@ -198,11 +199,13 @@ export class TopicComponent implements OnInit, OnDestroy {
       formData.append(`TopicName[${index}].Text`, item.text);
     });
 
-    const questionsTempaltes = this.form.value.name;
-    questionsTempaltes.forEach((item: any, index: number) => {
+    const questionsStructure = this.form.value.questionsStructure;
+    questionsStructure.forEach((item: any, index: number) => {
       formData.append(`QuestionsStructure[${index}].Count`, item.count);
       formData.append(`QuestionsStructure[${index}].QuestionType`, item.type);
-      formData.append(`QuestionsStructure[${index}].AnswersCount`, item.answersCount);
+      if (item.answersCount) {
+        formData.append(`QuestionsStructure[${index}].AnswersCount`, item.answersCount);
+      }
     });
 
     const languages = this.form.value.languages;

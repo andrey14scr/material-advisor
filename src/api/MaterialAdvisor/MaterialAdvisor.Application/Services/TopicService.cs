@@ -40,7 +40,7 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
     {
         var user = await _userService.GetUser();
 
-        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+        var typesToVerify = Data.Constants.QuestionTypesRequiredVerification;
 
         var entities = await _dbContext.Topics
             .Where(t => t.OwnerId == user.Id)

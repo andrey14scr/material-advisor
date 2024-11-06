@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MaterialAdvisor.Data.Entities;
 
@@ -17,4 +18,7 @@ public class VerifiedAnswerEntity
     public double Score { get; set; }
 
     public bool IsManual { get; set; }
+
+    [MaxLength(255)]
+    public string? Comment { get; set; }
 }

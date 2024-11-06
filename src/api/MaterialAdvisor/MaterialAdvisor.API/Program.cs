@@ -1,13 +1,13 @@
 using FluentValidation;
-using FluentValidation.AspNetCore;
 
+using MaterialAdvisor.AI.Configuration;
 using MaterialAdvisor.API;
 using MaterialAdvisor.API.Middleware;
 using MaterialAdvisor.API.Options;
 using MaterialAdvisor.API.Services;
-using MaterialAdvisor.Application.AI;
 using MaterialAdvisor.Application.Configuration;
-using MaterialAdvisor.QueueStorage.Configuration;
+using MaterialAdvisor.Application.Quartz.Configuration;
+using MaterialAdvisor.Application.QueueStorage.Configuration;
 using MaterialAdvisor.SignalR;
 using MaterialAdvisor.SignalR.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -78,6 +78,8 @@ var configuration = builder.Configuration;
 builder.Services.ConfigureServices(configuration);
 builder.Services.ConfigureQueueStorage(configuration);
 builder.Services.ConfigureSignalR(configuration);
+builder.Services.ConfigureQuartz(configuration);
+builder.Services.ConfigureOpenAIAssistants(configuration);
 
 var jwtOptionPath = Constants.Configuration.AuthSection;
 builder.Services.Configure<AuthOptions>(configuration.GetSection(jwtOptionPath));

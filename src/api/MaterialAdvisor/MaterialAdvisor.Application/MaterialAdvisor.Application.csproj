@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MaterialAdvisor.Application.AI\MaterialAdvisor.Application.AI.csproj" />
-    <ProjectReference Include="..\MaterialAdvisor.Application.Storage\MaterialAdvisor.Application.Storage.csproj" />
+    <ProjectReference Include="..\MaterialAdvisor.Storage\MaterialAdvisor.Storage.csproj" />
     <ProjectReference Include="..\MaterialAdvisor.Data\MaterialAdvisor.Data.csproj" />
   </ItemGroup>
 

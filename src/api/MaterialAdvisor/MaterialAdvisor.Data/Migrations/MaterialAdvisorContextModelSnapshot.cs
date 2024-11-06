@@ -105,6 +105,9 @@ namespace MaterialAdvisor.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsCanceled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsSubmitted")
                         .HasColumnType("bit");
 
@@ -141,6 +144,8 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.HasIndex("OwnerId");
 
@@ -188,6 +193,8 @@ namespace MaterialAdvisor.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.HasIndex("TopicId");
 
@@ -390,9 +397,6 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.HasIndex("Name")
                         .IsUnique();
 
@@ -410,6 +414,10 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.Property<Guid>("AttemptId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("IsManual")
                         .HasColumnType("bit");
@@ -429,13 +437,13 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
                         .WithMany()
                         .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", null)
                         .WithMany()
                         .HasForeignKey("KnowledgeChecksId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -444,13 +452,13 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.GroupEntity", null)
                         .WithMany()
                         .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
@@ -459,7 +467,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
                         .WithMany("Answers")
                         .HasForeignKey("AnswerGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AnswerGroup");
@@ -470,7 +478,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
                         .WithMany("AnswerGroups")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -481,13 +489,13 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", "KnowledgeCheck")
                         .WithMany("Attempts")
                         .HasForeignKey("KnowledgeCheckId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("KnowledgeCheck");
@@ -500,7 +508,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
                         .WithMany("CreatedGroups")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -511,7 +519,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany("KnowledgeChecks")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Topic");
@@ -530,7 +538,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.LanguageEntity", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.QuestionEntity", "Question")
@@ -557,7 +565,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.TopicEntity", "Topic")
                         .WithMany("Questions")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Topic");
@@ -568,7 +576,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -579,13 +587,13 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
                         .WithMany()
                         .HasForeignKey("AnswerGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MaterialAdvisor.Data.Entities.AttemptEntity", "Attempt")
                         .WithMany("SubmittedAnswers")
                         .HasForeignKey("AttemptId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AnswerGroup");
@@ -598,7 +606,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -609,7 +617,7 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasOne("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", "SubmittedAnswer")
                         .WithMany("VerifiedAnswers")
                         .HasForeignKey("AnswerGroupId", "AttemptId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("SubmittedAnswer");

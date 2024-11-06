@@ -1,9 +1,9 @@
 ﻿using MaterialAdvisor.API.Models.Requests.TopicGeneration;
 using MaterialAdvisor.Application.Models.Topics;
+using MaterialAdvisor.Application.QueueStorage.Messages;
+using MaterialAdvisor.Application.QueueStorage.QueueService;
 using MaterialAdvisor.Application.Services.Abstraction;
-using MaterialAdvisor.Application.Storage;
-using MaterialAdvisor.QueueStorage.Messages;
-using MaterialAdvisor.QueueStorage.QueueService;
+using MaterialAdvisor.Storage;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

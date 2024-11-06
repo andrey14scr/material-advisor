@@ -62,7 +62,7 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
 
     public async Task<IList<TModel>> GetUnverifiedAnswers<TModel>(Guid knowledgeCheckId)
     {
-        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+        var typesToVerify = Data.Constants.QuestionTypesRequiredVerification;
 
         var entities = await _dbContext.SubmittedAnswers
             .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Answers).ThenInclude(ag => ag.Content)

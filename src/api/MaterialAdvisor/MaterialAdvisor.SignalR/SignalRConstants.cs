@@ -7,5 +7,6 @@ public static class SignalRConstants
     public static class Messages
     {
         public const string TopicGeneratedMessage = "TopicGenerated";
+        public const string AnswersVerifiedMessage = "AnswersVerified";
     }
 }

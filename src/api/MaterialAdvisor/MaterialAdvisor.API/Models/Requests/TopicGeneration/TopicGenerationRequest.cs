@@ -1,6 +1,6 @@
 ﻿using MaterialAdvisor.Application.Models.Topics;
+using MaterialAdvisor.Application.QueueStorage.Messages;
 using MaterialAdvisor.Data.Enums;
-using MaterialAdvisor.QueueStorage.Messages;
 
 namespace MaterialAdvisor.API.Models.Requests.TopicGeneration;
 

@@ -42,7 +42,7 @@ public class KnowledgeCheckProfile : Profile
                 })
             .ForMember(dest => dest.HasAnswersToVerify,
                 opt => opt.MapFrom(src => src.Attempts.Any(a => a.SubmittedAnswers
-                    .Any(sa => Constants.QuestionTypesRequiredVerification.Contains(sa.AnswerGroup.Question.Type) && 
+                    .Any(sa => Data.Constants.QuestionTypesRequiredVerification.Contains(sa.AnswerGroup.Question.Type) && 
                         !sa.VerifiedAnswers.Any(va => va.IsManual)))))
             .ForMember(dest => dest.IsVerified,
                 opt =>
@@ -78,7 +78,7 @@ public class KnowledgeCheckProfile : Profile
             return null;
         }
 
-        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+        var typesToVerify = Data.Constants.QuestionTypesRequiredVerification;
 
         var openQuestionsSum = lastAttempt.SubmittedAnswers
             .Where(sa => !string.IsNullOrEmpty(sa.Value) && typesToVerify.Contains(sa.AnswerGroup.Question.Type))
@@ -101,7 +101,7 @@ public class KnowledgeCheckProfile : Profile
     private static bool IsVerified(KnowledgeCheckEntity src)
     {
         var lastAttempt = src.Attempts.OrderByDescending(a => a.StartDate).First();
-        var typesToVerify = Constants.QuestionTypesRequiredVerification;
+        var typesToVerify = Data.Constants.QuestionTypesRequiredVerification;
 
         return lastAttempt.IsFinished() && lastAttempt.SubmittedAnswers
             .Where(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type))

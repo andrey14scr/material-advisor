@@ -1,4 +1,4 @@
-﻿using MaterialAdvisor.Application.Storage;
+﻿using MaterialAdvisor.Storage;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
