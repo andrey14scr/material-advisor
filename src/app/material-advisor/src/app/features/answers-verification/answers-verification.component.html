@@ -1,5 +1,5 @@
 <div *ngFor="let item of items; let i = index" class="mt-3">
-  <mat-card>
+  <mat-card class="p-2">
     <mat-card-header>
       <mat-card-title>{{ translateText(item.unverifiedAnswer.topic.name) }}. {{ item.unverifiedAnswer.knowledgeCheck.name }}</mat-card-title>
       <mat-card-subtitle>Completed by {{ item.unverifiedAnswer.user.name }} ({{ item.unverifiedAnswer.user.email }})</mat-card-subtitle>
@@ -25,7 +25,7 @@
           <div class="col d-flex align-items-center">
             <mat-card class="w-100 rounded-3 p-2 user-card-color">
               <span *ngIf="item.unverifiedAnswer.topic.questions[0].type === questionTypeRef.OpenText">
-                {{item.unverifiedAnswer.values[0]}}
+                {{item.unverifiedAnswer.submittedAnswer.values[0]}}
               </span>
             </mat-card>
           </div>
@@ -49,6 +49,10 @@
         <mat-label class="ms-2">(of max {{item.unverifiedAnswer.topic.questions[0].points}})</mat-label>
         <button mat-raised-button color="primary" (click)="onSubmit(item)" class="ms-2">Submit</button>
       </mat-card-actions>
+    </div>
+    <div *ngIf="item.comment" class="d-flex justify-content-center mt-2">
+      <span>Comment:</span>
+      <span class="ms-2">{{item.comment}}</span>
     </div>
   </mat-card>
 </div>

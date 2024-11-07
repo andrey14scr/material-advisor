@@ -18,12 +18,13 @@ using MaterialAdvisor.AI.Configuration.Options;
 using MaterialAdvisor.Data.Enums;
 using MaterialAdvisor.Data.Extensions;
 using MaterialAdvisor.Application.Quartz.Properties;
+using MaterialAdvisor.Application.Quartz.Models;
 
 namespace MaterialAdvisor.Application.Quartz.Jobs;
 
 public class VerifyKnowledgeCheckJob(IOptions<VerifyKnowledgeCheckJobOptions> _verifyKnowledgeCheckJobOptions,
     IOptions<OpenAIAssistantOptions> _openAIAssistantOptions,
-    IHubContext<TopicGenerationHub> _topicGenerationHubContext,
+    IHubContext<AnswerVerificationHub> _answerVerificationHubContext,
     ILogger<VerifyKnowledgeCheckJob> _logger,
     IMaterialAdvisorAIAssistant _materialAdvisorAIAssistant,
     MaterialAdvisorContext _dbContext) : IJob
@@ -97,14 +98,22 @@ public class VerifyKnowledgeCheckJob(IOptions<VerifyKnowledgeCheckJobOptions> _v
             });
 
             var submittedAnswersJson = await SerializeJson(answers);
-            var json = await Verify(file, submittedAnswersJson);
+            var json = await Verify(file, submittedAnswersJson); 
             var verifiedAnswers = await ParseVerifiedAnswers(json);
 
             await AddVerifiedAnswers(verifiedAnswers);
 
-            await _topicGenerationHubContext.Clients
+            var verifiedAIAnswers = verifiedAnswers.Select(va => new VerifiedAIAnswer
+            {
+                AnswerGroupId = va.AnswerGroupId,
+                AttemptId = va.AttemptId,
+                Comment = va.Comment,
+                Score = va.Score,
+            }).ToList();
+
+            await _answerVerificationHubContext.Clients
                 .User(user)
-                .SendAsync(SignalRConstants.Messages.AnswersVerifiedMessage, verifiedAnswers);
+                .SendAsync(SignalRConstants.Messages.AnswersVerifiedMessage, verifiedAIAnswers);
         }
         catch (Exception ex)
         {
@@ -162,6 +171,10 @@ public class VerifyKnowledgeCheckJob(IOptions<VerifyKnowledgeCheckJobOptions> _v
         foreach (var verifiedAnswer in verifiedAnswers)
         {
             verifiedAnswer.IsManual = false;
+            if (verifiedAnswer.Comment?.Length > 255)
+            {
+                verifiedAnswer.Comment = verifiedAnswer.Comment.Substring(0, 255);
+            }
         }
 
         return verifiedAnswers ?? [];

@@ -29,11 +29,7 @@ public class SubmittedAnswerProfile : Profile
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.Attempt.User))
             .ForMember(dest => dest.KnowledgeCheck, opt => opt.MapFrom(src => src.Attempt.KnowledgeCheck))
             .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.AnswerGroup.Question.Topic))
-            .ForMember(dest => dest.Values,
-                opt =>
-                {
-                    opt.PreCondition(src => !string.IsNullOrEmpty(src.Value));
-                    opt.MapFrom(src => src.Value!.Split(Data.Constants.ListDelimeter, StringSplitOptions.RemoveEmptyEntries));
-                });
+            .ForMember(dest => dest.SubmittedAnswer, opt => opt.MapFrom(src => src))
+            .ForMember(dest => dest.VerifiedAnswers, opt => opt.MapFrom(src => src.VerifiedAnswers));
     }
 }

@@ -71,6 +71,7 @@ public class SubmittedAnswerService(MaterialAdvisorContext _dbContext, IUserProv
             .Include(sa => sa.AnswerGroup).ThenInclude(ag => ag.Content)
             .Include(sa => sa.Attempt).ThenInclude(a => a.User)
             .Include(sa => sa.Attempt).ThenInclude(a => a.KnowledgeCheck)
+            .Include(sa => sa.VerifiedAnswers.Where(sa => !sa.IsManual))
             .Where(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type) &&
                 sa.Attempt.KnowledgeCheckId == knowledgeCheckId &&
                 !sa.Attempt.IsCanceled &&

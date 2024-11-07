@@ -1,6 +1,6 @@
-﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
+﻿namespace MaterialAdvisor.Application.Quartz.Models;
 
-public class VerifiedAnswer
+public class VerifiedAIAnswer
 {
     public Guid AnswerGroupId { get; set; }
 

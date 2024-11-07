@@ -2,7 +2,7 @@
 
 namespace MaterialAdvisor.SignalR.Hubs;
 
-public class TopicGenerationHub : Hub
+public class AnswerVerificationHub : Hub
 {
-    
+
 }

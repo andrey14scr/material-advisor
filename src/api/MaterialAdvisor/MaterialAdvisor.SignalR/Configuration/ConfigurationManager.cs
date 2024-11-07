@@ -19,5 +19,6 @@ public static class ConfigurationManager
     public static void ConfigureHubs(this WebApplication app)
     {
         app.MapHub<TopicGenerationHub>(SignalRConstants.TopicGenerationHubName);
+        app.MapHub<AnswerVerificationHub>(SignalRConstants.AnswerVerificationHubName);
     }
 }
