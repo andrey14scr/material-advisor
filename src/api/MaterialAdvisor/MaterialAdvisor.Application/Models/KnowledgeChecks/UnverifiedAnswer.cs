@@ -13,5 +13,5 @@ public class UnverifiedAnswer
 
     public Topic Topic { get; set; } = null!;
 
-    public ICollection<VerifiedAnswer> VerifiedAnswers { get; set; } = [];
+    public IEnumerable<VerifiedAnswer> VerifiedAnswers { get; set; } = [];
 }

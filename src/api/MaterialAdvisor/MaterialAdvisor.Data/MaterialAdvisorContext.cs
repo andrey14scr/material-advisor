@@ -20,6 +20,8 @@ public class MaterialAdvisorContext : DbContext
     public DbSet<VerifiedAnswerEntity> VerifiedAnswers { get; set; }
     public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
     public DbSet<AttemptEntity> Attempts { get; set; }
+    public DbSet<GeneratedFileEntity> GeneratedFiles { get; set; }
+    public DbSet<GeneratedFilesKnowldgeChecks> GeneratedFilesKnowldgeChecks { get; set; }
 
     public MaterialAdvisorContext(DbContextOptions<MaterialAdvisorContext> options) : base(options)
     {

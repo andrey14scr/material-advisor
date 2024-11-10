@@ -108,7 +108,8 @@ builder.Services
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) && 
                     (path.StartsWithSegments(SignalRConstants.TopicGenerationHubName) || 
-                        path.StartsWithSegments(SignalRConstants.AnswerVerificationHubName)))
+                        path.StartsWithSegments(SignalRConstants.AnswerVerificationHubName) ||
+                        path.StartsWithSegments(SignalRConstants.TableGenerationHubName)))
                 {
                     context.Token = accessToken;
                 }

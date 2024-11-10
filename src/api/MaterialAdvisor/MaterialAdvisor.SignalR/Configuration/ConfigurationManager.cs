@@ -20,5 +20,6 @@ public static class ConfigurationManager
     {
         app.MapHub<TopicGenerationHub>(SignalRConstants.TopicGenerationHubName);
         app.MapHub<AnswerVerificationHub>(SignalRConstants.AnswerVerificationHubName);
+        app.MapHub<TableGenerationHub>(SignalRConstants.TableGenerationHubName);
     }
 }

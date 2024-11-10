@@ -1,4 +1,6 @@
-﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
+﻿using MaterialAdvisor.Data.Entities;
+
+namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
 public class KnowledgeCheckTopicListItem
 {
@@ -13,4 +15,6 @@ public class KnowledgeCheckTopicListItem
     public bool HasAnswersToVerify { get; set; }
 
     public int DataCount { get; set; }
+
+    public IEnumerable<GeneratedFile> GeneratedFiles { get; set; }
 }

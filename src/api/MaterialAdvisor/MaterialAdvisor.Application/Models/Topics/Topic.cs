@@ -8,6 +8,8 @@ public class Topic
 
     public string? File { get; set; }
 
+    public DateTime? GeneratedAt { get; set; }
+
     public IEnumerable<Question> Questions { get; set; } = [];
 
     public IEnumerable<LanguageText> Name { get; set; } = [];

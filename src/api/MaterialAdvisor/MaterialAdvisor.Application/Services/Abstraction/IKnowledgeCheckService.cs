@@ -17,4 +17,8 @@ public interface IKnowledgeCheckService
     Task<TModel> Update<TModel>(TModel model);
 
     Task<IDictionary<Guid, int>> GetAttemptsCount(IEnumerable<Guid> topicIds);
+
+    Task<bool> HasVerifiedAttemts(Guid id);
+
+    Task<Guid> AddPreGeneratedFile(Guid id);
 }

@@ -7,4 +7,5 @@ export interface TopicListItem<TKnowledgeCheck> {
   owner: string;
   name: LanguageText[];
   knowledgeChecks: TKnowledgeCheck[];
+  generatedAt?: Date;
 }

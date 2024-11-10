@@ -46,8 +46,13 @@ public class TopicService(MaterialAdvisorContext _dbContext, IUserProvider _user
             .Where(t => t.OwnerId == user.Id)
             .Include(t => t.Name)
             .Include(t => t.KnowledgeChecks)
-                .ThenInclude(kc => kc.Attempts.Where(a => !a.IsCanceled && a.SubmittedAnswers
-                    .Any(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type) && !sa.VerifiedAnswers.Any(va => va.IsManual))))
+                .ThenInclude(kc => kc.Attempts
+                    .Where(a => !a.IsCanceled && 
+                        !a.VerifiedAnswers.Any(va => va.IsManual) && 
+                        a.SubmittedAnswers.Any(sa => typesToVerify.Contains(sa.AnswerGroup.Question.Type))))
+            .Include(t => t.KnowledgeChecks)
+                .ThenInclude(kc => kc.GeneratedFilesKnowldgeChecks.OrderByDescending(x => x.GeneratedFile.GeneratedAt))
+                .ThenInclude(gfkc => gfkc.GeneratedFile)
             .AsNoTracking()
             .ToListAsync();
 

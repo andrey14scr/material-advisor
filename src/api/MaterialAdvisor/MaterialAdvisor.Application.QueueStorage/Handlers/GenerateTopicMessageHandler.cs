@@ -42,7 +42,7 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
 
             await _topicGenerationHubContext.Clients
                 .User(message.UserName)
-                .SendAsync(SignalRConstants.Messages.TopicGeneratedMessage, message.TopicId, TopicGenerationStatuses.Generated);
+                .SendAsync(SignalRConstants.Messages.TopicGeneratedMessage, message.TopicId, GenerationStatuses.Generated);
         }
         catch (Exception ex)
         {
@@ -50,7 +50,7 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
 
             await _topicGenerationHubContext.Clients
                 .User(message.UserName)
-                .SendAsync(SignalRConstants.Messages.TopicGeneratedMessage, message.TopicId, TopicGenerationStatuses.Failed);
+                .SendAsync(SignalRConstants.Messages.TopicGeneratedMessage, message.TopicId, GenerationStatuses.Failed);
 
             await _dbContext.Topics.Where(t => t.Id == message.TopicId).ExecuteDeleteAsync();
 
@@ -82,7 +82,7 @@ public class GenerateTopicMessageHandler(IHubContext<TopicGenerationHub> _topicG
         _logger.LogDebug($"Prompt: {prompt}");
 
         var json = await _materialAdvisorAIAssistant.CallAssistant(topic.File!, prompt, _openAIAssistantOptions.Value.GenerateQuestionsAssistantId);
-        return json;
+        return await Task.FromResult(json);
     }
 
     private async Task<TopicQuestions> ParseTopicQuestions(string json)

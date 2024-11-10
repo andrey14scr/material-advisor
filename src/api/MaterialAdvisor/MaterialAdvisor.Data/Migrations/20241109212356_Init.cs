@@ -42,6 +42,26 @@ namespace MaterialAdvisor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GeneratedFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    File = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GeneratedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GeneratedFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GeneratedFiles_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -350,6 +370,18 @@ namespace MaterialAdvisor.Data.Migrations
                 {
                     table.PrimaryKey("PK_VerifiedAnswers", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_VerifiedAnswers_AnswerGroups_AnswerGroupId",
+                        column: x => x.AnswerGroupId,
+                        principalTable: "AnswerGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_VerifiedAnswers_Attempts_AttemptId",
+                        column: x => x.AttemptId,
+                        principalTable: "Attempts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_VerifiedAnswers_SubmittedAnswers_AnswerGroupId_AttemptId",
                         columns: x => new { x.AnswerGroupId, x.AttemptId },
                         principalTable: "SubmittedAnswers",
@@ -385,6 +417,11 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "IX_Attempts_UserId",
                 table: "Attempts",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GeneratedFiles_OwnerId",
+                table: "GeneratedFiles",
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupEntityKnowledgeCheckEntity_KnowledgeChecksId",
@@ -471,11 +508,19 @@ namespace MaterialAdvisor.Data.Migrations
                 name: "IX_VerifiedAnswers_AnswerGroupId_AttemptId",
                 table: "VerifiedAnswers",
                 columns: new[] { "AnswerGroupId", "AttemptId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VerifiedAnswers_AttemptId",
+                table: "VerifiedAnswers",
+                column: "AttemptId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "GeneratedFiles");
+
             migrationBuilder.DropTable(
                 name: "GroupEntityKnowledgeCheckEntity");
 

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using MaterialAdvisor.Data.Entities.Anstraction;
 
-using Microsoft.EntityFrameworkCore;
+using MaterialAdvisor.Data.Entities.Anstraction;
 
 namespace MaterialAdvisor.Data.Entities;
 
@@ -15,6 +14,8 @@ public class TopicEntity : IEntity, IVersion
     public Guid PersistentId { get; set; }
 
     public uint Version { get; set; }
+
+    public DateTime? GeneratedAt { get; set; }
 
     public Guid OwnerId { get; set; }
 

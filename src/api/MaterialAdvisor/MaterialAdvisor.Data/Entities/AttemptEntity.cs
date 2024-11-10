@@ -23,4 +23,6 @@ public class AttemptEntity : IEntity
     public bool IsCanceled { get; set; }
 
     public ICollection<SubmittedAnswerEntity> SubmittedAnswers { get; set; } = [];
+
+    public ICollection<VerifiedAnswerEntity> VerifiedAnswers { get; set; } = [];
 }

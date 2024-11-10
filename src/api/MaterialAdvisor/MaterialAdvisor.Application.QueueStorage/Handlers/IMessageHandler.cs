@@ -1,5 +1,4 @@
 ﻿using MaterialAdvisor.Application.QueueStorage.Messages;
-using MaterialAdvisor.Data;
 
 namespace MaterialAdvisor.Application.QueueStorage.Handlers;
 

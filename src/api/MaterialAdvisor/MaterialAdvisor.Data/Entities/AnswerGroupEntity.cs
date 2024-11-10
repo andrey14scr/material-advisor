@@ -21,4 +21,6 @@ public class AnswerGroupEntity : IEntity
     public virtual ICollection<LanguageTextEntity> Content { get; set; } = [];
 
     public virtual ICollection<AnswerEntity> Answers { get; set; } = [];
+
+    public ICollection<VerifiedAnswerEntity> VerifiedAnswers { get; set; } = [];
 }

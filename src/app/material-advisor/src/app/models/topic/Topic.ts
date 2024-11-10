@@ -7,4 +7,5 @@ export interface Topic {
   version: number;
   name: LanguageText[];
   questions: Question[];
+  generatedAt?: Date;
 }

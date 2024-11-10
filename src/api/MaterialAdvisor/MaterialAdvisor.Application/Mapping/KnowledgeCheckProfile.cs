@@ -16,6 +16,7 @@ public class KnowledgeCheckProfile : Profile
         CreateMap<KnowledgeCheckEntity, KnowledgeCheckTopicListItem>()
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.SpecifyKind(src.StartDate, DateTimeKind.Utc)))
             .ForMember(dest => dest.DataCount, opt => opt.MapFrom(src => src.Attempts.Count))
+            .ForMember(dest => dest.GeneratedFiles, opt => opt.MapFrom(src => src.GeneratedFilesKnowldgeChecks.Select(gfkc => gfkc.GeneratedFile)))
             .ForMember(dest => dest.HasAnswersToVerify, opt => opt.MapFrom(src => src.Attempts.Any()))
             .ForMember(dest => dest.EndDate,
                 opt =>

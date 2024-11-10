@@ -33,6 +33,23 @@ public class LocalStorageService : AbstractStorageService, IStorageService
         return filePath;
     }
 
+    public async Task<string> SaveFile(Stream stream, string fileName)
+    {
+        var filePath = Path.Combine(_storageDirectory, GetUniqueFileName(fileName));
+
+        if (!Directory.Exists(_storageDirectory))
+        {
+            Directory.CreateDirectory(_storageDirectory);
+        }
+
+        using (var fileStream = new FileStream(filePath, FileMode.Create))
+        {
+            await stream.CopyToAsync(fileStream);
+        }
+
+        return filePath;
+    }
+
     public async Task<FileToDownload> GetFile(string name)
     {
         var filePath = Path.Combine(_storageDirectory, name);

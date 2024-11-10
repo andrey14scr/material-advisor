@@ -27,6 +27,7 @@ public class TopicGenerationController(ITopicService _topicService,
             Name = request.TopicName,
             File = file,
             Version = 0,
+            GeneratedAt = DateTime.UtcNow,
         };
         var createdTopic = await _topicService.Create(topicToCreate);
 

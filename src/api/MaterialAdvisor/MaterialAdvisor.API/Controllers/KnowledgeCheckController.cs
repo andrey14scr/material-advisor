@@ -1,6 +1,5 @@
 ﻿using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.Models.Topics;
-using MaterialAdvisor.Application.Services;
 using MaterialAdvisor.Application.Services.Abstraction;
 
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +38,7 @@ public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckServ
         return Ok(result);
     }
 
-    [HttpPost()]
+    [HttpPost]
     public async Task<ActionResult<KnowledgeCheck>> CreateOrUpdate(KnowledgeCheck knowledgeCheck)
     {
         if (knowledgeCheck.Id == Guid.Empty)
@@ -54,7 +53,7 @@ public class KnowledgeCheckController(IKnowledgeCheckService _knowledgeCheckServ
         }
     }
 
-    [HttpDelete()]
+    [HttpDelete]
     public async Task<ActionResult<bool>> Delete(Guid id)
     {
         var result = await _knowledgeCheckService.Delete(id);

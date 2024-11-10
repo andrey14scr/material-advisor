@@ -43,4 +43,6 @@ public class KnowledgeCheckEntity : IEntity
     public virtual ICollection<GroupEntity> Groups { get; set; } = [];
 
     public virtual ICollection<AttemptEntity> Attempts { get; set; } = [];
+
+    public virtual ICollection<GeneratedFilesKnowldgeChecks> GeneratedFilesKnowldgeChecks { get; set; } = [];
 }

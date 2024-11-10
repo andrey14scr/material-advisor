@@ -34,4 +34,6 @@ public class UserEntity : IEntity
     public virtual ICollection<GroupEntity> Groups { get; set; } = [];
 
     public virtual ICollection<GroupEntity> CreatedGroups { get; set; } = [];
+
+    public virtual ICollection<GeneratedFileEntity> GeneratedFiles { get; set; } = [];
 }

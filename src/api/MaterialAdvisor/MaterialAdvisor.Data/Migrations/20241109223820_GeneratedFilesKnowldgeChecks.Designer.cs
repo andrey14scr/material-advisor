@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MaterialAdvisor.Data.Migrations
 {
     [DbContext(typeof(MaterialAdvisorContext))]
-    [Migration("20241106224854_Init")]
-    partial class Init
+    [Migration("20241109223820_GeneratedFilesKnowldgeChecks")]
+    partial class GeneratedFilesKnowldgeChecks
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,50 @@ namespace MaterialAdvisor.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Attempts");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GeneratedFileEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("File")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("GeneratedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GeneratedFor")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("GeneratedFiles");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GeneratedFilesKnowldgeChecks", b =>
+                {
+                    b.Property<Guid>("GeneratedFileId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("KnowledgeCheckId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("GeneratedFileId", "KnowledgeCheckId");
+
+                    b.HasIndex("GeneratedFileId")
+                        .IsUnique();
+
+                    b.HasIndex("KnowledgeCheckId");
+
+                    b.ToTable("GeneratedFilesKnowldgeChecks");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
@@ -430,6 +474,8 @@ namespace MaterialAdvisor.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AttemptId");
+
                     b.HasIndex("AnswerGroupId", "AttemptId");
 
                     b.ToTable("VerifiedAnswers");
@@ -504,6 +550,36 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("KnowledgeCheck");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GeneratedFileEntity", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.UserEntity", "Owner")
+                        .WithMany("GeneratedFiles")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GeneratedFilesKnowldgeChecks", b =>
+                {
+                    b.HasOne("MaterialAdvisor.Data.Entities.GeneratedFileEntity", "GeneratedFile")
+                        .WithMany("GeneratedFilesKnowldgeChecks")
+                        .HasForeignKey("GeneratedFileId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", "KnowledgeCheck")
+                        .WithMany("GeneratedFilesKnowldgeChecks")
+                        .HasForeignKey("KnowledgeCheckId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GeneratedFile");
+
+                    b.Navigation("KnowledgeCheck");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.GroupEntity", b =>
@@ -617,11 +693,27 @@ namespace MaterialAdvisor.Data.Migrations
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.VerifiedAnswerEntity", b =>
                 {
+                    b.HasOne("MaterialAdvisor.Data.Entities.AnswerGroupEntity", "AnswerGroup")
+                        .WithMany("VerifiedAnswers")
+                        .HasForeignKey("AnswerGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MaterialAdvisor.Data.Entities.AttemptEntity", "Attempt")
+                        .WithMany("VerifiedAnswers")
+                        .HasForeignKey("AttemptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("MaterialAdvisor.Data.Entities.SubmittedAnswerEntity", "SubmittedAnswer")
                         .WithMany("VerifiedAnswers")
                         .HasForeignKey("AnswerGroupId", "AttemptId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("AnswerGroup");
+
+                    b.Navigation("Attempt");
 
                     b.Navigation("SubmittedAnswer");
                 });
@@ -636,16 +728,27 @@ namespace MaterialAdvisor.Data.Migrations
                     b.Navigation("Answers");
 
                     b.Navigation("Content");
+
+                    b.Navigation("VerifiedAnswers");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.AttemptEntity", b =>
                 {
                     b.Navigation("SubmittedAnswers");
+
+                    b.Navigation("VerifiedAnswers");
+                });
+
+            modelBuilder.Entity("MaterialAdvisor.Data.Entities.GeneratedFileEntity", b =>
+                {
+                    b.Navigation("GeneratedFilesKnowldgeChecks");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.KnowledgeCheckEntity", b =>
                 {
                     b.Navigation("Attempts");
+
+                    b.Navigation("GeneratedFilesKnowldgeChecks");
                 });
 
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.QuestionEntity", b =>
@@ -672,6 +775,8 @@ namespace MaterialAdvisor.Data.Migrations
             modelBuilder.Entity("MaterialAdvisor.Data.Entities.UserEntity", b =>
                 {
                     b.Navigation("CreatedGroups");
+
+                    b.Navigation("GeneratedFiles");
                 });
 #pragma warning restore 612, 618
         }

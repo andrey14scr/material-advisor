@@ -27,6 +27,15 @@ public class BlobStorageService : AbstractStorageService, IStorageService
         using var stream = file.OpenReadStream();
         await blobClient.UploadAsync(stream, overwrite: true);
 
+        return blobClient.Name;
+    }
+
+    public async Task<string> SaveFile(Stream stream, string fileName)
+    {
+        var blobContainerClient = await GetOrCreateContainerAsync(_containerName);
+        var blobClient = blobContainerClient.GetBlobClient(GetUniqueFileName(fileName));
+
+        await blobClient.UploadAsync(stream, overwrite: true);
 
         return blobClient.Name;
     }

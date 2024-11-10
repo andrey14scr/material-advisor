@@ -1,6 +1,6 @@
 ﻿namespace MaterialAdvisor.SignalR;
 
-public enum TopicGenerationStatuses
+public enum GenerationStatuses
 {
     Generated,
     Failed,

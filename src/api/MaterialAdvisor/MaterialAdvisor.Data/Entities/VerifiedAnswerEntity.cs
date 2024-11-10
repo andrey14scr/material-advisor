@@ -10,7 +10,11 @@ public class VerifiedAnswerEntity
 
     public Guid AnswerGroupId { get; set; }
 
+    public virtual AnswerGroupEntity AnswerGroup { get; set; }
+
     public Guid AttemptId { get; set; }
+
+    public virtual AttemptEntity Attempt { get; set; }
 
     [ForeignKey($"{nameof(AnswerGroupId)}, {nameof(AttemptId)}")]
     public virtual SubmittedAnswerEntity SubmittedAnswer { get; set; }

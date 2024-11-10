@@ -8,5 +8,5 @@ public class StartedAttempt
 
     public Guid KnowledgeCheckId { get; set; }
 
-    public ICollection<SubmittedAnswer> SubmittedAnswers { get; set; } = [];
+    public IEnumerable<SubmittedAnswer> SubmittedAnswers { get; set; } = [];
 }

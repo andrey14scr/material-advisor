@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
@@ -23,6 +24,13 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
         var entityToDelete = await GetFullEntityToDelete().SingleAsync(t => t.Id == id);
         var deleted = await DeleteAndSave(entityToDelete);
         return deleted != 0;
+    }
+
+    public async Task<bool> HasVerifiedAttemts(Guid id)
+    {
+        var hasVerifiedAttemts = await _dbContext.KnowledgeChecks
+            .AnyAsync(kc => kc.Id == id && !kc.Attempts.Any(a => !a.VerifiedAnswers.Any(va => va.IsManual)));
+        return hasVerifiedAttemts;
     }
 
     public async Task<TModel> Get<TModel>(Guid id)
@@ -106,6 +114,26 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<Guid> AddPreGeneratedFile(Guid id)
+    {
+        var user = await _userProvider.GetUser();
+
+        var created = await _dbContext.GeneratedFiles.AddAsync(new GeneratedFileEntity
+        {
+            OwnerId = user.Id,
+            GeneratedAt = DateTime.UtcNow,
+            GeneratedFilesKnowldgeChecks =
+            [
+                new GeneratedFilesKnowldgeChecks
+                {
+                    KnowledgeCheckId = id,
+                }
+            ]
+        });
+        await _dbContext.SaveChangesAsync();
+        return created.Entity.Id;
     }
 
     private async Task<KnowledgeCheckEntity> MapToEntity<TModel>(TModel model)

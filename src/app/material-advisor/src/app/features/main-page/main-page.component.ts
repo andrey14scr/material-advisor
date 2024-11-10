@@ -35,6 +35,8 @@ export class MainPageComponent {
   ownedTopics: TopicListItem<KnowledgeCheckTopicListItem>[] = [];
   currentTag?: string;
   hubConnection!: signalR.HubConnection;
+
+  MAX_MINUTES_FROM_UNLOADED_GENERATION = 15;
   
   constructor(private translationService: TranslationService, 
     private topicService: TopicService,
@@ -55,10 +57,13 @@ export class MainPageComponent {
     this.topicService.getTopics()
       .pipe(
         map(data => 
-          data.map(item => ({
-            ...item,
-            knowledgeChecks: sortByStartDate(item.knowledgeChecks)
-          }))
+          data
+            .filter(t => t.version > 0 || 
+              t.generatedAt && ((new Date().getTime() - t.generatedAt.getTime() / 1000) / 60 < this.MAX_MINUTES_FROM_UNLOADED_GENERATION))
+            .map(item => ({
+              ...item,
+              knowledgeChecks: sortByStartDate(item.knowledgeChecks)
+            }))
         )
       )
       .subscribe(
