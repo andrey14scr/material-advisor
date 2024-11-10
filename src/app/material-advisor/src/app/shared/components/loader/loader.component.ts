@@ -11,4 +11,5 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
 })
 export class LoaderComponent {
   @Input() isLoading: boolean = false;
+  @Input() overlay: boolean = true;
 }

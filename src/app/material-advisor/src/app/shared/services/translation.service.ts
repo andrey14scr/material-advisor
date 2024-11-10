@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, map, mergeMap, Observable, of } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
 import { LanguageText } from '@shared/models/LanguageText';
 import { CookieStorageService } from './cookie-storage.service';
 import { Language } from '@shared/types/Language';
@@ -15,6 +15,7 @@ export class TranslationService {
   private defaultLanguageCode = 'en';
   private currentLanguageCode = new BehaviorSubject<string>(this.defaultLanguageCode);
   private translations = new BehaviorSubject<any>({});
+  private languages: Language[] = [];
 
   private languagesDictionary: { [id: string] : LanguageEnum; } = { 
     'en': LanguageEnum.English,
@@ -47,6 +48,10 @@ export class TranslationService {
     return key.split('.').reduce((acc, part) => acc && acc[part], translations) || key;;
   }
 
+  getCurrentLanguage(): LanguageEnum {
+    return this.languagesDictionary[this.getCurrentLanguageCode()];
+  }
+
   getCurrentLanguageCode(): string {
     return this.currentLanguageCode.value;
   }
@@ -60,22 +65,28 @@ export class TranslationService {
     return languageTexts.find(lt => lt.languageId === languageId)?.text ?? languageTexts.sort((a,b) => a.languageId - b.languageId)[0].text;
   }
 
-  getLanguages(): Observable<Language> {
+  getLanguages(): Observable<Language[]> {
+    if (this.languages.length) {
+      return of(this.languages);
+    }
+    
     return this.http.get<string[]>(`${this.langPath}/languages.json`).pipe(
-      mergeMap(langTags =>
-        of(...langTags).pipe(
-          mergeMap(langCode =>
-            this.http.get<{ languageName: string }>(`${this.langPath}/${langCode}.json`).pipe(
-              map(data => ({
-                languageId: this.languagesDictionary[langCode],
-                name: data.languageName,
-                code: langCode,
-                flag: `assets/img/${langCode}.png`
-              }))
-            )
+      switchMap((arrayOfStrings) => {
+        const transformedObservables = arrayOfStrings.map((langCode) =>
+          this.http.get<{ languageName: string }>(`${this.langPath}/${langCode}.json`).pipe(
+            map((data) => ({
+              languageId: this.languagesDictionary[langCode],
+              name: data.languageName,
+              code: langCode,
+              flag: `assets/img/${langCode}.png`
+            }))
           )
-        )
-      )
+        );
+        return forkJoin(transformedObservables);
+      }),
+      tap((result) => {
+        this.languages = result;
+      })
     );
   }
 }

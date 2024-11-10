@@ -109,7 +109,7 @@ builder.Services
                 if (!string.IsNullOrEmpty(accessToken) && 
                     (path.StartsWithSegments(SignalRConstants.TopicGenerationHubName) || 
                         path.StartsWithSegments(SignalRConstants.AnswerVerificationHubName) ||
-                        path.StartsWithSegments(SignalRConstants.TableGenerationHubName)))
+                        path.StartsWithSegments(SignalRConstants.ReportGenerationHubName)))
                 {
                     context.Token = accessToken;
                 }

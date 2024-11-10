@@ -30,6 +30,7 @@ public static class ConfigurationManager
         services.AddScoped<IKnowledgeCheckService, KnowledgeCheckService>();
         services.AddScoped<ISubmittedAnswerService, SubmittedAnswerService>();
         services.AddScoped<IAttemptService, AttemptService>();
+        services.AddScoped<IGeneratedFileService, GeneratedFileService>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

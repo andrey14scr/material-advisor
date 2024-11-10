@@ -16,15 +16,15 @@ public class UserController(IUserService _userService) : BaseApiController
         return Ok();
     }
 
-    [HttpGet("language")]
-    public async Task<ActionResult> GetCurrentLanguage()
+    [HttpGet("settings")]
+    public async Task<IActionResult> GetSettings()
     {
-        var currentLanguage = await _userService.CetCurrentLanguage();
-        return Ok(currentLanguage);
+        var settings = await _userService.GetUserSettings();
+        return Ok(settings);
     }
 
     [HttpGet("search")]
-    public async Task<ActionResult<IList<User>>> Search(string input)
+    public async Task<IActionResult> Search(string input)
     {
         var result = await _userService.Search<Group>(input);
         return Ok(result);

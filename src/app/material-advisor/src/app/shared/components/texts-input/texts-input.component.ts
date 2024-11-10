@@ -7,16 +7,18 @@ import { TranslationService } from '@shared/services/translation.service';
 import { LanguageText } from '@shared/models/LanguageText';
 import { LanguageEnum } from '@shared/types/LanguageEnum';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
   selector: 'texts-input',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, LoaderComponent],
   templateUrl: './texts-input.component.html',
   styleUrl: './texts-input.component.scss'
 })
 export class TextsInputComponent implements OnInit {
   languages: Language[] = [];
+  isLoading: boolean = true;
   @Input() formName!: string;
   @Input() isOneRow: boolean = true;
   @Input() form!: FormGroup;
@@ -25,16 +27,17 @@ export class TextsInputComponent implements OnInit {
   constructor(private fb: FormBuilder, private translationService: TranslationService) { }
   
   ngOnInit() {
-    this.translationService.getLanguages().subscribe(lang => {
-      this.languages.push(lang);
-    });
+    this.translationService.getLanguages().subscribe(languages => {
+      this.languages = languages;
 
-    if (this.formData && this.formData.length) {
-      this.formData.forEach(x => this.addForm(x.languageId, x.text));
-    }
-    else {
-      this.addEmptyForm();
-    }
+      if (this.formData && this.formData.length) {
+        this.formData.forEach(x => this.addForm(x.languageId, x.text));
+      }
+      else {
+        this.addEmptyForm();
+      }
+      this.isLoading = false;
+    });
   }
 
   get textsFormArray(): FormArray {
@@ -42,8 +45,15 @@ export class TextsInputComponent implements OnInit {
   }
 
   addEmptyForm() {
-    const defaultLanguage = this.languages.find(l => !this.isLanguageChosen(l.languageId))?.languageId!;
-    this.addForm(defaultLanguage, '');
+    const currentLanguageId = this.translationService.getCurrentLanguage();
+
+    if (this.isLanguageChosen(currentLanguageId)) {
+      const defaultLanguage = this.languages.find(l => !this.isLanguageChosen(l.languageId))?.languageId!;
+      this.addForm(defaultLanguage, '');
+    }
+    else {
+      this.addForm(currentLanguageId, '');
+    }
   }
 
   addForm(languageId: LanguageEnum, text: string) {
@@ -51,6 +61,7 @@ export class TextsInputComponent implements OnInit {
       languageId: [languageId, Validators.required],
       text: [text, Validators.required],
     });
+    
     this.textsFormArray.push(textGroup);
   }
 

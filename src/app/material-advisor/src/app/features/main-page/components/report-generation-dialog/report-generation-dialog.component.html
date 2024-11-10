@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Generated files</h2>
+<loader [isLoading]="isLoading" [overlay]="false"/>
+<div *ngIf="!isLoading" mat-dialog-content>
+  <mat-label>
+    You can download an existiong file or generate new one
+  </mat-label>
+  <mat-list *ngFor="let item of items">
+    <mat-list-item>
+      <div class="d-flex align-items-center">
+        <span *ngIf="!item.file.file">
+          Generation started {{ item.file.generatedAt | date: 'yyy-MM-dd HH:mm:ss' }}
+        </span>
+        <span *ngIf="item.file.file" class="link-text" (click)="!item.isLoading && onDownload(item)">
+          {{ item.file.fileName ?? 'Generation started ' + item.file.generatedAt }}
+        </span>
+        <div *ngIf="item.isLoading || item.file.file == null" class="ms-1">
+          <mat-progress-spinner [diameter]="18" mode="indeterminate"/>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onCreateNew()">Create New</button>
+</div>

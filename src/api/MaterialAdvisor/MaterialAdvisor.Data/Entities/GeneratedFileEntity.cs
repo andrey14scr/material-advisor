@@ -11,6 +11,8 @@ public class GeneratedFileEntity : IEntity
 
     public string? File { get; set; }
 
+    public string? FileName { get; set; }
+
     public DateTime GeneratedAt { get; set; }
 
     public Guid OwnerId { get; set; }

@@ -20,6 +20,7 @@ public class GenerateTablesMessageHandler(IHubContext<TableGenerationHub> _table
 {
     public async Task HandleAsync(GenerateTablesMessage message)
     {
+        var ids = message.TableGenerationParameters.Select(p => p.PreGeneratedFileId).ToList();
         try
         {
             _logger.LogDebug($"Handled {nameof(GenerateTablesMessage)}");
@@ -31,7 +32,7 @@ public class GenerateTablesMessageHandler(IHubContext<TableGenerationHub> _table
 
             await _tableGenerationHubContext.Clients
                 .User(message.UserName)
-                .SendAsync(SignalRConstants.Messages.TableGeneratedMessage, message.TableGenerationParameters.Select(p => p.KnowledgeCheckId), GenerationStatuses.Generated);
+                .SendAsync(SignalRConstants.Messages.ReportGeneratedMessage, ids, GenerationStatuses.Generated);
         }
         catch (Exception ex)
         {
@@ -39,7 +40,7 @@ public class GenerateTablesMessageHandler(IHubContext<TableGenerationHub> _table
 
             await _tableGenerationHubContext.Clients
                 .User(message.UserName)
-                .SendAsync(SignalRConstants.Messages.TableGeneratedMessage, message.TableGenerationParameters.Select(p => p.KnowledgeCheckId), GenerationStatuses.Failed);
+                .SendAsync(SignalRConstants.Messages.ReportGeneratedMessage, ids, GenerationStatuses.Failed);
 
             throw;
         }
@@ -55,6 +56,7 @@ public class GenerateTablesMessageHandler(IHubContext<TableGenerationHub> _table
                 await _dbContext.GeneratedFiles
                     .Where(gf => gf.Id == file.PreGeneratedFileId)
                     .ExecuteUpdateAsync(gf => gf.SetProperty(p => p.File, file.File)
+                        .SetProperty(p => p.FileName, file.FileName)
                         .SetProperty(p => p.GeneratedAt, now));
             }
             else
@@ -68,7 +70,14 @@ public class GenerateTablesMessageHandler(IHubContext<TableGenerationHub> _table
             }
         }
 
-        await ClearOldFiles(files);
+        try
+        {
+            await ClearOldFiles(files);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error clearing old files");
+        }
     }
 
     private async Task ClearOldFiles(IEnumerable<TableGenerationResponse> files)

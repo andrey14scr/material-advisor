@@ -88,11 +88,14 @@ export class TopicComponent implements OnInit, OnDestroy {
       languages: [[]],
       file: [null]
     });
+
+    this.form.get('languages')?.disable();
   }
 
   ngOnInit() {
-    this.translationService.getLanguages().subscribe(lang => {
-      this.languages.push(lang);
+    this.translationService.getLanguages().subscribe(languages => {
+      this.languages = languages;
+      this.form.get('languages')?.enable();
     });
 
     const id = this.route.snapshot.paramMap.get('id');

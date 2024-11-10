@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TranslationService } from '../../services/translation.service';
 import { Language } from '@shared/types/Language';
@@ -8,33 +8,29 @@ import { LanguageEnum } from '@shared/types/LanguageEnum';
 @Component({
   selector: 'app-language-dropdown',
   standalone: true,
-  imports: [NgFor],
+  imports: [CommonModule],
   templateUrl: './language-dropdown.component.html',
   styleUrl: './language-dropdown.component.scss'
 })
 export class LanguageDropdownComponent implements OnInit {
   languages: Language[] = [];
-  selectedLanguage: Language | null = null;
+  selectedLanguage!: Language;
   defaultLanguageId = LanguageEnum.English;
 
   constructor (private translationService: TranslationService, private userService: UserService){}
 
   ngOnInit() {
-    let currentCode = this.translationService.getCurrentLanguageCode();
-
-    if (!currentCode) {
-      this.userService.getUserCurrentLanguage().subscribe(lang => {
-        currentCode = lang;
+    this.translationService.getLanguages().subscribe(languages => {
+      this.languages = languages;
+      this.userService.getUserCurrentLanguage().subscribe(settings => {
+        if (settings.currentLanguage) {
+          this.selectedLanguage = this.languages.find(x => x.code === settings.currentLanguage)!;
+        }
+        else {
+          const selectedLanguage = this.languages.find(x => x.languageId === this.defaultLanguageId)!;
+          this.languageChanged(selectedLanguage);
+        }
       });
-    }
-
-    this.translationService.getLanguages().subscribe(lang => {
-      this.languages.push(lang);
-
-      if (!currentCode && lang.languageId === this.defaultLanguageId || currentCode && lang.code === currentCode) {
-        currentCode = lang.code;
-        this.selectedLanguage = lang;
-      }
     });
   }
 

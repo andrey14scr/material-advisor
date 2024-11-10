@@ -6,5 +6,5 @@ public class UserSettings
 
     //public string? SecondName { get; set; }
 
-    public string CurrentLanguage { get; set; } = null!;
+    public string? CurrentLanguage { get; set; }
 }

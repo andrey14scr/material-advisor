@@ -19,6 +19,4 @@ public interface IKnowledgeCheckService
     Task<IDictionary<Guid, int>> GetAttemptsCount(IEnumerable<Guid> topicIds);
 
     Task<bool> HasVerifiedAttemts(Guid id);
-
-    Task<Guid> AddPreGeneratedFile(Guid id);
 }

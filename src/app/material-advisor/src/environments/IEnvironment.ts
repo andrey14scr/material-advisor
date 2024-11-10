@@ -1,5 +1,5 @@
 export interface IEnvironment {
-    production: boolean;
-    hashKey: string;
-    apiUrl: string;
+  production: boolean;
+  hashKey: string;
+  apiUrl: string;
 }

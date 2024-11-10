@@ -4,7 +4,7 @@ using MaterialAdvisor.API.Models.Requests.TopicGeneration;
 
 namespace MaterialAdvisor.API.Validators;
 
-public class TopicGenerationRequestValidator : AbstractValidator<TopicGenerationRequest>
+public class TopicGenerationRequestValidator : AbstractValidator<ReportGenerationRequest>
 {
     public TopicGenerationRequestValidator()
     {

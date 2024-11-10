@@ -11,7 +11,7 @@ public interface IUserService : ISearchService
 
     Task UpdateSettings(UserSettings userSettings);
 
-    Task<string?> CetCurrentLanguage();
+    Task<UserSettings> GetUserSettings();
 
     Task<IList<TModel>> Get<TModel>(Pagination pagination);
 }

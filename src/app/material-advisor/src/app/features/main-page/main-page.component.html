@@ -25,19 +25,24 @@
           <div class="d-flex flex-row align-items-center">
             <span>{{ knowledgeCheck.name }}</span>
             <div class="ms-1">
+              <button mat-icon-button [disabled]="!knowledgeCheck.attemptsToVerifyCount" (click)="openKnowledgeCheckVerifyPage(knowledgeCheck.id)">
+                <mat-icon>library_books</mat-icon>
+              </button>
+              <span *ngIf="knowledgeCheck.attemptsToVerifyCount" class="rounded-pill bg-primary badge-count text-white">
+                {{knowledgeCheck.dataCount}}
+              </span>
+              <button mat-icon-button (click)="downloadReport(knowledgeCheck)">
+                <mat-icon>download</mat-icon>
+              </button>
+              <span *ngIf="knowledgeCheck.dataCount" class="rounded-pill bg-primary badge-count text-white">
+                {{knowledgeCheck.dataCount}}
+              </span>
               <button mat-icon-button (click)="openKnowledgeCheckDialog(topic, knowledgeCheck.id)">
                 <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button [disabled]="!knowledgeCheck.hasAnswersToVerify" (click)="openKnowledgeCheckVerifyPage(knowledgeCheck.id)">
-                <mat-icon>library_books</mat-icon>
               </button>
               <button mat-icon-button (click)="deleteKnowledgeCheck(topic, knowledgeCheck.id)">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button mat-icon-button (click)="downloadReport(knowledgeCheck.id)">
-                <mat-icon>download</mat-icon>
-              </button>              
-              <span *ngIf="knowledgeCheck.dataCount" [class.px-1]="knowledgeCheck.dataCount < 10" class="rounded-pill bg-primary badge-count text-white">{{knowledgeCheck.dataCount}}</span>
             </div>
           </div>
         </mat-list-item>

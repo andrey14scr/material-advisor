@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from "@environments/environment";
 import { User } from "@shared/models/User";
+import { UserSettings } from "@shared/models/UserSettings";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -23,7 +24,7 @@ export class UserService {
     return this.http.get<User[]>(`${this.apiRoot}`, { params: params });
   }
 
-  getUserCurrentLanguage(): Observable<string> {
-    return this.http.get<string>(`${this.apiRoot}/language`);
+  getUserCurrentLanguage(): Observable<UserSettings> {
+    return this.http.get<UserSettings>(`${this.apiRoot}/settings`);
   }
 }

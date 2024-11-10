@@ -26,17 +26,20 @@ public class TableGenerator(IStorageService _storageService, MaterialAdvisorCont
         {
             return new TableGenerationResponse
             {
-                File = null,
-                KnowledgeCheckId = tableGenerationParameter.KnowledgeCheckId
+                KnowledgeCheckId = tableGenerationParameter.KnowledgeCheckId,
+                PreGeneratedFileId = tableGenerationParameter.PreGeneratedFileId
             };
         }
         var byteArray = Encoding.UTF8.GetBytes(csv);
         using var memoryStream = new MemoryStream(byteArray);
-        var file = await _storageService.SaveFile(memoryStream, $"{knowledgeCheckName}.csv");
+        var fileName = $"{knowledgeCheckName}.csv";
+        var file = await _storageService.SaveFile(memoryStream, fileName);
         return new TableGenerationResponse
         {
             File = file,
-            KnowledgeCheckId = tableGenerationParameter.KnowledgeCheckId
+            FileName = fileName,
+            KnowledgeCheckId = tableGenerationParameter.KnowledgeCheckId,
+            PreGeneratedFileId = tableGenerationParameter.PreGeneratedFileId
         };
     }
 
@@ -78,11 +81,10 @@ public class TableGenerator(IStorageService _storageService, MaterialAdvisorCont
 
         foreach (var question in knowledgeCheck.Topic.Questions)
         {
-            csvBuilder.Append($"Question {question.Number},");
             foreach (var answerGroup in question.AnswerGroups.OrderBy(ag => ag.Question.Number).ThenBy(ag => ag.Number))
             {
                 var number = answerGroup.IsTechnical ? question.Number.ToString() : $"{question.Number}.{answerGroup.Number}";
-                csvBuilder.Append($"Answer {number},Right Answer {number},Score {number},Max Score {number},");
+                csvBuilder.Append($"{number}. Answer,{number}. Right Answer,{number}. Score,{number}. Max Score,");
             }
         }
 

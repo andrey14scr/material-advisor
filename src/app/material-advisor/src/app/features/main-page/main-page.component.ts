@@ -21,6 +21,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
 import { toFullTimeFormat } from '@shared/services/format-utils.service';
+import { ReportGenerationDialogComponent } from './components/report-generation-dialog/report-generation-dialog.component';
 
 @Component({
   selector: 'app-main-page',
@@ -312,8 +313,12 @@ export class MainPageComponent {
   openKnowledgeCheckVerifyPage(knowledgeCheckId: GUID) {
     this.router.navigate([`answer-verification/${knowledgeCheckId}`]);
   }
-
-  downloadReport(knowledgeCheckId: GUID) {
-    
+  
+  downloadReport(knowledgeCheck: KnowledgeCheckTopicListItem) {
+    const data = knowledgeCheck;
+    const dialogRef = this.dialog.open(ReportGenerationDialogComponent, {
+      width: '500px',
+      data: data
+    });
   }
 }

@@ -30,5 +30,5 @@ public class KnowledgeCheckListItem
 
     public bool IsManualOnlyVerification { get; set; }
 
-    public bool HasAnswersToVerify { get; set; }
+    public bool AttemptsToVerifyCount { get; set; }
 }

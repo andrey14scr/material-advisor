@@ -1,14 +1,14 @@
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle uppercase-text" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-      <img [src]="selectedLanguage?.flag" alt="{{selectedLanguage?.name}}" class="me-2" width="20">
-      {{ selectedLanguage ? selectedLanguage.code : 'Select Language' }}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <li *ngFor="let language of languages" (click)="languageChanged(language)" class="pointer-cursor">
-        <span class="dropdown-item">
-          <img [src]="language.flag" alt="{{language.name}}" class="me-2" width="20">
-          {{ language.name }}
-        </span>
-      </li>
-    </ul>
-  </div>
+<div *ngIf="selectedLanguage" class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle uppercase-text" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+    <img [src]="selectedLanguage.flag" alt="{{selectedLanguage.name}}" class="me-2" width="20">
+    {{ selectedLanguage ? selectedLanguage.code : 'Select Language' }}
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <li *ngFor="let language of languages" (click)="languageChanged(language)" class="pointer-cursor">
+      <span class="dropdown-item">
+        <img [src]="language.flag" alt="{{language.name}}" class="me-2" width="20">
+        {{ language.name }}
+      </span>
+    </li>
+  </ul>
+</div>

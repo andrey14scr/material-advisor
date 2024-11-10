@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 
 using MaterialAdvisor.Application.Exceptions;
-using MaterialAdvisor.Application.Models.Users;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 
 using Microsoft.EntityFrameworkCore;
-
-using System.Linq;
 
 namespace MaterialAdvisor.Application.Services;
 

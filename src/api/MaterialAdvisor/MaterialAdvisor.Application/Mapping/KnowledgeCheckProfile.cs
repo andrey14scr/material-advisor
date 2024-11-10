@@ -16,8 +16,7 @@ public class KnowledgeCheckProfile : Profile
         CreateMap<KnowledgeCheckEntity, KnowledgeCheckTopicListItem>()
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => DateTime.SpecifyKind(src.StartDate, DateTimeKind.Utc)))
             .ForMember(dest => dest.DataCount, opt => opt.MapFrom(src => src.Attempts.Count))
-            .ForMember(dest => dest.GeneratedFiles, opt => opt.MapFrom(src => src.GeneratedFilesKnowldgeChecks.Select(gfkc => gfkc.GeneratedFile)))
-            .ForMember(dest => dest.HasAnswersToVerify, opt => opt.MapFrom(src => src.Attempts.Any()))
+            .ForMember(dest => dest.AttemptsToVerifyCount, opt => opt.MapFrom(src => src.Attempts.Count()))
             .ForMember(dest => dest.EndDate,
                 opt =>
                 {
@@ -41,8 +40,8 @@ public class KnowledgeCheckProfile : Profile
                     opt.PreCondition(src => src.Attempts.Any());
                     opt.MapFrom(src => src.Attempts.OrderByDescending(a => a.StartDate).First().IsFinished());
                 })
-            .ForMember(dest => dest.HasAnswersToVerify,
-                opt => opt.MapFrom(src => src.Attempts.Any(a => a.SubmittedAnswers
+            .ForMember(dest => dest.AttemptsToVerifyCount,
+                opt => opt.MapFrom(src => src.Attempts.Count(a => a.SubmittedAnswers
                     .Any(sa => Data.Constants.QuestionTypesRequiredVerification.Contains(sa.AnswerGroup.Question.Type) && 
                         !sa.VerifiedAnswers.Any(va => va.IsManual)))))
             .ForMember(dest => dest.IsVerified,

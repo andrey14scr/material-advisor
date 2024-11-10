@@ -1,6 +1,4 @@
-﻿using MaterialAdvisor.Data.Entities;
-
-namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
+﻿namespace MaterialAdvisor.Application.Models.KnowledgeChecks;
 
 public class KnowledgeCheckTopicListItem
 {
@@ -12,9 +10,7 @@ public class KnowledgeCheckTopicListItem
 
     public DateTime? EndDate { get; set; }
 
-    public bool HasAnswersToVerify { get; set; }
+    public int AttemptsToVerifyCount { get; set; }
 
     public int DataCount { get; set; }
-
-    public IEnumerable<GeneratedFile> GeneratedFiles { get; set; }
 }

@@ -15,6 +15,8 @@ public class UserProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .AfterMap<DecryptUserInfoAction>();
 
+        CreateMap<UserEntity, UserSettings>();
+
         CreateMap<User, UserEntity>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

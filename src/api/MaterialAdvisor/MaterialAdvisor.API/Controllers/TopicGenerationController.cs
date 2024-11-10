@@ -19,7 +19,7 @@ public class TopicGenerationController(ITopicService _topicService,
     IMessagesQueueService _messageQueueService) : BaseApiController
 { 
     [HttpPost()]
-    public async Task<ActionResult> Generate([FromForm] TopicGenerationRequest request)
+    public async Task<ActionResult> Generate([FromForm] ReportGenerationRequest request)
     {
         var file = await _storageService.SaveFile(request.File);
         var topicToCreate = new Topic

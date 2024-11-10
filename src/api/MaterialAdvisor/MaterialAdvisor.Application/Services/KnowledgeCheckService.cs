@@ -116,26 +116,6 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
         }
     }
 
-    public async Task<Guid> AddPreGeneratedFile(Guid id)
-    {
-        var user = await _userProvider.GetUser();
-
-        var created = await _dbContext.GeneratedFiles.AddAsync(new GeneratedFileEntity
-        {
-            OwnerId = user.Id,
-            GeneratedAt = DateTime.UtcNow,
-            GeneratedFilesKnowldgeChecks =
-            [
-                new GeneratedFilesKnowldgeChecks
-                {
-                    KnowledgeCheckId = id,
-                }
-            ]
-        });
-        await _dbContext.SaveChangesAsync();
-        return created.Entity.Id;
-    }
-
     private async Task<KnowledgeCheckEntity> MapToEntity<TModel>(TModel model)
     {
         var entity = _mapper.Map<KnowledgeCheckEntity>(model);

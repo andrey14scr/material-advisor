@@ -13,5 +13,5 @@ export interface KnowledgeCheckListItem {
   passScore: number;
   maxScore: number;
   score?: number;
-  hasAnswersToVerify: boolean;
+  attemptsToVerifyCount: number;
 }

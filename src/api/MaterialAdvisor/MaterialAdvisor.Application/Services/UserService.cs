@@ -55,11 +55,12 @@ public class UserService(MaterialAdvisorContext _dbContext,
             .ExecuteUpdateAsync(u => u.SetProperty(p => p.CurrentLanguage, userSettings.CurrentLanguage));
     }
 
-    public async Task<string?> CetCurrentLanguage()
+    public async Task<UserSettings> GetUserSettings()
     {
         var user = await _userProvider.GetUser();
         var userEntity = await _dbContext.Users.SingleAsync(u => u.Id == user.Id);
-        return userEntity.CurrentLanguage;
+        var settings = _mapper.Map<UserSettings>(userEntity);
+        return settings;
     }
 
     public async Task<IList<TModel>> Search<TModel>(string input)

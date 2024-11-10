@@ -4,7 +4,7 @@ using MaterialAdvisor.Data.Enums;
 
 namespace MaterialAdvisor.API.Models.Requests.TopicGeneration;
 
-public class TopicGenerationRequest
+public class ReportGenerationRequest
 {
     public List<LanguageText> TopicName { get; set; } = [];
 

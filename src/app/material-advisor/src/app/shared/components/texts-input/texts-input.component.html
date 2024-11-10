@@ -1,5 +1,6 @@
 <mat-card class="texts-card p-1">
-  <div [formGroup]="form" class="mt-2">
+  <loader [isLoading]="isLoading" [overlay]="false"/>
+  <div *ngIf="!isLoading" [formGroup]="form" class="mt-2">
     <div [formArrayName]="formName">
       <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroupName]="i" class="d-flex align-items-center mb-3">
         <mat-form-field appearance="outline" class="w-25" subscriptSizing="dynamic">

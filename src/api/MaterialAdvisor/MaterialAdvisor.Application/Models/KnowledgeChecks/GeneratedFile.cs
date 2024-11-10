@@ -6,5 +6,7 @@ public class GeneratedFile
 
     public string? File { get; set; }
 
+    public string? FileName { get; set; }
+
     public DateTime GeneratedAt { get; set; }
 }
