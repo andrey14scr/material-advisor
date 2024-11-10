@@ -62,7 +62,6 @@ export class AnswersVerificationComponent implements OnInit {
       .build();
 
     this.hubConnection.on('AnswersVerified', (answers: VerifiedAIAnswer[]) => {
-      console.log
       answers.forEach(answer => {
         const existingAnswer = this.items.find(i => i.unverifiedAnswer.submittedAnswer.answerGroupId === answer.answerGroupId && 
           i.unverifiedAnswer.submittedAnswer.attemptId === answer.attemptId);
