@@ -8,6 +8,7 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 import { KnowledgeCheckTopicListItem } from '@models/knowledge-check/KnowledgeCheckTopicListItem';
 import { sortByStartDate } from '@shared/services/sort-utils.service';
 import { KnowledgeCheckCreateDialogComponent } from '@features/knowledge-check-create-dialog/knowledge-check-create-dialog.component';
+import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
   selector: 'knowledge-check-list',
@@ -23,6 +24,7 @@ export class KnowledgeChecksComponent implements OnInit {
 
   constructor(
     private knowledgeCheckService: KnowledgeCheckService,
+    private translationService: TranslationService,
     private dialog: MatDialog,
   ) { }
 
@@ -87,5 +89,9 @@ export class KnowledgeChecksComponent implements OnInit {
         });
       }
     });
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

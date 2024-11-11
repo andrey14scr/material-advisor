@@ -1,56 +1,193 @@
 {
-    "languages":{
-        "en": "Angielski",
-        "pl": "Polski"
+  "actions": {
+    "accept": "Akceptować",
+    "cancel": "Cofnąć",
+    "create": "Utworzyć",
+    "delete": "Usunąć",
+    "generate": "Wygenerowac",
+    "ok": "OK",
+    "save": "Zapisać",
+    "submit": "Potwierdić",
+    "update": "Aktualizować"
+  },
+  "answerVerification": {
+    "comment": "Komentarz:",
+    "completedBy": "Ukończone przez",
+    "exampleOfRightAnswer": "Przykład prawidłowej odpowiedzi",
+    "noAnswersToVerify": "Brak odpowiedzi do zweryfikowania",
+    "ofMax": "maks.",
+    "returnToMainPage": "Powrót do strony głównej",
+    "score": "Wynik",
+    "userAnswer": "Odpowiedź użytkownika"
+  },
+  "auth": {
+    "ConfirmPassword": "Potwierdź hasło",
+    "ConfirmPasswordPlaceholder": "Potwierdź swoje hasło",
+    "ConfirmPasswordRequired": "Powinieneś potwierdzić hasło.",
+    "Email": "E-mail",
+    "EmailPlaceholder": "Wprowadź swój e-mail",
+    "EmailRequired": "E-mail jest wymagany.",
+    "EnterEqualPasswords": "Hasła muszą być równe.",
+    "Login": "Login",
+    "LoginHeader": "Logowanie",
+    "LoginOffer": "Masz już konto? Zaloguj się",
+    "LoginPlaceholder": "Wprowadź swój e-mail lub nazwę użytkownika",
+    "LoginRequired": "Login jest wymagany.",
+    "Password": "Hasło",
+    "PasswordPlaceholder": "Wprowadź swoje hasło",
+    "PasswordRequired": "Hasło jest wymagany.",
+    "RegisterHeader": "Rejestracja",
+    "RegisterOffer": "Nie masz konta? Zarejestruj się",
+    "ToLogin": "Zalogować się",
+    "ToRegister": "Zarejestrować się",
+    "UnknownAuthorizationError": "Nieznany błąd podczas autoryzacji",
+    "UserName": "Nazwa użytkownika",
+    "UserNamePlaceholder": "Wprowadź swoją nazwę użytkownika",
+    "UserNameRequired": "Nazwa użytkownika jest wymagana.",
+    "WrongCredentialsProvided": "Login lub hasło jest błędne, spróbuj ponownie",
+    "WrongRegisterDataProvided": "Niepoprawne dane są przedstawiane do rejestracji"
+  },
+  "group": {
+    "createDialog": {
+      "createGroup": "Utworzyć grupę",
+      "groupName": "Nazwa grupy",
+      "members": "Członkowie"
     },
-    "questionTypes":{
-        "SingleSelect": "Single select pl",
-        "MultiSelect": "Multiple select pl",
-        "Group": "Grouping pl",
-        "OpenText": "Open pl"
+    "createGroup": "Utworzyć grupę",
+    "memberedGroups": "Grupy, do których należę",
+    "ownedGroups": "Grupy, które posiadam"
+  },
+  "knowledgeCheck": {
+    "answerIsSaved": "Odpowiedź została zapisana",
+    "answerIsSaving": "Odpowiedź w trakcie zapisana...",
+    "confirmDialog": {
+      "header": "Czy na pewno chcesz rozpocząć sprawdzian?"
     },
-    "languageName": "Polski",
-    "navigation": {
-        "mainPage": "Strona główna",
-        "topicConstructor": "Konstruktor tematów",
-        "groups": "Grupy",
-        "account": "Konto",
-        "title": "Nawigacja"
+    "createDialog": {
+      "addCheck": "Tworzenie sprawdzianu",
+      "description": "Opis",
+      "editCheck": "Edycja sprawdzianu",
+      "endDate": "Data zakończenia",
+      "endTime": "Czas zakończenia",
+      "groups": "Grupy",
+      "isAttemptOverrided": "Nowa próba zastępuje ostatnią",
+      "isManualOnlyVerification": "Zastosuj tylko weryfikację ręczną",
+      "loading": "Załadowanie",
+      "maxAttempts": "Maksymalna liczba prób",
+      "name": "Nazwa",
+      "passScore": "Wynik dla zaliczenia",
+      "startDate": "Data rozpoczęcia",
+      "startTime": "Czas rozpoczęcia",
+      "time": "Czas trwania"
     },
-    "auth":{
-        "LoginHeader": "Logowanie",
-        "RegisterHeader": "Rejestracja",
-        "Email": "E-mail",
-        "UserName": "Nazwa użytkownika",
-        "Login": "Login",
-        "Password": "Hasło",
-        "ConfirmPassword": "Potwierdź hasło",
-        "EmailPlaceholder": "Wprowadź swój e-mail",
-        "UserNamePlaceholder": "Wprowadź swoją nazwę użytkownika",
-        "LoginPlaceholder": "Wprowadź swój e-mail lub nazwę użytkownika",
-        "PasswordPlaceholder": "Wprowadź swoje hasło",
-        "ConfirmPasswordPlaceholder": "Potwierdź swoje hasło",
-        "EmailRequired": "E-mail jest wymagany.",
-        "UserNameRequired": "Nazwa użytkownika jest wymagana.",
-        "LoginRequired": "Login jest wymagany.",
-        "PasswordRequired": "Hasło jest wymagany.",
-        "ConfirmPasswordRequired": "Powinieneś potwierdzić hasło.",
-        "EnterEqualPasswords": "Hasła muszą być równe.",
-        "ToLogin": "Zalogować się",
-        "ToRegister": "Zarejestrować się",
-        "LoginOffer": "Masz już konto? Zaloguj się",
-        "RegisterOffer": "Nie masz konta? Zarejestruj się",
-        "WrongCredentialsProvided": "Login lub hasło jest błędne, spróbuj ponownie",
-        "WrongRegisterDataProvided": "Niepoprawne dane są przedstawiane do rejestracji",
-        "UnknownAuthorizationError": "Nieznany błąd podczas autoryzacji"
+    "deleteConfirmation": "Czy na pewno chcesz usunąć sprawdzian?",
+    "list": {
+      "add": "Dodać sprawdzian",
+      "empty": "Brak sprawdzianów"
     },
-    "mainPage": {
-        "title": "Lista tematów",
-        "usedAttempts": "Używane próby"
+    "notAllAnswered": "Nie na wszystkie pytania jest odpowiedź",
+    "openQuestion": {
+      "answerPlaceholder": "Wpisz swoją odpowiedź tutaj"
     },
-    "knowledgeText":{
-        "answerIsSaved": "Odpowiedź została zapisana",
-        "answerIsSaving": "Odpowiedź w trakcie zapisana...",
-        "notAllAnswered": "Nie na wszystkie pytania jest odpowiedź"
+    "timeLeft": "Pozostały czas",
+    "title": "Sprawdziany"
+  },
+  "languageName": "Polski",
+  "languages": {
+    "en": "Angielski",
+    "pl": "Polski"
+  },
+  "mainPage": {
+    "isLoading": "ładowanie",
+    "labelKnowledgeCheck": {
+      "allottedTime": "przydzielony czas",
+      "attemptdLeft": "Pozostało prób",
+      "attempts": "Próby",
+      "endedOn": "Zakończone",
+      "endsOn": "Kończy się",
+      "noAttempts": "Nie ma już żadnych prób",
+      "notPassed": "Nie zdane",
+      "notPassedYet": "Jeszcze nie zdane",
+      "startsOn": "Zaczyna się",
+      "usedAttempts": "Używane próby",
+      "withoutDateLimits": "Bez ograniczeń datowych",
+      "withoutTimeLimits": "bez ograniczeń czasowych"
+    },
+    "noTopicToPass": "Brak tematów do przekazania",
+    "ownedTopic": "Posiadane tematy",
+    "passScore": "Wynik do zaliczenia",
+    "score": "Wynik",
+    "title": "Lista tematów",
+    "topicsToPass": "Tematy do przekazania",
+    "usedAttempts": "Używane próby"
+  },
+  "navigation": {
+    "account": {
+      "logout": "Wyjść",
+      "title": "Konto"
+    },
+    "groups": "Grupy",
+    "mainPage": "Strona główna",
+    "title": "Nawigacja",
+    "topicConstructor": "Konstruktor tematów"
+  },
+  "questionTypes": {
+    "Group": "Grupowanie",
+    "MultiSelect": "Wybór wielokrotny",
+    "OpenText": "Otwarte",
+    "SingleSelect": "Pojedynczy wybór"
+  },
+  "reportGeneration": {
+    "createNewReport": "Utworzyć nowy raport",
+    "generationStarted": "Generacji się rozpoczęła",
+    "header": "Wygenerowane pliki",
+    "labelInstruction": "Możesz pobrać istniejący plik lub wygenerować nowy"
+  },
+  "sharedComponents": {
+    "confirmDialog": {
+      "header": "Potwierdzenie"
+    },
+    "fileInput": {
+      "labelButton": "Wybrać",
+      "labelDragAndDrop": "Przeciągnij i upuść pliki tutaj lub",
+      "labelSelectFiles": "Wybrane pliki"
+    },
+    "textInput": {
+      "labelLanguage": "Język",
+      "labelText": "Tekst"
     }
+  },
+  "topic": {
+    "answer": {
+      "isCorrect": "Poprawny",
+      "points": "Punkty",
+      "title": "Odpowiedzi"
+    },
+    "answerGroup": {
+      "addQuestionsDirectly": "Dodać pytania bezpośrednio",
+      "title": "Grupy odpowiedzi"
+    },
+    "deleteConfirmation": "Czy na pewno chcesz usunąć temat?",
+    "generate": {
+      "cultureContext": "Kontekst kulturowy",
+      "cultureContextPlaceholder": "Kontekst kulturowy",
+      "defaultAnswersCount": "Domyślna liczba odpowiedzi",
+      "defaultAnswersCountPlaceholder": "Domyślna liczba odpowiedzi",
+      "doesComplexityIncrease": "Wraz ze wzrostem złożoności",
+      "instruction": "Można wygenerować temat korzystając z materiałów z pliku LUB stworzyć go samodzielnie",
+      "languages": "Dodatkowe języki",
+      "questionsTemplate": {
+        "answersCount": "Liczba odpowiedzi",
+        "count": "Ilość",
+        "title": "Struktura pytań",
+        "type": "Typ"
+      }
+    },
+    "question": {
+      "points": "Punkty",
+      "title": "Pytania",
+      "type": "Typ"
+    },
+    "title": "Temat"
+  }
 }

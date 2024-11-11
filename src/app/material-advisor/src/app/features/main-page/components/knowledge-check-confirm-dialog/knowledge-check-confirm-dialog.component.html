@@ -1,9 +1,13 @@
-<h1 mat-dialog-title>Are you sure to start knowledge check?</h1>
+<h1 mat-dialog-title>{{ t('knowledgeCheck.confirmDialog.header') }}</h1>
 <div mat-dialog-content>
-  <p>{{ translateText(data.topic.name) }}</p>
+  <p>{{ tlt(data.topic.name) }}</p>
   <p>{{ data.knowledgeCheck.name }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onAccept()">Accept</button>
+  <button mat-button (click)="onCancel()">
+    {{ t('actions.cancel') }}
+  </button>
+  <button mat-raised-button color="primary" (click)="onAccept()">
+    {{ t('actions.accept') }}
+  </button>
 </div>

@@ -1,8 +1,8 @@
 <div *ngFor="let item of items; let i = index" class="mt-3">
   <mat-card class="p-2">
     <mat-card-header>
-      <mat-card-title>{{ translateText(item.unverifiedAnswer.topic.name) }}. {{ item.unverifiedAnswer.knowledgeCheck.name }}</mat-card-title>
-      <mat-card-subtitle>Completed by {{ item.unverifiedAnswer.user.name }} ({{ item.unverifiedAnswer.user.email }})</mat-card-subtitle>
+      <mat-card-title>{{ tlt(item.unverifiedAnswer.topic.name) }}. {{ item.unverifiedAnswer.knowledgeCheck.name }}</mat-card-title>
+      <mat-card-subtitle>{{ t('answerVerification.completedBy') }} {{ item.unverifiedAnswer.user.name }} ({{ item.unverifiedAnswer.user.email }})</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content class="mt-2">
@@ -10,12 +10,12 @@
         <div class="row">
           <div class="col d-flex align-items-center justify-content-center">
             <mat-label >
-              User's answer:
+              {{ t('answerVerification.userAnswer') }}:
             </mat-label>
           </div>
           <div class="col d-flex align-items-center justify-content-center">
             <mat-label>
-              Example of right answer:
+              {{ t('answerVerification.exampleOfRightAnswer') }}:
             </mat-label>
           </div>
         </div>
@@ -32,7 +32,7 @@
           <div class="col d-flex align-items-center">
             <mat-card class="w-100 rounded-3 p-2 answer-card-color">
               <span *ngIf="item.unverifiedAnswer.topic.questions[0].type === questionTypeRef.OpenText">
-                {{translateText(item.unverifiedAnswer.topic.questions[0].answerGroups[0].answers[0].content)}}
+                {{ tlt(item.unverifiedAnswer.topic.questions[0].answerGroups[0].answers[0].content) }}
               </span>
             </mat-card>
           </div>
@@ -43,15 +43,23 @@
     <div class="d-flex justify-content-center mt-2">
       <mat-card-actions>
         <mat-form-field appearance="outline" subscriptSizing="dynamic">
-          <mat-label>Score</mat-label>
+          <mat-label>
+            {{ t('answerVerification.score') }}
+          </mat-label>
           <input matInput type="number" [(ngModel)]="item.score" [max]="item.unverifiedAnswer.topic.questions[0].points" />
         </mat-form-field>
-        <mat-label class="ms-2">(of max {{item.unverifiedAnswer.topic.questions[0].points}})</mat-label>
-        <button mat-raised-button color="primary" (click)="onSubmit(item)" class="ms-2">Submit</button>
+        <mat-label class="ms-2">
+          ({{ t('answerVerification.ofMax') }} {{item.unverifiedAnswer.topic.questions[0].points}})
+        </mat-label>
+        <button mat-raised-button color="primary" (click)="onSubmit(item)" class="ms-2">
+          {{ t('actions.submit') }}
+        </button>
       </mat-card-actions>
     </div>
     <div *ngIf="item.comment" class="d-flex justify-content-center mt-2">
-      <span>Comment:</span>
+      <span>
+        {{ t('answerVerification.comment') }}
+      </span>
       <span class="ms-2">{{item.comment}}</span>
     </div>
   </mat-card>
@@ -59,7 +67,13 @@
 
 <div *ngIf="items.length === 0" class="d-flex justify-content-center">
   <div class="mt-4">
-    <mat-label>No answers to verify</mat-label>
-    <div><a href="/main-page" class="mt-2">Return to main page</a></div>
+    <mat-label>
+      {{ t('answerVerification.noAnswersToVerify') }}
+    </mat-label>
+    <div>
+      <a href="/main-page" class="mt-2">
+        {{ t('answerVerification.returnToMainPage') }}
+      </a>
+    </div>
   </div>
 </div>

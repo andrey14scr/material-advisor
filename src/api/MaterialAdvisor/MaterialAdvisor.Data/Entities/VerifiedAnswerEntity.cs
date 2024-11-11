@@ -23,6 +23,6 @@ public class VerifiedAnswerEntity
 
     public bool IsManual { get; set; }
 
-    [MaxLength(255)]
+    [MaxLength(500)]
     public string? Comment { get; set; }
 }

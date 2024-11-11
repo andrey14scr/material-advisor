@@ -58,4 +58,8 @@ export class QuestionsTemplateInputComponent {
   translateQuestionType(questionType: string | QuestionType){
     return this.translationService.translate(`questionTypes.${questionType.toString()}`);
   }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
 }

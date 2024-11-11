@@ -265,4 +265,12 @@ export class TopicComponent implements OnInit, OnDestroy {
   isAdditioanlLanguageChosen(languageId: LanguageEnum): boolean {
     return (this.form.value.name as LanguageText[]).filter((x: LanguageText) => x.languageId === languageId).length !== 0;
   }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
+  
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
+  }
 }

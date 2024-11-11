@@ -1,8 +1,14 @@
-<h2 mat-dialog-title>Confirmation</h2>
+<h2 mat-dialog-title>
+  {{ t('sharedComponents.confirmDialog.header') }}
+</h2>
 <div mat-dialog-content>
   <p>{{ data.message }}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" (click)="onConfirm()">OK</button>
+  <button mat-button (click)="onCancel()">
+    {{ t('actions.cancel') }}
+  </button>
+  <button mat-button color="primary" (click)="onConfirm()">
+    {{ t('actions.ok') }}
+  </button>
 </div>

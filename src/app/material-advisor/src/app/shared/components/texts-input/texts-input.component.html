@@ -5,7 +5,7 @@
       <div *ngFor="let textGroup of textsFormArray.controls; let i = index;" [formGroupName]="i" class="d-flex align-items-center mb-3">
         <mat-form-field appearance="outline" class="w-25" subscriptSizing="dynamic">
           <mat-label>
-            Language
+            {{ t('sharedComponents.textInput.labelLanguage') }}
           </mat-label>
           <mat-select formControlName="languageId" required>
             <mat-option *ngFor="let language of languages" [value]="language.languageId" [disabled]="isLanguageChosen(language.languageId)">
@@ -15,7 +15,9 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="flex-1 ms-2" subscriptSizing="dynamic">
-          <mat-label>Text</mat-label>
+          <mat-label>
+            {{ t('sharedComponents.textInput.labelText') }}
+          </mat-label>
           <input *ngIf="isOneRow" matInput formControlName="text" required/>
           <textarea *ngIf="!isOneRow" matInput formControlName="text" required></textarea>
         </mat-form-field>
@@ -27,7 +29,9 @@
     </div>
 
     <div class="d-flex justify-content-center mt-n2">
-      <button mat-raised-button color="primary" (click)="addEmptyForm()" [disabled]="languages.length == textsFormArray.controls.length">+</button>
+      <button mat-icon-button color="primary" (click)="addEmptyForm()" [disabled]="languages.length == textsFormArray.controls.length">
+        <mat-icon>add_circle</mat-icon>
+      </button>
     </div>
   </div>
 </mat-card>

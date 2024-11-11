@@ -88,4 +88,8 @@ export class QuestionsInputComponent implements OnInit {
   translateQuestionType(questionType: string | QuestionType){
     return this.translationService.translate(`questionTypes.${questionType.toString()}`);
   }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
 }

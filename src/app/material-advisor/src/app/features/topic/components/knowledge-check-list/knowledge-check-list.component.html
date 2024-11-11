@@ -1,5 +1,7 @@
 <div *ngIf="topicId && !isLoading">
-  <span *ngIf="!knowledgeChecks.length">No knowledge checks yet</span>
+  <span *ngIf="!knowledgeChecks.length">
+    {{ t('knowledgeCheck.list.empty') }}
+  </span>
   <mat-list>
     <mat-list-item *ngFor="let knowledgeCheck of knowledgeChecks">
       <span>
@@ -16,6 +18,8 @@
     </mat-list-item>
   </mat-list>
   <div class="d-flex justify-content-center mt-3">
-    <button mat-raised-button color="primary" (click)="openKnowledgeCheckDialog()">Add knowledge Check</button>
+    <button mat-raised-button color="primary" (click)="openKnowledgeCheckDialog()">
+      {{ t('knowledgeCheck.list.add') }}
+    </button>
   </div>
 </div>

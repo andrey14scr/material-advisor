@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '@environments/environment';
 import { GUID } from '@shared/types/GUID';
 import { LoaderComponent } from "@shared/components/loader/loader.component";
+import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
   selector: 'report-generation-dialog',
@@ -31,6 +32,7 @@ export class ReportGenerationDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ReportGenerationDialogComponent>,
     private fileService: FileService,
+    private translationService: TranslationService,
     private generatedFileService: GeneratedFileService,
     private reportGenerationService: ReportGenerationService,
     private authService: AuthService,
@@ -114,5 +116,9 @@ export class ReportGenerationDialogComponent implements OnInit {
         console.error('Report generation failed', err);
       }
     });
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

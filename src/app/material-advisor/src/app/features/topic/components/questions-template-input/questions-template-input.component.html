@@ -1,5 +1,5 @@
 <mat-label class="mb-1">
-  Questions structure:
+  {{ t('topic.generate.questionsTemplate.title') }}:
 </mat-label>
 
 <div [formGroup]="form">
@@ -8,19 +8,27 @@
         <mat-card class="card-color py-2 px-1 w-100">
           <div class="d-flex align-items-center">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
-              <mat-label>Count</mat-label>
+              <mat-label>
+                {{ t('topic.generate.questionsTemplate.count') }}
+              </mat-label>
               <input matInput type="number" formControlName="count" required>
             </mat-form-field>
       
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="ms-2">
-              <mat-label>Type</mat-label>
+              <mat-label>
+                {{ t('topic.generate.questionsTemplate.type') }}
+              </mat-label>
               <mat-select formControlName="type" required>
-                <mat-option *ngFor="let type of questionTypes" [value]="type.key">{{ translateQuestionType(type.value) }}</mat-option>
+                <mat-option *ngFor="let type of questionTypes" [value]="type.key">
+                  {{ translateQuestionType(type.value) }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
       
             <mat-form-field appearance="outline" subscriptSizing="dynamic" class="ms-2">
-              <mat-label>Answers count</mat-label>
+              <mat-label>
+                {{ t('topic.generate.questionsTemplate.answersCount') }}
+              </mat-label>
               <input matInput type="number" formControlName="answersCount">
             </mat-form-field>
           </div>
@@ -32,6 +40,8 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <button mat-raised-button color="primary" (click)="addEmptyForm()">+</button>
+    <button mat-icon-button color="primary" (click)="addEmptyForm()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
   </div>
 </div>

@@ -1,56 +1,193 @@
 {
-    "languages":{
-        "en": "English",
-        "pl": "Polish"
+  "actions": {
+    "accept": "Accept",
+    "cancel": "Cancel",
+    "create": "Create",
+    "delete": "Delete",
+    "generate": "Generate",
+    "ok": "OK",
+    "save": "Save",
+    "submit": "Submit",
+    "update": "Update"
+  },
+  "answerVerification": {
+    "comment": "Comment:",
+    "completedBy": "Completed by",
+    "exampleOfRightAnswer": "Example of right answer",
+    "noAnswersToVerify": "No answers to verify",
+    "ofMax": "of max",
+    "returnToMainPage": "Return to main page",
+    "score": "Score",
+    "userAnswer": "User's answer"
+  },
+  "auth": {
+    "ConfirmPassword": "Confirm Password",
+    "ConfirmPasswordPlaceholder": "Confirm your password",
+    "ConfirmPasswordRequired": "You should confirm password.",
+    "Email": "Email",
+    "EmailPlaceholder": "Enter your email",
+    "EmailRequired": "Email is required.",
+    "EnterEqualPasswords": "Passwords must be equal.",
+    "Login": "Login",
+    "LoginHeader": "Login",
+    "LoginOffer": "Already have an account? Login",
+    "LoginPlaceholder": "Enter your email or username",
+    "LoginRequired": "Login is required.",
+    "Password": "Password",
+    "PasswordPlaceholder": "Enter your password",
+    "PasswordRequired": "Password is required.",
+    "RegisterHeader": "Register",
+    "RegisterOffer": "Don't have an account? Register",
+    "ToLogin": "Login",
+    "ToRegister": "Register",
+    "UnknownAuthorizationError": "Unknown error during authorization",
+    "UserName": "Username",
+    "UserNamePlaceholder": "Enter your username",
+    "UserNameRequired": "Username is required.",
+    "WrongCredentialsProvided": "Login or password is wrong, try again",
+    "WrongRegisterDataProvided": "Wrong register data provided"
+  },
+  "group": {
+    "createDialog": {
+      "createGroup": "Create Group",
+      "groupName": "Group Name",
+      "members": "Members"
     },
-    "questionTypes":{
-        "SingleSelect": "Single select",
-        "MultiSelect": "Multiple select",
-        "Group": "Grouping",
-        "OpenText": "Open"
+    "createGroup": "Create Group",
+    "memberedGroups": "Groups I am a member of",
+    "ownedGroups": "Groups I own"
+  },
+  "knowledgeCheck": {
+    "answerIsSaved": "Answer is saved",
+    "answerIsSaving": "Answer is saving...",
+    "confirmDialog": {
+      "header": "Are you sure to start knowledge check?"
     },
-    "languageName": "English",
-    "navigation": {
-        "mainPage": "Main page",
-        "topicConstructor": "Topic constructor",
-        "groups": "Groups",
-        "account": "Account",
-        "title": "Navigation"
+    "createDialog": {
+      "addCheck": "Add Check",
+      "description": "Description",
+      "editCheck": "Edit Check",
+      "endDate": "End Date",
+      "endTime": "End Time",
+      "groups": "Groups",
+      "isAttemptOverrided": "New attempt overrides the last one",
+      "isManualOnlyVerification": "Apply manual only verification",
+      "loading": "Loading",
+      "maxAttempts": "Max Attempts",
+      "name": "Name",
+      "passScore": "Pass Score",
+      "startDate": "Start Date",
+      "startTime": "Start Time",
+      "time": "Time"
     },
-    "auth":{
-        "LoginHeader": "Login",
-        "RegisterHeader": "Register",
-        "Email": "Email",
-        "UserName": "Username",
-        "Login": "Login",
-        "Password": "Password",
-        "ConfirmPassword": "Confirm Password",
-        "EmailPlaceholder": "Enter your email",
-        "UserNamePlaceholder": "Enter your username",
-        "LoginPlaceholder": "Enter your email or username",
-        "PasswordPlaceholder": "Enter your password",
-        "ConfirmPasswordPlaceholder": "Confirm your password",
-        "EmailRequired": "Email is required.",
-        "UserNameRequired": "Username is required.",
-        "LoginRequired": "Login is required.",
-        "PasswordRequired": "Password is required.",
-        "ConfirmPasswordRequired": "You should confirm password.",
-        "EnterEqualPasswords": "Passwords must be equal.",
-        "ToLogin": "Login",
-        "ToRegister": "Register",
-        "LoginOffer": "Already have an account? Login",
-        "RegisterOffer": "Don't have an account? Register",
-        "WrongCredentialsProvided": "Login or password is wrong, try again",
-        "WrongRegisterDataProvided": "Wrong register data provided",
-        "UnknownAuthorizationError": "Unknown error during authorization"
+    "deleteConfirmation": "Are you sure you want to delete knowledge check?",
+    "list": {
+      "add": "Add knowledge check",
+      "empty": "No knowledge checks yet"
     },
-    "mainPage": {
-        "title": "Topics list",
-        "usedAttempts": "Used attempts"
+    "notAllAnswered": "Not all questions are answered",
+    "openQuestion": {
+      "answerPlaceholder": "Type your answer here"
     },
-    "knowledgeText":{
-        "answerIsSaved": "Answer is saved",
-        "answerIsSaving": "Answer is saving...",
-        "notAllAnswered": "Not all questions are answered"
+    "timeLeft": "Time left",
+    "title": "Knowledge checks"
+  },
+  "languageName": "English",
+  "languages": {
+    "en": "English",
+    "pl": "Polish"
+  },
+  "mainPage": {
+    "isLoading": "is loading",
+    "labelKnowledgeCheck": {
+      "allottedTime": "allotted time",
+      "attemptdLeft": "Attempts left",
+      "attempts": "Attempts",
+      "endedOn": "Ended on",
+      "endsOn": "Ends on",
+      "noAttempts": "No attempts left",
+      "notPassed": "Not passed",
+      "notPassedYet": "Not passed yet",
+      "startsOn": "Starts on",
+      "usedAttempts": "Used attempts",
+      "withoutDateLimits": "Without date bounds",
+      "withoutTimeLimits": "without time limits"
+    },
+    "noTopicToPass": "No topics to pass",
+    "ownedTopic": "Owned topics",
+    "passScore": "Pass score",
+    "score": "Score",
+    "title": "Topics list",
+    "topicsToPass": "Topics to pass",
+    "usedAttempts": "Used attempts"
+  },
+  "navigation": {
+    "account": {
+      "logout": "Sign out",
+      "title": "Account"
+    },
+    "groups": "Groups",
+    "mainPage": "Main page",
+    "title": "Navigation",
+    "topicConstructor": "Topic constructor"
+  },
+  "questionTypes": {
+    "Group": "Grouping",
+    "MultiSelect": "Multiple select",
+    "OpenText": "Open",
+    "SingleSelect": "Single select"
+  },
+  "reportGeneration": {
+    "createNewReport": "Create new report",
+    "generationStarted": "Generation started",
+    "header": "Generated files",
+    "labelInstruction": "You can download an existing file or generate new one"
+  },
+  "sharedComponents": {
+    "confirmDialog": {
+      "header": "Confirmation"
+    },
+    "fileInput": {
+      "labelButton": "Browse",
+      "labelDragAndDrop": "Drag and drop files here or",
+      "labelSelectFiles": "Selected files"
+    },
+    "textInput": {
+      "labelLanguage": "Language",
+      "labelText": "Text"
     }
+  },
+  "topic": {
+    "answer": {
+      "isCorrect": "Correct",
+      "points": "Points",
+      "title": "Answers"
+    },
+    "answerGroup": {
+      "addQuestionsDirectly": "Add questions directly",
+      "title": "Answer groups"
+    },
+    "deleteConfirmation": "Are you sure you want to delete topic?",
+    "generate": {
+      "cultureContext": "Culture context",
+      "cultureContextPlaceholder": "Culture context",
+      "defaultAnswersCount": "Default answers count",
+      "defaultAnswersCountPlaceholder": "Default answers count",
+      "doesComplexityIncrease": "With complexity increasing",
+      "instruction": "You can generate topic using materials from file OR create by yourself",
+      "languages": "Additional languages",
+      "questionsTemplate": {
+        "answersCount": "Answers count",
+        "count": "Count",
+        "title": "Questions structure",
+        "type": "Type"
+      }
+    },
+    "question": {
+      "points": "Points",
+      "title": "Questions",
+      "type": "Type"
+    },
+    "title": "Topic"
+  }
 }

@@ -59,8 +59,8 @@ export class QuestionMultipleSelectComponent implements OnInit {
     });
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
   translate(key: string){

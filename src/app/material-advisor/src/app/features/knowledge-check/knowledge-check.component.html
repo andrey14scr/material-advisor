@@ -2,10 +2,10 @@
 
 <div class="knowledge-check-container">
   <mat-toolbar *ngIf="knowledgeCheck && topic" color="primary">
-    <span>{{ translateText(topic.name) }}. {{ knowledgeCheck.name }}</span>
+    <span>{{ tlt(topic.name) }}. {{ knowledgeCheck.name }}</span>
     <span class="spacer"></span>
     <div *ngIf="remainingTime" [ngClass]="{'text-danger': remainingTime < 30, 'text-warning': remainingTime < MIN_TIME_TO_FINISH && remainingTime >= 30}" class="timer">
-      Time left: {{ getTimeLabel(remainingTime) }}
+      {{ t('knowledgeCheck.timeLeft') }}: {{ getTimeLabel(remainingTime) }}
     </div>
   </mat-toolbar>
 
@@ -37,7 +37,11 @@
   </div>
 
   <div *ngIf="attempt" class="d-flex justify-content-center align-items-center flex-column mt-3">
-    <button mat-raised-button color="primary" (click)="submitAll()">Submit</button>
-    <span *ngIf="!areAllAnswered()" class="text-danger">{{ translate('knowledgeText.notAllAnswered') }}</span>
+    <button mat-raised-button color="primary" (click)="submitAll()">
+      {{ t('actions.submit') }}
+    </button>
+    <span *ngIf="!areAllAnswered()" class="text-danger">
+      {{ t('knowledgeCheck.notAllAnswered') }}
+    </span>
   </div>
 </div>

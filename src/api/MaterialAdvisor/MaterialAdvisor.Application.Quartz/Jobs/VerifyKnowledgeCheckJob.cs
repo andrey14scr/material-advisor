@@ -19,6 +19,7 @@ using MaterialAdvisor.Data.Enums;
 using MaterialAdvisor.Data.Extensions;
 using MaterialAdvisor.Application.Quartz.Properties;
 using MaterialAdvisor.Application.Quartz.Models;
+using System.Reflection;
 
 namespace MaterialAdvisor.Application.Quartz.Jobs;
 
@@ -171,9 +172,13 @@ public class VerifyKnowledgeCheckJob(IOptions<VerifyKnowledgeCheckJobOptions> _v
         foreach (var verifiedAnswer in verifiedAnswers)
         {
             verifiedAnswer.IsManual = false;
-            if (verifiedAnswer.Comment?.Length > 255)
+            var maxLength = typeof(VerifiedAnswerEntity)
+              .GetProperty(nameof(VerifiedAnswerEntity.Comment))!
+              .GetCustomAttribute<System.ComponentModel.DataAnnotations.MaxLengthAttribute>()!
+              .Length;
+            if (verifiedAnswer.Comment?.Length > maxLength)
             {
-                verifiedAnswer.Comment = verifiedAnswer.Comment.Substring(0, 255);
+                verifiedAnswer.Comment = verifiedAnswer.Comment.Substring(0, maxLength);
             }
         }
 

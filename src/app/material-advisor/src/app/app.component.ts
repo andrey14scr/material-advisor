@@ -15,10 +15,10 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
     imports: [RouterOutlet, CommonModule, RouterModule, LanguageDropdownComponent, MaterialModule]
 })
 export class AppComponent implements OnInit {
-  constructor(public translationService: TranslationService, private authService: AuthService) {}
+  constructor(private translationService: TranslationService, private authService: AuthService) {}
   title = 'material-advisor';
 
-  translate(key: string){
+  t(key: string): string {
     return this.translationService.translate(key);
   }
 

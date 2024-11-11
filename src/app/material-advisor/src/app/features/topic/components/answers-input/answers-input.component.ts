@@ -78,4 +78,8 @@ export class AnswersInputComponent implements OnInit {
   toForm(control: any): FormGroup {
     return control as FormGroup;
   }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
 }

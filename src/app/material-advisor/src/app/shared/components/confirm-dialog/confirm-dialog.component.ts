@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -15,6 +16,7 @@ import { MaterialModule } from '@shared/modules/matetial/material.module';
 })
 export class ConfirmDialogComponent {
   constructor(
+    private translationService: TranslationService,
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { message: string }
   ) {}
@@ -25,5 +27,9 @@ export class ConfirmDialogComponent {
 
   onCancel() {
     this.dialogRef.close(false);
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

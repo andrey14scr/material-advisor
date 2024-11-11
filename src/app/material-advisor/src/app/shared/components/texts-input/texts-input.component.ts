@@ -80,4 +80,8 @@ export class TextsInputComponent implements OnInit {
   getLanguageName(langCode: string){
     return this.translationService.translate(`languages.${langCode}`);
   }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
 }

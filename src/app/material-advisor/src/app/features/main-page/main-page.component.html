@@ -1,11 +1,15 @@
-<mat-label *ngIf="ownedTopics && ownedTopics.length">Owned topics:</mat-label>
+<mat-label *ngIf="ownedTopics && ownedTopics.length">
+  {{ t('mainPage.ownedTopic') }}:
+</mat-label>
 
 <mat-list *ngIf="ownedTopics && ownedTopics.length">
   <ng-container *ngFor="let topic of ownedTopics">
     <mat-list-item>
       <div class="d-flex align-items-center">
-        <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">{{ translateText(topic.name) }}</span>
-        <span *ngIf="isLoadingTopic(topic)" class="gray-text ms-2">is loading...</span>
+        <span [ngClass]="{'gray-text': isLoadingTopic(topic) }">
+          {{ tlt(topic.name) }}
+        </span>
+        <span *ngIf="isLoadingTopic(topic)" class="gray-text ms-2">{{ t('mainPage.isLoading') }}...</span>
         <div *ngIf="isLoadingTopic(topic)" class="d-flex">
           <mat-progress-spinner [diameter]="18" mode="indeterminate"/>
         </div>
@@ -53,8 +57,12 @@
 
 <hr *ngIf="ownedTopics && ownedTopics.length"/>
 
-<mat-label *ngIf="topics && topics.length">Topics to pass:</mat-label>
-<mat-label *ngIf="!topics || !topics.length">No topics to pass</mat-label>
+<mat-label *ngIf="topics && topics.length">
+  {{ t('mainPage.topicsToPass') }}:
+</mat-label>
+<mat-label *ngIf="!topics || !topics.length">
+  {{ t('mainPage.noTopicToPass') }}
+</mat-label>
 
 <mat-list *ngIf="topics && topics.length">
   <ng-container *ngFor="let topic of topics">
@@ -88,7 +96,7 @@
                 class="ms-2"
                 [class.text-success]="knowledgeCheck.score >= knowledgeCheck.passScore"
                 [class.text-danger]="knowledgeCheck.score < knowledgeCheck.passScore">
-              Score: {{ knowledgeCheck.score }} / {{ knowledgeCheck.maxScore }} (Pass score: {{ knowledgeCheck.passScore }})
+                {{ t('mainPage.score') }}: {{ knowledgeCheck.score }}/{{ knowledgeCheck.maxScore }} ({{ t('mainPage.passScore') }}: {{ knowledgeCheck.passScore }})
             </span>
           </div>
         </mat-list-item>

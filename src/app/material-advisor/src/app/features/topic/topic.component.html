@@ -2,7 +2,9 @@
 
 <mat-expansion-panel hideToggle [expanded]="true">
   <mat-expansion-panel-header>
-    <mat-panel-title> Topic: </mat-panel-title>
+    <mat-panel-title> 
+      {{ t('topic.title') }}:
+    </mat-panel-title>
   </mat-expansion-panel-header>
 
   <div *ngIf="!isLoading" class="topic-card p-1">
@@ -10,15 +12,15 @@
       <texts-input [formData]="currentTopic.name" [form]="form" formName="name" [isOneRow]="true" />
   
       <div *ngIf="!currentTopic.id">
-        <line-separator labelText="You can generate topic using materials from file OR create by yourself"/>
+        <line-separator labelText="{{ t('topic.generate.instruction') }}"/>
   
         <div class="d-flex justify-content-center mb-3">
           <mat-button-toggle-group [(value)]="selectedMode" [disabled]="isSubmittingGeneration">
             <mat-button-toggle [value]="TopicCreationMode.Generate">
-              Generate
+              {{ t('actions.generate') }}
             </mat-button-toggle>
             <mat-button-toggle [value]="TopicCreationMode.Create">
-              Create
+              {{ t('actions.create') }}
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
@@ -28,13 +30,15 @@
       <div *ngIf="!currentTopic.id && selectedMode == TopicCreationMode.Generate" class="mt-3">
         <div>
           <mat-checkbox formControlName="doesComplexityIncrease">
-            With complexity increasing
+            {{ t('topic.doesComplexityIncrease') }}
           </mat-checkbox>
         </div>
         
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
-          <mat-label>Default answers count</mat-label>
-          <input matInput formControlName="defaultAnswersCount" type="number" placeholder="Max Questions Count">
+          <mat-label>
+            {{ t('topic.generate.defaultAnswersCount') }}
+          </mat-label>
+          <input matInput formControlName="defaultAnswersCount" type="number" placeholder="{{ t('topic.generate.defaultAnswersCountPlaceholder') }}">
         </mat-form-field>
   
         <div class="mt-3">
@@ -42,7 +46,9 @@
         </div>
   
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
-          <mat-label>Additional languages</mat-label>
+          <mat-label>
+            {{ t('topic.generate.languages') }}
+          </mat-label>
           <mat-select formControlName="languages" multiple>
             <mat-option *ngFor="let language of languages" [value]="language.languageId" [disabled]="isAdditioanlLanguageChosen(language.languageId)">
               {{ getLanguageName(language.code) }}
@@ -51,8 +57,10 @@
         </mat-form-field>
   
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="mt-3">
-          <mat-label>Culture context</mat-label>
-          <input matInput formControlName="cultureContext" type="text" placeholder="Culture context">
+          <mat-label>
+            {{ t('topic.generate.cultureContext') }}
+          </mat-label>
+          <input matInput formControlName="cultureContext" type="text" placeholder="{{ t('topic.generate.cultureContextPlaceholder') }}">
         </mat-form-field>
   
         <div class="mt-3">
@@ -61,7 +69,7 @@
       
         <div class="d-flex justify-content-center mt-2">
           <button mat-raised-button color="primary" type="submit" [disabled]="isSubmittingGeneration" (click)="onGenerateSubmit()">
-            Generate
+            {{ t('actions.generate') }}
           </button>
         </div>
       </div>
@@ -74,10 +82,10 @@
   
         <div class="d-flex justify-content-center mt-2">
           <button mat-raised-button color="primary" type="submit" (click)="onCreateSubmit()">
-            {{ this.currentTopic.id ? 'Update' : 'Create' }}
+            {{ this.currentTopic.id ? t('actions.update') : t('actions.create') }}
           </button>
           <button *ngIf="currentTopic.id" mat-raised-button class="ms-2" color="warn" type="submit" (click)="onDeleteSubmit()">
-            Delete
+            {{ t('actions.delete') }}
           </button>
         </div>
       </div>
@@ -88,7 +96,9 @@
 
 <mat-expansion-panel *ngIf="currentTopic.id" hideToggle [expanded]="true" class="mt-2">
   <mat-expansion-panel-header>
-    <mat-panel-title> Knowledge checks: </mat-panel-title>
+    <mat-panel-title>
+      {{ t('knowledgeCheck.title') }}:
+    </mat-panel-title>
   </mat-expansion-panel-header>
   <knowledge-check-list [topicId]="currentTopic.id"/>
 </mat-expansion-panel>

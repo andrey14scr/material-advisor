@@ -1,35 +1,43 @@
 <mat-card class="p-1">
   <div class="d-flex flex-row m-1">
     <mat-label>
-      {{ question.number }}. {{ translateText(question.content) }}
+      {{ question.number }}. {{ tlt(question.content) }}
     </mat-label>
     <div *ngIf="question.answerGroups.length === 1 && question.answerGroups[0].isTechnical">
       <div *ngIf="isModified(question.answerGroups[0].id)" class="d-flex align-items-center text-info ms-3">
         <mat-icon>schedule</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaving')}}</span>
+        <span class="ms-1">
+          {{ t('knowledgeCheck.answerIsSaving') }}
+        </span>
       </div>
       <div *ngIf="isSaved(question.answerGroups[0].id)" class="d-flex align-items-center text-success ms-3">
         <mat-icon>check_circle_outline</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaved')}}</span>
+        <span class="ms-1">
+          {{ t('knowledgeCheck.answerIsSaved') }}
+        </span>
       </div>
     </div>
   </div>
   <div *ngFor="let answerGroup of question.answerGroups" class="mt-2">
     <div *ngIf="!answerGroup.isTechnical" class="d-flex flex-row m-1">
       <mat-label>
-        {{ question.number }}.{{ answerGroup.number }}. {{ translateText(answerGroup.content) }}
+        {{ question.number }}.{{ answerGroup.number }}. {{ tlt(answerGroup.content) }}
       </mat-label>
       <div *ngIf="isModified(answerGroup.id)" class="d-flex align-items-center text-info ms-3">
         <mat-icon>schedule</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaving')}}</span>
+        <span class="ms-1">
+          {{ t('knowledgeCheck.answerIsSaving') }}
+        </span>
       </div>
       <div *ngIf="isSaved(answerGroup.id)" class="d-flex align-items-center text-success ms-3">
         <mat-icon>check_circle_outline</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaved')}}</span>
+        <span class="ms-1">
+          {{ t('knowledgeCheck.answerIsSaved') }}
+        </span>
       </div>
     </div>
     <mat-form-field *ngFor="let answer of answerGroup.answers" appearance="outline" subscriptSizing="dynamic" class="w-100">
-      <textarea matInput placeholder="Type your answer here" [value]="getValue(answerGroup.id)" (input)="onChange(answerGroup.id, $event)"></textarea>
+      <textarea matInput placeholder="{{ t('knowledgeCheck.openQuestion.answerPlaceholder') }}" [value]="getValue(answerGroup.id)" (input)="onChange(answerGroup.id, $event)"></textarea>
     </mat-form-field>
   </div>
 </mat-card>

@@ -1,96 +1,96 @@
 <div class="form-container">
   <form (ngSubmit)="onSubmit()" [formGroup]="authForm">
-    <h2>{{ isRegister ? translate('auth.RegisterHeader') : translate('auth.LoginHeader') }}</h2>
+    <h2>{{ isRegister ? t('auth.RegisterHeader') : t('auth.LoginHeader') }}</h2>
 
     <ng-container *ngIf="isRegister">
       <mat-form-field appearance="outline">
-        <mat-label>{{translate('auth.Email')}}</mat-label>
+        <mat-label>{{t('auth.Email')}}</mat-label>
         <input
           matInput
           id="email"
           type="email"
           formControlName="email"
-          placeholder="{{translate('auth.EmailPlaceholder')}}"
+          placeholder="{{t('auth.EmailPlaceholder')}}"
           required
         />
         <mat-error *ngIf="authForm.get('email')?.touched && authForm.get('email')?.invalid">
-          <small *ngIf="authForm.get('email')?.errors?.['required']">{{translate('auth.EmailRequired')}}</small>
+          <small *ngIf="authForm.get('email')?.errors?.['required']">{{t('auth.EmailRequired')}}</small>
         </mat-error>
       </mat-form-field>
     </ng-container>
 
     <ng-container *ngIf="isRegister">
       <mat-form-field appearance="outline">
-        <mat-label>{{translate('auth.UserName')}}</mat-label>
+        <mat-label>{{t('auth.UserName')}}</mat-label>
         <input
           matInput
           id="username"
           type="text"
           formControlName="username"
-          placeholder="{{translate('auth.UserNamePlaceholder')}}"
+          placeholder="{{t('auth.UserNamePlaceholder')}}"
           required
         />
         <mat-error *ngIf="authForm.get('username')?.touched && authForm.get('username')?.invalid">
-          <small *ngIf="authForm.get('username')?.errors?.['required']">{{translate('auth.UserNameRequired')}}</small>
+          <small *ngIf="authForm.get('username')?.errors?.['required']">{{t('auth.UserNameRequired')}}</small>
         </mat-error>
       </mat-form-field>
     </ng-container>
 
     <ng-container *ngIf="!isRegister">
       <mat-form-field appearance="outline">
-        <mat-label>{{translate('auth.Login')}}</mat-label>
+        <mat-label>{{t('auth.Login')}}</mat-label>
         <input
           matInput
           id="login"
           type="text"
           formControlName="login"
-          placeholder="{{translate('auth.LoginPlaceholder')}}"
+          placeholder="{{t('auth.LoginPlaceholder')}}"
           required
         />
         <mat-error *ngIf="authForm.get('login')?.touched && authForm.get('login')?.invalid">
-          <small *ngIf="authForm.get('login')?.errors?.['required']">{{translate('auth.LoginRequired')}}</small>
+          <small *ngIf="authForm.get('login')?.errors?.['required']">{{t('auth.LoginRequired')}}</small>
         </mat-error>
       </mat-form-field>
     </ng-container>
 
     <mat-form-field appearance="outline">
-      <mat-label>{{translate('auth.Password')}}</mat-label>
+      <mat-label>{{t('auth.Password')}}</mat-label>
       <input
         matInput
         id="password"
         type="password"
         formControlName="password"
-        placeholder="{{translate('auth.PasswordPlaceholder')}}"
+        placeholder="{{t('auth.PasswordPlaceholder')}}"
         required
       />
       <mat-error *ngIf="authForm.get('password')?.touched && authForm.get('password')?.invalid">
-        <small *ngIf="authForm.get('password')?.errors?.['required']">{{translate('auth.PasswordRequired')}}</small>
+        <small *ngIf="authForm.get('password')?.errors?.['required']">{{t('auth.PasswordRequired')}}</small>
       </mat-error>
     </mat-form-field>
 
     <ng-container *ngIf="isRegister">
       <mat-form-field appearance="outline">
-        <mat-label>{{translate('auth.ConfirmPassword')}}</mat-label>
+        <mat-label>{{t('auth.ConfirmPassword')}}</mat-label>
         <input
           matInput
           id="confirmPassword"
           type="password"
           formControlName="confirmPassword"
-          placeholder="{{translate('auth.ConfirmPasswordPlaceholder')}}"
+          placeholder="{{t('auth.ConfirmPasswordPlaceholder')}}"
           required
         />
         <mat-error *ngIf="authForm.get('confirmPassword')?.touched && authForm.get('confirmPassword')?.invalid">
-          <small *ngIf="authForm.get('confirmPassword')?.errors?.['required']">{{translate('auth.ConfirmPasswordRequired')}}</small>
+          <small *ngIf="authForm.get('confirmPassword')?.errors?.['required']">{{t('auth.ConfirmPasswordRequired')}}</small>
         </mat-error>
         <mat-error *ngIf="authForm.get('confirmPassword')?.touched && authForm.get('confirmPassword')?.valid">
-          <small *ngIf="authForm.get('confirmPassword')?.value !== authForm.get('password')?.value">{{translate('auth.EnterEqualPasswords')}}</small>
+          <small *ngIf="authForm.get('confirmPassword')?.value !== authForm.get('password')?.value">{{t('auth.EnterEqualPasswords')}}</small>
         </mat-error>
       </mat-form-field>
     </ng-container>
 
     <div class="form-actions">
       <button mat-raised-button color="primary" type="submit">
-        {{ isRegister ? translate('auth.ToRegister') : translate('auth.ToLogin') }}
+        {{ isRegister ? t('auth.ToRegister') : t('auth.ToLogin') }}
       </button>
     </div>
   </form>
@@ -101,7 +101,7 @@
 
   <div class="switch-mode">
     <button mat-button (click)="toggleMode()">
-      {{ isRegister ? translate('auth.LoginOffer') : translate('auth.RegisterOffer') }}
+      {{ isRegister ? t('auth.LoginOffer') : t('auth.RegisterOffer') }}
     </button>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { GroupService } from '@services/group.service';
 import { User } from '@shared/models/User';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { TranslationService } from '@shared/services/translation.service';
 import { UserService } from '@shared/services/user.service';
 
 @Component({
@@ -25,6 +26,7 @@ export class GroupCreateDialogComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private translationService: TranslationService,
     private dialogRef: MatDialogRef<GroupCreateDialogComponent>,
     private userService: UserService,
     private groupService: GroupService
@@ -64,5 +66,9 @@ export class GroupCreateDialogComponent implements OnInit {
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

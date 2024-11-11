@@ -120,12 +120,12 @@ export class MainPageComponent {
     );
   }
 
-  translate(key: string){
+  t(key: string){
     return this.translationService.translate(key);
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
   navigateToTopicDetails(topicId: GUID) {
@@ -146,7 +146,7 @@ export class MainPageComponent {
   deleteTopic(id: GUID) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '300px',
-      data: { message: 'Are you sure you want to proceed?' }
+      data: { message: this.t('topic.deleteConfirmation') }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -189,7 +189,7 @@ export class MainPageComponent {
   deleteKnowledgeCheck(topic: TopicListItem<KnowledgeCheckTopicListItem>, id: GUID) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '300px',
-      data: { message: 'Are you sure you want to proceed?' }
+      data: { message: this.t('knowledgeCheck.deleteConfirmation') }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -234,17 +234,17 @@ export class MainPageComponent {
     const dateTimeFormat = 'dd.MM.yyyy HH:mm';
 
     if (startDate > now) {
-      return `Starts on: ${this.datePipe.transform(startDate, dateTimeFormat)}`;
+      return `${this.t('mainPage.labelKnowledgeCheck.startsOn')}: ${this.datePipe.transform(startDate, dateTimeFormat)}`;
     }
     else {
       if (endDate && endDate >= now) {
-        return `Ends on: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
+        return `${this.t('mainPage.labelKnowledgeCheck.endsOn')}: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
       }
       else if (endDate) {
-        return `Ended on: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
+        return `${this.t('mainPage.labelKnowledgeCheck.endedOn')}: ${this.datePipe.transform(endDate, dateTimeFormat)}`;
       }
       else {
-        return 'Without date bounds';
+        return this.t('mainPage.labelKnowledgeCheck.withoutDateLimits');
       }
     }
   }
@@ -259,38 +259,38 @@ export class MainPageComponent {
 
     if (endDate && endDate < now) {
       if (usedAttempts) {
-        return `Used attempts: ${usedAttempts}`;
+        return `${this.t('mainPage.labelKnowledgeCheck.usedAttempts')}: ${usedAttempts}`;
       }
       else {
-        return 'Not passed';
+        return this.t('mainPage.labelKnowledgeCheck.notPassed');
       }
     }
 
     if (startDate > now && maxAttempts) {
-      return `Attempts: ${maxAttempts}`;
+      return `${this.t('mainPage.labelKnowledgeCheck.attempts')}: ${maxAttempts}`;
     }
     
     if (maxAttempts) {
       if (maxAttempts === usedAttempts) {
-        return 'No attempts left';
+        return this.t('mainPage.labelKnowledgeCheck.noAttempts');
       }
-      return `Attempts left: ${maxAttempts - usedAttempts}/${maxAttempts}`;
+      return `${this.t('mainPage.labelKnowledgeCheck.attemptdLeft')}: ${maxAttempts - usedAttempts}/${maxAttempts}`;
     }
 
     if (usedAttempts) {
-      return `Used attempts: ${usedAttempts}`;
+      return `${this.t('mainPage.labelKnowledgeCheck.usedAttempts')}: ${usedAttempts}`;
     }
 
-    return 'Not passed yet';
+    return this.t('mainPage.labelKnowledgeCheck.notPassedYet');
   }
 
   getTimeLabel(time: number): string {
     const formattedTime = toFullTimeFormat(time);
     if (formattedTime) {
-      return `allotted time: ${formattedTime}`;
+      return `${this.t('mainPage.labelKnowledgeCheck.allottedTime')}: ${formattedTime}`;
     }
 
-    return 'without time limits';
+    return this.t('mainPage.labelKnowledgeCheck.withoutTimeLimits');
   }
 
   startKnowledgeCheck(topic: TopicListItem<KnowledgeCheckListItem>, knowledgeCheck: KnowledgeCheckListItem) {

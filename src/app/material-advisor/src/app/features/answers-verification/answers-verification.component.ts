@@ -78,12 +78,12 @@ export class AnswersVerificationComponent implements OnInit {
       .catch(err => console.error('Error establishing SignalR connection:', err));
   }
 
-  translate(key: string){
+  t(key: string): string {
     return this.translationService.translate(key);
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
   onSubmit(item: {unverifiedAnswer: UnverifiedAnswer, score?: number}) {

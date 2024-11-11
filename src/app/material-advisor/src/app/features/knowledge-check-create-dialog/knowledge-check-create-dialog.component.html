@@ -1,32 +1,40 @@
 <loader [isLoading]="isLoading"/>
 
 <h3 mat-dialog-title>
-  {{ data?.id ? 'Edit Check' : 'Add Check' }}
+  {{ data?.id ? t('knowledgeCheck.createDialog.editCheck') : t('knowledgeCheck.createDialog.addCheck') }}
 </h3>
 
 <mat-dialog-content *ngIf="!isLoading" [formGroup]="form">
   <div class="container-fluid">
     <div class="row pt-2">
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Name</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.name') }}
+        </mat-label>
         <input matInput formControlName="name" required />
       </mat-form-field>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Description</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.description') }}
+        </mat-label>
         <textarea matInput formControlName="description" required></textarea>
       </mat-form-field>
 
       <div class="d-flex">
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="flex-fill me-1">
-          <mat-label>Start Date</mat-label>
+          <mat-label>
+            {{ t('knowledgeCheck.createDialog.startDate') }}
+          </mat-label>
           <input matInput [matDatepicker]="pickerStartDate" formControlName="startDate" required />
           <mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
           <mat-datepicker #pickerStartDate></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="flex-fill ms-1">
-          <mat-label>Start Time</mat-label>
+          <mat-label>
+            {{ t('knowledgeCheck.createDialog.startTime') }}
+          </mat-label>
           <input matInput [format]="24" [ngxMatTimepicker]="pickerStartTime" formControlName="startTime" placeholder="16:00" readonly required />
           <mat-icon matSuffix (click)="pickerStartTime.open()">watch_later</mat-icon>
         </mat-form-field>
@@ -35,14 +43,18 @@
 
       <div class="d-flex">
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="flex-fill me-1">
-          <mat-label>End Date</mat-label>
+          <mat-label>
+            {{ t('knowledgeCheck.createDialog.endDate') }}
+          </mat-label>
           <input matInput [matDatepicker]="pickerEndDate" formControlName="endDate" />
           <mat-datepicker-toggle matSuffix [for]="pickerEndDate"></mat-datepicker-toggle>
           <mat-datepicker #pickerEndDate></mat-datepicker>
         </mat-form-field>
   
         <mat-form-field appearance="outline" subscriptSizing="dynamic" class="flex-fill ms-1">
-          <mat-label>End Time</mat-label>
+          <mat-label>
+            {{ t('knowledgeCheck.createDialog.endTime') }}
+          </mat-label>
           <input matInput [format]="24" [ngxMatTimepicker]="pickerEndTime" formControlName="endTime" placeholder="16:00" readonly />
           <mat-icon matSuffix (click)="pickerEndTime.open()">watch_later</mat-icon>
         </mat-form-field>
@@ -50,32 +62,42 @@
       </div>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Max Attempts</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.maxAttempts') }}
+        </mat-label>
         <input matInput type="number" formControlName="maxAttempts" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Pass Score</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.passScore') }}
+        </mat-label>
         <input matInput type="number" formControlName="passScore" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Time</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.time') }}
+        </mat-label>
         <input matInput type="number" formControlName="time" />
       </mat-form-field>
 
       <mat-checkbox formControlName="isAttemptOverrided">
-        New attempt overrides the last one
+        {{ t('knowledgeCheck.createDialog.isAttemptOverrided') }}
       </mat-checkbox>
 
       <mat-checkbox formControlName="isManualOnlyVerification">
-        Apply manual only verification
+        {{ t('knowledgeCheck.createDialog.isManualOnlyVerification') }}
       </mat-checkbox>
 
       <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Groups</mat-label>
+        <mat-label>
+          {{ t('knowledgeCheck.createDialog.groups') }}
+        </mat-label>
         <mat-select formControlName="groupIds" multiple>
-          <mat-option *ngIf="isLoading" disabled>Loading...</mat-option>
+          <mat-option *ngIf="isLoading" disabled>
+            {{ t('knowledgeCheck.createDialog.loading') }}...
+          </mat-option>
           <mat-option *ngFor="let group of groups" [value]="group.id">
             {{ group.name }}
           </mat-option>
@@ -86,6 +108,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+  <button mat-button (click)="onCancel()">
+    {{ t('actions.cancel') }}
+  </button>
+  <button mat-raised-button color="primary" (click)="onSave()">
+    {{ t('actions.save') }}
+  </button>
 </mat-dialog-actions>

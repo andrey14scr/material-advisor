@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Group } from '@models/user/Group';
 import { GroupService } from '@services/group.service';
 import { GroupCreateDialogComponent } from './components/group-create-dialog/group-create-dialog.component';
+import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
   selector: 'group',
@@ -14,8 +15,7 @@ import { GroupCreateDialogComponent } from './components/group-create-dialog/gro
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    GroupCreateDialogComponent,
-],
+  ],
   templateUrl: './group.component.html',
   styleUrl: './group.component.scss'
 })
@@ -24,7 +24,7 @@ export class GroupComponent implements OnInit {
   groupsAsMember: Group[] = [];
   public isCreateGroupDialogVisible = false;
 
-  constructor(private groupService: GroupService, private dialog: MatDialog) {}
+  constructor(private groupService: GroupService, private translationService: TranslationService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadGroups();
@@ -48,5 +48,9 @@ export class GroupComponent implements OnInit {
         this.loadGroups();
       }
     });
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

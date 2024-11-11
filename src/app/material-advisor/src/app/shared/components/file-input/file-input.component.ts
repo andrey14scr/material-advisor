@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MaterialModule } from '@shared/modules/matetial/material.module';
+import { TranslationService } from '@shared/services/translation.service';
 
 @Component({
   selector: 'file-input',
@@ -14,6 +15,8 @@ export class FileInputComponent {
   fileList: File[] = [];
   @Input() isMultiple: boolean = false;
   @Output() change = new EventEmitter<Event>();
+
+  constructor(private translationService: TranslationService){}
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -53,5 +56,9 @@ export class FileInputComponent {
 
   removeFile(index: number) {
     this.fileList.splice(index, 1);
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
   }
 }

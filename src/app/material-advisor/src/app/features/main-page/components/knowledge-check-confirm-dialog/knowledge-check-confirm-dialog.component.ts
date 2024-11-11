@@ -23,8 +23,12 @@ export class KnowledgeCheckConfirmDialogComponent {
     
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
+  
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
   onAccept(): void {

@@ -1,6 +1,6 @@
 <div class="mb-1 mt-2">
   <mat-label>
-    Answers:
+    {{ t('topic.answer.title') }}:
   </mat-label>
 </div>
 
@@ -11,10 +11,12 @@
         <div class="all-width">
           <div class="d-flex align-items-center">          
             <mat-checkbox formControlName="isCorrect">
-              Correct
+              {{ t('topic.answer.isCorrect') }}
             </mat-checkbox>
             <mat-form-field appearance="outline" class="ms-2" subscriptSizing="dynamic">
-              <mat-label>Points</mat-label>
+              <mat-label>
+                {{ t('topic.answer.points') }}
+              </mat-label>
               <input matInput formControlName="points" type="number" min="1" />
             </mat-form-field>
           </div>
@@ -32,6 +34,8 @@
   </div>
 
   <div class="d-flex justify-content-center">
-    <button mat-raised-button color="primary" (click)="addEmptyForm()">+</button>
+    <button mat-icon-button color="primary" (click)="addEmptyForm()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
   </div>
 </div>

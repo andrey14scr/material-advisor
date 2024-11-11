@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
     confirmPasswordControl?.updateValueAndValidity();
   }
 
-  translate(key: string){
+  t(key: string): string {
     return this.translationService.translate(key);
   }
 }

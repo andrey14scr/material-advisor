@@ -1,36 +1,44 @@
 <mat-card class="p-1">
   <div class="d-flex flex-row m-1">
     <mat-label>
-      {{ question.number }}. {{ translateText(question.content) }}
+      {{ question.number }}. {{ tlt(question.content) }}
     </mat-label>
     <div *ngIf="question.answerGroups.length === 1 && question.answerGroups[0].isTechnical">
       <div *ngIf="isModified(question.answerGroups[0].id)" class="d-flex align-items-center text-info ms-3">
         <mat-icon>schedule</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaving')}}</span>
+        <span class="ms-1">
+          {{t('knowledgeCheck.answerIsSaving')}}
+        </span>
       </div>
       <div *ngIf="isSaved(question.answerGroups[0].id)" class="d-flex align-items-center text-success ms-3">
         <mat-icon>check_circle_outline</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaved')}}</span>
+        <span class="ms-1">
+          {{t('knowledgeCheck.answerIsSaved')}}
+        </span>
       </div>
     </div>
   </div>
   <div *ngFor="let answerGroup of question.answerGroups" class="mt-2">
     <div *ngIf="!answerGroup.isTechnical" class="d-flex flex-row m-1">
       <mat-label>
-        {{ question.number }}.{{ answerGroup.number }}. {{ translateText(answerGroup.content) }}
+        {{ question.number }}.{{ answerGroup.number }}. {{ tlt(answerGroup.content) }}
       </mat-label>
       <div *ngIf="isModified(answerGroup.id)" class="d-flex align-items-center text-info ms-3">
         <mat-icon>schedule</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaving')}}</span>
+        <span class="ms-1">
+          {{t('knowledgeCheck.answerIsSaving')}}
+        </span>
       </div>
       <div *ngIf="isSaved(answerGroup.id)" class="d-flex align-items-center text-success ms-3">
         <mat-icon>check_circle_outline</mat-icon>
-        <span class="ms-1">{{translate('knowledgeText.answerIsSaved')}}</span>
+        <span class="ms-1">
+          {{t('knowledgeCheck.answerIsSaved')}}
+        </span>
       </div>
     </div>
     <mat-radio-group>
       <mat-radio-button *ngFor="let answer of answerGroup.answers" [checked]="isChecked(answerGroup.id, answer.id)" [value]="answer.id" class="d-flex flex-column" (change)="onChange(answerGroup.id, answer.id)">
-        {{ translateText(answer.content) }}
+        {{ tlt(answer.content) }}
       </mat-radio-button>
     </mat-radio-group>
   </div>

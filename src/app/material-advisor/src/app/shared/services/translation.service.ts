@@ -60,7 +60,7 @@ export class TranslationService {
     return this.languagesDictionary[key];
   }
 
-  translateText(languageTexts: LanguageText[]): string {
+  translateLanguageText(languageTexts: LanguageText[]): string {
     const languageId = this.languagesDictionary[this.currentLanguageCode.getValue()];
     return languageTexts.find(lt => lt.languageId === languageId)?.text ?? languageTexts.sort((a,b) => a.languageId - b.languageId)[0].text;
   }

@@ -54,11 +54,11 @@ export class QuestionSingleSelectComponent implements OnInit {
     });
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
-  translate(key: string){
+  t(key: string){
     return this.translationService.translate(key);
   }
 

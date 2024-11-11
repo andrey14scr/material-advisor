@@ -9,7 +9,9 @@ import { KnowledgeCheckService } from '@services/knowledge-check.service';
 import { GroupService } from '@services/group.service';
 import { Group } from '@models/user/Group';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
-import {NgxMatTimepickerModule} from 'ngx-mat-timepicker';
+import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
+import { TranslationService } from '@shared/services/translation.service';
+import { LanguageText } from '@shared/models/LanguageText';
 
 @Component({
   selector: 'knowledge-check-create-dialog',
@@ -38,6 +40,7 @@ export class KnowledgeCheckCreateDialogComponent {
   constructor(
     private fb: FormBuilder,
     private knowledgeCheckService: KnowledgeCheckService,
+    private translationService: TranslationService,
     private groupService: GroupService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<KnowledgeCheckCreateDialogComponent>,
@@ -127,5 +130,13 @@ export class KnowledgeCheckCreateDialogComponent {
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  t(key: string): string {
+    return this.translationService.translate(key);
+  }
+  
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 }

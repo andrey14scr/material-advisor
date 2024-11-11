@@ -164,11 +164,11 @@ export class KnowledgeCheckComponent implements OnInit, OnDestroy {
     this.router.navigate([`/main-page`]);
   }
 
-  translateText(texts: LanguageText[]): string {
-    return this.translationService.translateText(texts);
+  tlt(texts: LanguageText[]): string {
+    return this.translationService.translateLanguageText(texts);
   }
 
-  translate(key: string){
+  t(key: string){
     return this.translationService.translate(key);
   }
 

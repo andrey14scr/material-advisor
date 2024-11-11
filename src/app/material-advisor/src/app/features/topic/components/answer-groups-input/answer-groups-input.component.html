@@ -1,6 +1,6 @@
 <div class="mb-1 mt-2">
   <mat-label *ngIf="!isTechnicalForm()">
-    Answer groups:
+    {{ t('topic.answerGroup.title') }}:
   </mat-label>
 </div>
 
@@ -29,7 +29,11 @@
   </div>
 
   <div *ngIf="!isTechnicalForm()" class="d-flex justify-content-center">
-    <button mat-raised-button color="primary" (click)="addEmptyForm()">+</button>
-    <button *ngIf="!answerGroupsFormArray.controls.length" mat-raised-button color="primary" class="ms-1" (click)="addEmptyTechnicalForm()">Add questions directly</button>
+    <button mat-icon-button color="primary" (click)="addEmptyForm()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+    <button *ngIf="!answerGroupsFormArray.controls.length" mat-raised-button color="primary" class="ms-1" (click)="addEmptyTechnicalForm()">
+      {{ t('topic.answerGroup.addQuestionsDirectly') }}
+    </button>
   </div>
 </div>

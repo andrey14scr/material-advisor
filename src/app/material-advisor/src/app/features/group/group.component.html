@@ -1,16 +1,22 @@
 <div class="group-container">
   <mat-card class="group-column">
-    <h3>Groups I Own</h3>
+    <h3>
+      {{ t('group.ownedGroups') }}
+    </h3>
     <mat-list>
       <mat-list-item *ngFor="let group of groupsAsOwner">
         {{ group.name }}
       </mat-list-item>
     </mat-list>
-    <button mat-raised-button color="primary" (click)="openCreateGroupDialog()">Create Group</button>
+    <button mat-raised-button color="primary" (click)="openCreateGroupDialog()">
+      {{ t('group.createGroup') }}
+    </button>
   </mat-card>
 
   <mat-card class="group-column">
-    <h3>Groups I Am A Member Of</h3>
+    <h3>
+      {{ t('group.memberedGroups') }}
+    </h3>
     <mat-list>
       <mat-list-item *ngFor="let group of groupsAsMember">
         {{ group.name }}
