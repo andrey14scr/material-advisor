@@ -70,7 +70,7 @@ export class KnowledgeCheckCreateDialogComponent {
         this.groups = groups;
       },
       error: (error) => {
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.groupsLoadingError'), 'Close', { duration: 2000 });
         this.isLoading = false;
       }
     });

@@ -189,5 +189,16 @@
       "type": "Typ"
     },
     "title": "Temat"
+  },
+  "popupNotifications": {
+    "answersVerified": "Odpowiedzi zostały zweryfikowane",
+    "answerVerified": "Odpowiedź została zweryfikowana",
+    "answerVerificationError": "Odpowiedź nie została zweryfikowana",
+    "attemptSubmitted": "Próba została przesłana",
+    "groupsLoadingError": "Nie udało się załadować grup",
+    "topicGenerated": "Temat został wygenerowany",
+    "topicGenerationError": "Temat nie został wygenerowany",
+    "reportGenerated": "Raport został wygenerowany",
+    "topicCreated": "Temat został utworzony"
   }
 }

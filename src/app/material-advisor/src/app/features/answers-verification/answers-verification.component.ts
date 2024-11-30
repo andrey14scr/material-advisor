@@ -70,7 +70,7 @@ export class AnswersVerificationComponent implements OnInit {
           existingAnswer.comment = answer.comment;
         }
       });
-      this.snackBar.open('', 'Close', { duration: 2000 });
+      this.snackBar.open(this.t('popupNotifications.answersVerified'), 'Close', { duration: 2000 });
     });
 
     this.hubConnection.start()
@@ -99,11 +99,11 @@ export class AnswersVerificationComponent implements OnInit {
 
     this.verifyService.postVerifyAnswer(body).subscribe(isSuccess => {
       if (isSuccess) {
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.answerVerified'), 'Close', { duration: 2000 });
         this.items = this.items.filter(i => i !== item);
       }
       else {
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.answerVerificationError'), 'Close', { duration: 2000 });
         console.error('Answer was not verified', body);
       }
     });

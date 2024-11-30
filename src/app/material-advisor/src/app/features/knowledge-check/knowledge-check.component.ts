@@ -160,7 +160,7 @@ export class KnowledgeCheckComponent implements OnInit, OnDestroy {
   }
 
   closeAttempt() {
-    this.snackBar.open('', 'Close', { duration: 2000 });
+    this.snackBar.open(this.t('popupNotifications.attemptSubmitted'), 'Close', { duration: 2000 });
     this.router.navigate([`/main-page`]);
   }
 

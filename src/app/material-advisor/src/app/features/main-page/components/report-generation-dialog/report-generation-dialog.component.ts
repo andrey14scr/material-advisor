@@ -59,7 +59,7 @@ export class ReportGenerationDialogComponent implements OnInit {
 
     this.hubConnection.on('ReportGenerated', (ids: GUID[], status: any) => {
       this.getGeneratedFiles();
-      this.snackBar.open('', 'Close', { duration: 2000 });
+      this.snackBar.open(this.t('popupNotifications.reportGenerated'), 'Close', { duration: 2000 });
     });
 
     this.hubConnection.start()

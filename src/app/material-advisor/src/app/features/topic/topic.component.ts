@@ -141,7 +141,7 @@ export class TopicComponent implements OnInit, OnDestroy {
 
     this.topicService.postTopic(body).subscribe({
       next: (response) => {
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.topicCreated'), 'Close', { duration: 2000 });
         this.router.navigate([`/topic/${response.id}`]);
       },
       error: (error) => {
@@ -163,10 +163,10 @@ export class TopicComponent implements OnInit, OnDestroy {
       this.isSubmittingGeneration = false;
       if (status === 'TopicGenerated') {
         this.router.navigate([`/topic/${topicId}`]);
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.topicGenerated'), 'Close', { duration: 2000 });
       }
       else {
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.topicGenerationError'), 'Close', { duration: 2000 });
       }
     });
 
@@ -219,11 +219,11 @@ export class TopicComponent implements OnInit, OnDestroy {
     this.topicGenerationService.generateTopic(formData).subscribe({
       next: (response) => {
         this.router.navigate([`/main-page`]);
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.topicGenerated'), 'Close', { duration: 2000 });
       },
       error: (err) => {
         this.isSubmittingGeneration = false;
-        this.snackBar.open('', 'Close', { duration: 2000 });
+        this.snackBar.open(this.t('popupNotifications.topicGenerationError'), 'Close', { duration: 2000 });
         console.error(err);
       }
     });

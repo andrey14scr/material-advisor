@@ -100,7 +100,7 @@ export class MainPageComponent {
 
     this.hubConnection.on('TopicGenerated', (topicId: string, status: any) => {
       this.updateTopic(topicId);
-      this.snackBar.open('', 'Close', { duration: 2000 });
+      this.snackBar.open(this.t('popupNotifications.topicGenerated'), 'Close', { duration: 2000 });
     });
 
     this.hubConnection.start()

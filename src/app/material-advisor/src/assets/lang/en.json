@@ -189,5 +189,16 @@
       "type": "Type"
     },
     "title": "Topic"
+  },
+  "popupNotifications": {
+    "answersVerified": "Answers were verified",
+    "answerVerified": "Answer was verified",
+    "answerVerificationError": "Answer was not verified",
+    "attemptSubmitted": "Attempt was submitted",
+    "groupsLoadingError": "Groups were not loaded",
+    "topicGenerated": "Topic was generated",
+    "topicGenerationError": "Topic was not generated",
+    "reportGenerated": "Report was generated",
+    "topicCreated": "Topic was created"
   }
 }
