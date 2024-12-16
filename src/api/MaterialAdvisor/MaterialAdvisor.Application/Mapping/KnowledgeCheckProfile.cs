@@ -85,7 +85,7 @@ public class KnowledgeCheckProfile : Profile
             .Sum(sa => sa.VerifiedAnswers.Where(va => va.IsManual).Sum(va => va.Score));
 
         var closedQuestionsSum = lastAttempt.SubmittedAnswers
-            .Where(sa => !string.IsNullOrEmpty(sa.Value) && typesToVerify.Contains(sa.AnswerGroup.Question.Type))
+            .Where(sa => !string.IsNullOrEmpty(sa.Value) && !typesToVerify.Contains(sa.AnswerGroup.Question.Type))
             .Sum(sa => sa.AnswerGroup.Answers
                 .Where(a => SplitValue(sa.Value!).Contains(a.Id.ToString()))
                 .Sum(a => a.Points));

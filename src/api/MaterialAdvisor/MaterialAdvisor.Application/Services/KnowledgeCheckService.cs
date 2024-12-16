@@ -28,8 +28,11 @@ public class KnowledgeCheckService(MaterialAdvisorContext _dbContext, IUserProvi
 
     public async Task<bool> HasVerifiedAttemts(Guid id)
     {
+        var verifictionTypes = Data.Constants.QuestionTypesRequiredVerification;
         var hasVerifiedAttemts = await _dbContext.KnowledgeChecks
-            .AnyAsync(kc => kc.Id == id && !kc.Attempts.Any(a => !a.VerifiedAnswers.Any(va => va.IsManual)));
+            .AnyAsync(kc => kc.Id == id && !kc.Attempts.Any(a => 
+                a.SubmittedAnswers.Any(sa => verifictionTypes.Contains(sa.AnswerGroup.Question.Type) && 
+                    !sa.VerifiedAnswers.Any(va => va.IsManual))));
         return hasVerifiedAttemts;
     }
 

@@ -1,4 +1,5 @@
 ﻿using MaterialAdvisor.Data.Enums;
+using MaterialAdvisor.QueueStorage;
 
 namespace MaterialAdvisor.Application.QueueStorage.Messages;
 

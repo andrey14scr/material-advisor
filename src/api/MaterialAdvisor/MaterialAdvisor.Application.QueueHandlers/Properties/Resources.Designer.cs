@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MaterialAdvisor.Application.QueueStorage.Properties {
+namespace MaterialAdvisor.Application.QueueHandlers.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MaterialAdvisor.Application.QueueStorage.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MaterialAdvisor.Application.QueueStorage.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MaterialAdvisor.Application.QueueHandlers.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -133,7 +133,7 @@ namespace MaterialAdvisor.Application.QueueStorage.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions of {1} type with {2} answer(s)..
+        ///   Looks up a localized string similar to {0} question(s) of {1} type with {2} answer(s).
         /// </summary>
         internal static string QuestionsSectionPrompt {
             get {

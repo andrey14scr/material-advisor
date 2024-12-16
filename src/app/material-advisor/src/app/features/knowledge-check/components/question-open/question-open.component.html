@@ -36,7 +36,7 @@
         </span>
       </div>
     </div>
-    <mat-form-field *ngFor="let answer of answerGroup.answers" appearance="outline" subscriptSizing="dynamic" class="w-100">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-100">
       <textarea matInput placeholder="{{ t('knowledgeCheck.openQuestion.answerPlaceholder') }}" [value]="getValue(answerGroup.id)" (input)="onChange(answerGroup.id, $event)"></textarea>
     </mat-form-field>
   </div>

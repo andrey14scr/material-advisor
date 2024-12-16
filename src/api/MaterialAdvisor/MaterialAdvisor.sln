@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Data.Migrator", "MaterialAdvisor.Data.Migrator\MaterialAdvisor.Data.Migrator.csproj", "{D1CAD266-4FA6-46D3-8715-CA8B1F7D66B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application.QueueStorage", "MaterialAdvisor.Application.QueueStorage\MaterialAdvisor.Application.QueueStorage.csproj", "{CA32DF95-3808-4F9E-998E-E1237B7FC450}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application.QueueHandlers", "MaterialAdvisor.Application.QueueHandlers\MaterialAdvisor.Application.QueueHandlers.csproj", "{CA32DF95-3808-4F9E-998E-E1237B7FC450}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.SignalR", "MaterialAdvisor.SignalR\MaterialAdvisor.SignalR.csproj", "{BDE15934-E078-4877-832F-DD5742E5B4E1}"
 EndProject
@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.AI", "Mater
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application.Quartz", "MaterialAdvisor.Application.Quartz\MaterialAdvisor.Application.Quartz.csproj", "{6C8D6EEF-3A62-4162-AB71-9C8D543A8E82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialAdvisor.Application.TableGenerator", "MaterialAdvisor.Application.TableGenerator\MaterialAdvisor.Application.TableGenerator.csproj", "{F7C2801E-8DB9-4D83-8AE9-615F45C3C307}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaterialAdvisor.Application.TableGenerator", "MaterialAdvisor.Application.TableGenerator\MaterialAdvisor.Application.TableGenerator.csproj", "{F7C2801E-8DB9-4D83-8AE9-615F45C3C307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialAdvisor.QueueStorage", "MaterialAdvisor.QueueStorage\MaterialAdvisor.QueueStorage.csproj", "{B223CDBF-DEF1-46BB-B295-F8C74F2C6E73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{F7C2801E-8DB9-4D83-8AE9-615F45C3C307}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7C2801E-8DB9-4D83-8AE9-615F45C3C307}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7C2801E-8DB9-4D83-8AE9-615F45C3C307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B223CDBF-DEF1-46BB-B295-F8C74F2C6E73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B223CDBF-DEF1-46BB-B295-F8C74F2C6E73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B223CDBF-DEF1-46BB-B295-F8C74F2C6E73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B223CDBF-DEF1-46BB-B295-F8C74F2C6E73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

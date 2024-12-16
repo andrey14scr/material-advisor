@@ -57,6 +57,7 @@ public class TableGenerator(IStorageService _storageService, MaterialAdvisorCont
 
     private async Task<KnowledgeCheckEntity?> GetKnowledgeCheck(Guid knowledgeCheckId)
     {
+        var verifictionTypes = Data.Constants.QuestionTypesRequiredVerification;
         var knowledgeCheck = await _materialAdvisorContext.KnowledgeChecks
             .Include(kc => kc.Topic).ThenInclude(t => t.Questions).ThenInclude(t => t.AnswerGroups)
             .Include(kc => kc.Attempts).ThenInclude(a => a.User)
@@ -69,7 +70,9 @@ public class TableGenerator(IStorageService _storageService, MaterialAdvisorCont
             .Include(kc => kc.Attempts)
                 .ThenInclude(a => a.SubmittedAnswers.Where(sa => sa.Value != null && sa.Value.Length != 0))
                 .ThenInclude(sa => sa.VerifiedAnswers)
-            .SingleOrDefaultAsync(kc => kc.Id == knowledgeCheckId && !kc.Attempts.Any(a => !a.VerifiedAnswers.Any(va => va.IsManual)));
+            .SingleOrDefaultAsync(kc => kc.Id == knowledgeCheckId && 
+                !kc.Attempts.Any(a => a.SubmittedAnswers.Any(sa => verifictionTypes.Contains(sa.AnswerGroup.Question.Type) &&
+                    !sa.VerifiedAnswers.Any(va => va.IsManual))));
         return knowledgeCheck;
     }
 

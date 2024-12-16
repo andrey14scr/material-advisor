@@ -182,7 +182,6 @@ export class TopicComponent implements OnInit, OnDestroy {
 
   onGenerateSubmit() {
     this.isSubmittingGeneration = true;
-    console.log('lol', this.form.value);
 
     const formData = new FormData();
     

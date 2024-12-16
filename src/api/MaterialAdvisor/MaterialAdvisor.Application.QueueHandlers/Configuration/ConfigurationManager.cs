@@ -1,7 +1,7 @@
 ﻿using MaterialAdvisor.Application.QueueStorage.Handlers;
 using MaterialAdvisor.Application.QueueStorage.Messages;
-using MaterialAdvisor.Application.QueueStorage.QueueService;
 using MaterialAdvisor.Application.TableGenerator.Configuration;
+using MaterialAdvisor.QueueStorage;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

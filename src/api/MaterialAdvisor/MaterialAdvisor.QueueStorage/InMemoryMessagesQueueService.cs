@@ -1,8 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-using MaterialAdvisor.Application.QueueStorage.Messages;
-
-namespace MaterialAdvisor.Application.QueueStorage.QueueService;
+namespace MaterialAdvisor.QueueStorage;
 
 public class InMemoryMessagesQueueService : IMessagesQueueService
 {

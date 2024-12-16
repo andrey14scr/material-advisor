@@ -1,4 +1,5 @@
 ﻿using MaterialAdvisor.Application.TableGenerator;
+using MaterialAdvisor.QueueStorage;
 
 namespace MaterialAdvisor.Application.QueueStorage.Messages;
 

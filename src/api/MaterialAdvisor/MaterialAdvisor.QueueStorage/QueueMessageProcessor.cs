@@ -1,11 +1,8 @@
-﻿using MaterialAdvisor.Application.QueueStorage.Handlers;
-using MaterialAdvisor.Application.QueueStorage.Messages;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace MaterialAdvisor.Application.QueueStorage.QueueService;
+namespace MaterialAdvisor.QueueStorage;
 
 public class QueueMessageProcessor(IMessagesQueueService _queueService,
     IServiceProvider _serviceProvider,

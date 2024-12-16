@@ -1,9 +1,9 @@
 ﻿using MaterialAdvisor.API.Models.Requests.ReportGeneration;
 using MaterialAdvisor.Application.Models.KnowledgeChecks;
 using MaterialAdvisor.Application.QueueStorage.Messages;
-using MaterialAdvisor.Application.QueueStorage.QueueService;
 using MaterialAdvisor.Application.Services.Abstraction;
 using MaterialAdvisor.Application.TableGenerator;
+using MaterialAdvisor.QueueStorage;
 using MaterialAdvisor.Storage;
 
 using Microsoft.AspNetCore.Authorization;

@@ -2,6 +2,7 @@
 using MaterialAdvisor.Application.TableGenerator;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
+using MaterialAdvisor.QueueStorage;
 using MaterialAdvisor.SignalR;
 using MaterialAdvisor.SignalR.Hubs;
 using MaterialAdvisor.Storage;

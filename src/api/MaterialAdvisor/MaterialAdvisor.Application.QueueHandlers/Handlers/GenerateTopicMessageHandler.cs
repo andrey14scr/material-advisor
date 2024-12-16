@@ -1,12 +1,13 @@
 ﻿using MaterialAdvisor.AI;
 using MaterialAdvisor.AI.Configuration.Options;
+using MaterialAdvisor.Application.QueueHandlers.Properties;
 using MaterialAdvisor.Application.QueueStorage.Messages;
 using MaterialAdvisor.Application.QueueStorage.Models;
-using MaterialAdvisor.Application.QueueStorage.Properties;
 using MaterialAdvisor.Data;
 using MaterialAdvisor.Data.Entities;
 using MaterialAdvisor.Data.Enums;
 using MaterialAdvisor.Data.Extensions;
+using MaterialAdvisor.QueueStorage;
 using MaterialAdvisor.SignalR;
 using MaterialAdvisor.SignalR.Hubs;
 

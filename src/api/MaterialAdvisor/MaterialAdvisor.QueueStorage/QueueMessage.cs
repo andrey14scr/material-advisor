@@ -1,4 +1,4 @@
-﻿namespace MaterialAdvisor.Application.QueueStorage.Messages;
+﻿namespace MaterialAdvisor.QueueStorage;
 
 public abstract class QueueMessage
 {

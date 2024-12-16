@@ -1,6 +1,4 @@
-﻿using MaterialAdvisor.Application.QueueStorage.Messages;
-
-namespace MaterialAdvisor.Application.QueueStorage.QueueService;
+﻿namespace MaterialAdvisor.QueueStorage;
 
 public interface IMessagesQueueService
 {
